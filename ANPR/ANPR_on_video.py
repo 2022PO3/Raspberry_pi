@@ -5,13 +5,15 @@ import numpy as np
 
 class VideoANPR:
 
-    def __init__(self, anpr: PyImageSearchANPR):
+    def __init__(self, anpr: PyImageSearchANPR, imshow: bool = False):
         self.anpr = anpr
 
         # Open Webcam
         self.cap = cv2.VideoCapture(1)
 
         self.detected_strings = []
+
+        self.imshow = imshow
 
         # Check if the webcam is opened correctly
         if not self.cap.isOpened():
@@ -23,14 +25,17 @@ class VideoANPR:
             # frame = cv2.resize(frame, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
             if ret:
                 frame = resize_to_MP(frame)
-                cv2.imshow('Input', frame)
+                # Show input image
+                if self.imshow:
+                    cv2.imshow('Input', frame)
                 # Get license plate texts from anpr
                 (lpText, lpCnt) = self.anpr.find_and_ocr(frame, clearBorder=True)
 
                 # Add texts to list of detected string
                 if lpText is not None and len(lpText) > 0:
                     self.detected_strings += lpText
-                self.anpr.show_result(frame, lpText, lpCnt, waitKey=False)
+                if self.imshow:
+                    self.anpr.show_result(frame, lpText, lpCnt, waitKey=False)
         else:
             raise IOError("Cannot open webcam")
 
@@ -173,7 +178,7 @@ if __name__ == "__main__":
 
     anpr = PyImageSearchANPR(debug=False)
 
-    video_anpr = VideoANPR(anpr)
+    video_anpr = VideoANPR(anpr, imshow=False)
 
     while True:
         video_anpr.detect_on_frame()
