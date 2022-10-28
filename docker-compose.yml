@@ -1,0 +1,8 @@
+version: "3.8"
+services:
+  packages:
+    build:
+      context: .
+    container_name: packages_container
+    entrypoint: /docker/run.sh
+    image: raspberry-pi:packages
