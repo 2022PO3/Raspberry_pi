@@ -1,13 +1,9 @@
 # import the necessary packages
 import re
 
-import imutils
 import numpy as np
-from skimage.segmentation import clear_border
 
 from ocr import *
-
-from picamera import PiCamera
 
 class LicensePlateResult:
     """
@@ -67,7 +63,7 @@ class ANPR:
         if formats is not None:
             formats = [f.replace('N', '[0-9]') for f in formats]
             formats = [f.replace('L', '[A-Z]') for f in formats]
-            self.debug_print(formats, verbosity=4)
+            self.debug_print(formats, verbosity=0)
         self.formats = formats
 
     def debug_imshow(self, title, image, verbosity: int, waitKey=False):
@@ -144,12 +140,13 @@ class ANPR:
         # ones
         cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
                                 cv2.CHAIN_APPROX_SIMPLE)
-        cnts = imutils.grab_contours(cnts)
+
+        cnts = cnts[0]
         cnts = sorted(cnts, key=cv2.contourArea, reverse=True)[:keep]
         # return the list of contours
         return cnts
 
-    def pick_license_plate_location(self, gray, candidates, clearBorder=False):
+    def pick_license_plate_location(self, gray, candidates):
         """
         Pick the best estimation of the position of the license plate. Based on shape, contrast and presence of text.
         """
@@ -178,12 +175,6 @@ class ANPR:
                 roi_temp = cv2.threshold(licensePlate, 0, 255,
                                          cv2.THRESH_BINARY_INV | cv2.THRESH_OTSU)[1]
 
-                # check to see if we should clear any foreground
-                # pixels touching the border of the image
-                # (which typically, not but always, indicates noise)
-                if clearBorder:
-                    roi_temp = clear_border(roi_temp)
-
                 # Select the license plate with the longest text on it
                 ocr_results = self.selection_ocr.getTextFromImage(roi_temp)  # Read text
                 self.debug_print(f"Found Text on Candidate: {[r.text for r in ocr_results]}", 3)
@@ -202,7 +193,7 @@ class ANPR:
             cv2.imshow("ROI", roi)
         return roi, lp_location
 
-    def find_and_ocr(self, image, doSelection=True, clearBorder=False):
+    def find_and_ocr(self, image, doSelection=True):
         # convert the input image to grayscale, locate all candidate
         # license plate regions in the image, and then process the
         # candidates, leaving us with the *actual* license plate
@@ -211,7 +202,7 @@ class ANPR:
         location = None
         if doSelection:
             candidates = self.locate_license_plate_candidates(gray)
-            (lp_image, location) = self.pick_license_plate_location(gray, candidates, clearBorder=clearBorder)
+            (lp_image, location) = self.pick_license_plate_location(gray, candidates)
         else:
             lp_image = gray
 
@@ -274,7 +265,7 @@ def detectLicensePlate(imagePath, anpr):
     image = cv2.imread(imagePath)
     # image = imutils.resize(image, width=600)
     # apply automatic license plate recognition
-    lp_results = anpr.find_and_ocr(image, clearBorder=True, doSelection=True)
+    lp_results = anpr.find_and_ocr(image, doSelection=True)
 
 
 def takePhoto(path: str):
@@ -285,10 +276,8 @@ def takePhoto(path: str):
 
 if __name__ == "__main__":
     # initialize our ANPR class
-    anpr = ANPR(EasyOCR(), GoogleVisionOCR(), formats=["N-LLL-NNN"], verbosity=0)
-    path = 'img.jpg'
-
+    anpr = ANPR(EasyOCR(), GoogleVisionOCR(), formats=["N-LLL-NNN"], verbosity=4)
+    path = 'img.png'
     print('taking photo')
     takePhoto(path)
-    
     detectLicensePlate(path, anpr)
