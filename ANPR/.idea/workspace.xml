@@ -2,27 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c702e045-3bd5-4136-87dc-9ff66eaff92f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/ANPR.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pyproject.toml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/setup.cfg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/setup.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/anpr/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/anpr/google_vision_image.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/anpr/license_plate_recognition.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/anpr/ocr.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ANPR_on_video.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/anpr/anpr_on_video.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/license_plate_recognition.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/craft_mlt_25k.pth" beforeDir="false" afterPath="$PROJECT_DIR$/src/anpr/models/craft_mlt_25k.pth" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/english_g2.pth" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/english_g2.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/motion_detection.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/anpr/motion_detection.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/anpr/license_plate_recognition.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/anpr/license_plate_recognition.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -7,6 +7,7 @@ from skimage.segmentation import clear_border
 
 from ocr import *
 
+from picamera import PiCamera
 
 class LicensePlateResult:
     """
@@ -276,16 +277,18 @@ def detectLicensePlate(imagePath, anpr):
     lp_results = anpr.find_and_ocr(image, clearBorder=True, doSelection=True)
 
 
+def takePhoto(path: str):
+    camera = PiCamera()
+    camera.vflip = True
+    camera.capture(path)
+
+
 if __name__ == "__main__":
     # initialize our ANPR class
     anpr = ANPR(EasyOCR(), GoogleVisionOCR(), formats=["N-LLL-NNN"], verbosity=0)
+    path = 'img.jpg'
 
-    # imagePath = input("path to license plate image:")
-    path = '/Users/runeverachtert/Desktop/test afbeeldingen/'
-    directory = os.fsencode(path)
-
-    for file in os.listdir(directory):
-        filename = os.fsdecode(file)
-        if filename.endswith(".png"):
-            print(f"Detecting license plate in {filename}")
-            detectLicensePlate(path + filename, anpr)
+    print('taking photo')
+    takePhoto(path)
+    
+    detectLicensePlate(path, anpr)
