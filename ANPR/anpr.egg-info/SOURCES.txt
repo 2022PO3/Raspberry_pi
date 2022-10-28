@@ -1,0 +1,10 @@
+pyproject.toml
+setup.cfg
+setup.py
+.idea/workspace.xml
+anpr.egg-info/PKG-INFO
+anpr.egg-info/SOURCES.txt
+anpr.egg-info/dependency_links.txt
+anpr.egg-info/not-zip-safe
+anpr.egg-info/requires.txt
+anpr.egg-info/top_level.txt

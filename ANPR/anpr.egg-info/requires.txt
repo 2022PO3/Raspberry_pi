@@ -1,0 +1,6 @@
+opencv-contrib-python>=4
+numpy>=1.22
+easyocr>=1.6
+google>=3.0.0
+imutils>=0.5.4
+scikit-image>=0.19.3
