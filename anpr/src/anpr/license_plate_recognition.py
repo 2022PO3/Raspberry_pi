@@ -1,9 +1,14 @@
 # import the necessary packages
 import re
+import requests
+from picamera import PiCamera
 
 import numpy as np
 
 from ocr import *
+
+GARAGE_ID = 1
+
 
 class LicensePlateResult:
     """
@@ -37,8 +42,15 @@ class ANPR:
     This class can perform Automatic Number Plate Recognition (ANPR) on given images.
     """
 
-    def __init__(self, selection_ocr: OCR, result_ocr: OCR, formats: list[str] = None, minAR=3,
-                 maxAR=7, verbosity: int = 4, ):
+    def __init__(
+        self,
+        selection_ocr: OCR,
+        result_ocr: OCR,
+        formats: list[str] = None,
+        minAR=3,
+        maxAR=7,
+        verbosity: int = 4,
+    ):
         # Store the minimum and maximum rectangular aspect ratio
         self.minAR = minAR
         self.maxAR = maxAR
@@ -61,8 +73,8 @@ class ANPR:
 
         # Transform custom format to regex ex. 'N-LLL-NNN' -> '[0-9]-[A-Z][A-Z][A-Z]-[0-9][0-9][0-9]'
         if formats is not None:
-            formats = [f.replace('N', '[0-9]') for f in formats]
-            formats = [f.replace('L', '[A-Z]') for f in formats]
+            formats = [f.replace("N", "[0-9]") for f in formats]
+            formats = [f.replace("L", "[A-Z]") for f in formats]
             self.debug_print(formats, verbosity=0)
         self.formats = formats
 
@@ -105,15 +117,13 @@ class ANPR:
         # next, find regions in the image that are light
         squareKern = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
         light = cv2.morphologyEx(gray, cv2.MORPH_CLOSE, squareKern)
-        light = cv2.threshold(light, 0, 255,
-                              cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
+        light = cv2.threshold(light, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
         self.debug_imshow("Light Regions", light, 4)
 
         # compute the Scharr gradient representation of the blackhat
         # image in the x-direction and then scale the result back to
         # the range [0, 255]
-        gradX = cv2.Sobel(blackhat, ddepth=cv2.CV_32F,
-                          dx=1, dy=0, ksize=-1)
+        gradX = cv2.Sobel(blackhat, ddepth=cv2.CV_32F, dx=1, dy=0, ksize=-1)
         gradX = np.absolute(gradX)
         (minVal, maxVal) = (np.min(gradX), np.max(gradX))
         gradX = 255 * ((gradX - minVal) / (maxVal - minVal))
@@ -124,8 +134,7 @@ class ANPR:
         # operation, and threshold the image using Otsu's method
         gradX = cv2.GaussianBlur(gradX, (5, 5), 0)
         gradX = cv2.morphologyEx(gradX, cv2.MORPH_CLOSE, rectKern)
-        thresh = cv2.threshold(gradX, 0, 255,
-                               cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
+        thresh = cv2.threshold(gradX, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
         self.debug_imshow("Grad Thresh", thresh, 4)
 
         # take the bitwise AND between the threshold result and the
@@ -138,8 +147,9 @@ class ANPR:
         # find contours in the thresholded image and sort them by
         # their size in descending order, keeping only the largest
         # ones
-        cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
-                                cv2.CHAIN_APPROX_SIMPLE)
+        cnts = cv2.findContours(
+            thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
+        )
 
         cnts = cnts[0]
         cnts = sorted(cnts, key=cv2.contourArea, reverse=True)[:keep]
@@ -158,7 +168,7 @@ class ANPR:
         longest_text_length = 0
 
         # loop over the license plate candidate contours
-        self.debug_print(f'Picking out of {len(candidates)} candidates.', 2)
+        self.debug_print(f"Picking out of {len(candidates)} candidates.", 2)
         for c in candidates:
             # compute the bounding box of the contour and then use
             # the bounding box to derive the aspect ratio
@@ -171,16 +181,24 @@ class ANPR:
                 # store the license plate contour and extract the
                 # license plate from the grayscale image and then
                 # threshold it
-                licensePlate = gray[y:y + h, x:x + w]
-                roi_temp = cv2.threshold(licensePlate, 0, 255,
-                                         cv2.THRESH_BINARY_INV | cv2.THRESH_OTSU)[1]
+                licensePlate = gray[y : y + h, x : x + w]
+                roi_temp = cv2.threshold(
+                    licensePlate, 0, 255, cv2.THRESH_BINARY_INV | cv2.THRESH_OTSU
+                )[1]
 
                 # Select the license plate with the longest text on it
                 ocr_results = self.selection_ocr.getTextFromImage(roi_temp)  # Read text
-                self.debug_print(f"Found Text on Candidate: {[r.text for r in ocr_results]}", 3)
+                self.debug_print(
+                    f"Found Text on Candidate: {[r.text for r in ocr_results]}", 3
+                )
                 if len(ocr_results) > 0:
                     self.debug_imshow("License Plate Candidate", licensePlate, 3)
-                    self.debug_imshow("ROI", roi_temp, 3, waitKey=True, )
+                    self.debug_imshow(
+                        "ROI",
+                        roi_temp,
+                        3,
+                        waitKey=True,
+                    )
                     text_length = sum(len(r.text) for r in ocr_results)
                     if text_length is None or longest_text_length < text_length:
                         longest_text_length = text_length
@@ -212,7 +230,10 @@ class ANPR:
             # OCR the license plate
             ocr_results = self.result_ocr.getTextFromImage(lp_image)
 
-            lp_results = [LicensePlateResult(result.text, result.location) for result in ocr_results]
+            lp_results = [
+                LicensePlateResult(result.text, result.location)
+                for result in ocr_results
+            ]
 
             if self.formats is not None:
                 formatted_results = []
@@ -227,7 +248,12 @@ class ANPR:
 
             if self.verbosity >= 1:
                 for index, result in enumerate(lp_results):
-                    show_text_on_image(image, result.text, result.location, waitKey=index == len(lp_results) - 1)
+                    show_text_on_image(
+                        image,
+                        result.text,
+                        result.location,
+                        waitKey=index == len(lp_results) - 1,
+                    )
 
             self.debug_imshow("License Plate", lp_image, 2, waitKey=True)
 
@@ -252,8 +278,15 @@ def show_text_on_image(image, text, location: ResultLocation, waitKey=True):
         # compute a normal (unrotated) bounding box for the license
         # plate and then draw the OCR'd license plate text on the
         # image
-        cv2.putText(image, cleanup_text(text), (location.topLeft[0], location.topLeft[1] - 15),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 255, 0), 2)
+        cv2.putText(
+            image,
+            cleanup_text(text),
+            (location.topLeft[0], location.topLeft[1] - 15),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.75,
+            (0, 255, 0),
+            2,
+        )
         # show the output ANPR image
         cv2.imshow(text, image)
         if waitKey:
@@ -274,10 +307,21 @@ def takePhoto(path: str):
     camera.capture(path)
 
 
+def send_backend_request(
+    licence_plate: str, url: str = "http://192.168.49.1:8000/api/licence-plates/"
+) -> None:
+    """
+    Sends the detected licence plate with a POST-request to the backend.
+    """
+    body = {"licencePlate": licence_plate, "garageId": GARAGE_ID}
+    requests.post(url, json=body)
+
+
 if __name__ == "__main__":
     # initialize our ANPR class
     anpr = ANPR(EasyOCR(), GoogleVisionOCR(), formats=["N-LLL-NNN"], verbosity=4)
-    path = 'img.png'
-    print('taking photo')
+    path = "img.png"
+    print("taking photo")
     takePhoto(path)
-    detectLicensePlate(path, anpr)
+    licence_plate = detectLicensePlate(path, anpr)
+    send_backend_request(licence_plate)

@@ -4,13 +4,16 @@ WORKDIR /packages
 ENV PYTHONUNBUFFERED=1
 
 # Copying the run script and making it executable.
-COPY ./docker/run.sh /docker/run.sh
-RUN chmod +x /docker/run.sh
+COPY ./docker/run.sh ./docker/run.sh
+RUN chmod +x ./docker/run.sh
 
 # Copying all the package flies.
-COPY /anpr /anpr
+COPY ./anpr ./anpr
+
+# Update pip
+RUN python -m pip install --upgrade pip
 
 # Install the different packages.
-RUN pip3 install anpr
+RUN pip3 install -r ./anpr/requirements.txt
 
-ENTRYPOINT ["/docker/run.sh"]
+ENTRYPOINT ["./docker/run.sh"]
