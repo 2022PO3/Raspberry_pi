@@ -1,7 +1,7 @@
 # import the necessary packages
 import re
 import requests
-from picamera import PiCamera
+import subprocess
 
 import numpy as np
 
@@ -302,9 +302,9 @@ def detectLicensePlate(imagePath, anpr):
 
 
 def takePhoto(path: str):
-    camera = PiCamera()
-    camera.vflip = True
-    camera.capture(path)
+    subprocess.run(
+        ["libcamera-still", "-n", "--vflip=1", "--hflip=1", "--verbose=0", "-o", path]
+    )
 
 
 def send_backend_request(
