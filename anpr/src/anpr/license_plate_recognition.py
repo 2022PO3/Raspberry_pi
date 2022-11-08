@@ -1,5 +1,6 @@
 # import the necessary packages
 import re
+import os
 import requests
 import subprocess
 
@@ -307,10 +308,13 @@ def send_backend_request(
     licence_plate: str, url: str = "http://192.168.49.1:8000/api/licence-plates/"
 ) -> None:
     """
-    Sends the detected licence plate with a POST-request to the backend.
+    Sends the detected licence plate with a POST-request to the backend. The header is
+    needed for the backend to verify that the request came from the Raspberry Pi.
     """
+
+    headers = {"PO3-HEADER": os.environ["RASPBERRY_PI_KEY"]}
     body = {"licencePlate": licence_plate, "garageId": GARAGE_ID}
-    requests.post(url, json=body)
+    requests.post(url, json=body, headers=headers)
 
 
 if __name__ == "__main__":
@@ -318,8 +322,10 @@ if __name__ == "__main__":
     from src.anpr.ocr.easy_ocr import EasyOCR
     # initialize our ANPR class
     anpr = ANPR(EasyOCR(), GoogleVisionOCR(), formats=["N-LLL-NNN"], verbosity=4)
-    path = "img.png"
     print("taking photo")
+    path = "img.png"
     takePhoto(path)
+    # Initialize our ANPR class.
+    anpr = ANPR(EasyOCR(), GoogleVisionOCR(), formats=["N-LLL-NNN"], verbosity=4)
     licence_plate = detectLicensePlate(path, anpr)
     send_backend_request(licence_plate)
