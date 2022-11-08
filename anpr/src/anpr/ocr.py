@@ -54,7 +54,7 @@ class OCR:
 
 class EasyOCR(OCR):
 
-    def __init__(self, model_storage_directory: str = 'src/anpr/models'):
+    def __init__(self, model_storage_directory: str = '../../src/anpr/models'):
         # A string with all the possible characters in a license plate
         self.alphanumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-"
 
