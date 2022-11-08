@@ -3,7 +3,10 @@ import re
 import requests
 import subprocess
 
+import cv2
+import numpy
 import numpy as np
+from ocr.ocr import OCR, ResultLocation, OCRResult
 
 from ocr import *
 
@@ -20,7 +23,7 @@ class LicensePlateResult:
         self.text = text
         self.location = location
 
-    def match_format(self, formats: list):
+    def match_format(self, formats: list) -> list:
         """
         This function matches the detected text to the given regex patterns. It also creates new LicensePlateResult's
         based on the matching patterns.
@@ -42,15 +45,8 @@ class ANPR:
     This class can perform Automatic Number Plate Recognition (ANPR) on given images.
     """
 
-    def __init__(
-        self,
-        selection_ocr: OCR,
-        result_ocr: OCR,
-        formats: list[str] = None,
-        minAR=3,
-        maxAR=7,
-        verbosity: int = 4,
-    ):
+    def __init__(self, selection_ocr: OCR, result_ocr: OCR, formats: list[str] = None, minAR=3,
+                 maxAR=7, verbosity: int = 4, ):
         # Store the minimum and maximum rectangular aspect ratio
         self.minAR = minAR
         self.maxAR = maxAR
@@ -97,7 +93,7 @@ class ANPR:
             if waitKey:
                 cv2.waitKey(0)
 
-    def debug_print(self, text, verbosity):
+    def debug_print(self, text, verbosity) -> None:
         """
         Method print debug or result text
         @param text: Text to be printed
@@ -106,7 +102,7 @@ class ANPR:
         if verbosity <= self.verbosity:
             print(text)
 
-    def locate_license_plate_candidates(self, gray, keep=15):
+    def locate_license_plate_candidates(self, gray, keep=15) -> list[numpy.array]:
         # perform a blackhat morphological operation that will allow
         # us to reveal dark regions (i.e., text) on light backgrounds
         # (i.e., the license plate itself)
@@ -318,6 +314,8 @@ def send_backend_request(
 
 
 if __name__ == "__main__":
+    from src.anpr.ocr.google_vision_ocr import GoogleVisionOCR
+    from src.anpr.ocr.easy_ocr import EasyOCR
     # initialize our ANPR class
     anpr = ANPR(EasyOCR(), GoogleVisionOCR(), formats=["N-LLL-NNN"], verbosity=4)
     path = "img.png"
