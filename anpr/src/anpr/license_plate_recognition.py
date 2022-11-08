@@ -322,10 +322,10 @@ def send_backend_request(
 
 
 if __name__ == "__main__":
-    # initialize our ANPR class
-    anpr = ANPR(EasyOCR(), GoogleVisionOCR(), formats=["N-LLL-NNN"], verbosity=4)
-    path = "img.png"
     print("taking photo")
+    path = "img.png"
     takePhoto(path)
+    # Initialize our ANPR class.
+    anpr = ANPR(EasyOCR(), GoogleVisionOCR(), formats=["N-LLL-NNN"], verbosity=4)
     licence_plate = detectLicensePlate(path, anpr)
     send_backend_request(licence_plate)
