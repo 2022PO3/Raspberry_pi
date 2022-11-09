@@ -1,6 +1,6 @@
 import numpy
 
-from ocr import OCR, OCRResult, ResultLocation
+from anpr.ocr import OCR, OCRResult, ResultLocation
 from google.cloud import vision
 import io
 import os
