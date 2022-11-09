@@ -90,7 +90,8 @@ class ResultLocation:
         @param location: ResultLocation to move by.
         @return: None, the class changes the topLeft attribute of this instance.
         """
-        self.topLeft = (self.topLeft[0] + location.topLeft[0], self.topLeft[1] + location.topLeft[1])
+        self.topLeft = (
+            self.topLeft[0] + location.topLeft[0], self.topLeft[1] + location.topLeft[1])
 
 
 class OCRResult:
@@ -126,7 +127,7 @@ class OCR:
         @param image: image to perform OCR on.
         @return: list containing OCRResults' found on the image.
         """
-        pass
+        return []
 
 
 if __name__ == '__main__':

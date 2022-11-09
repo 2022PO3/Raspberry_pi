@@ -1,3 +1,9 @@
+"""
+!!! This code was made for testing earlier versions of the ANPR class. It now re-implements features already supported by
+the ANPR class and tries to solve problems that are already solved !!!
+"""
+
+
 from license_plate_recognition import ANPR
 import cv2
 import numpy as np

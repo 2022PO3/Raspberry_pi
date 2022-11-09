@@ -1,10 +1,12 @@
-import numpy
-
-from ocr import OCR, OCRResult, ResultLocation
-from google.cloud import vision
 import io
 import os
+from typing import Union
+
 import cv2
+import numpy
+from google.cloud import vision
+
+from ocr import OCR, OCRResult, ResultLocation
 
 
 class GoogleVisionOCR(OCR):
@@ -33,7 +35,7 @@ class GoogleVisionOCR(OCR):
         # Initialize client to connect to Google Cloud
         self.client = vision.ImageAnnotatorClient()
 
-    def getTextFromImagePath(self, path: [str, None]) -> list[OCRResult]:
+    def getTextFromImagePath(self, path: Union[str, None]) -> list[OCRResult]:
         """
         This method reads the text on the image at the given path, using Google Vision API.
 
@@ -87,6 +89,8 @@ class GoogleVisionOCR(OCR):
         vertices = text_annotation.bounding_poly.vertices
         topLeft = (vertices[0].x, vertices[0].y)
         bottomRight = (vertices[2].x, vertices[2].y)
-        location = ResultLocation.fromTopLeftBottomRight(topLeft=topLeft, bottomRight=bottomRight)
-        confidence = self.default_confidence  # Google Vision API doesn't return a confidence level but is really accurate
+        location = ResultLocation.fromTopLeftBottomRight(
+            topLeft=topLeft, bottomRight=bottomRight)
+        # Google Vision API doesn't return a confidence level but is really accurate
+        confidence = self.default_confidence
         return OCRResult(text, location, confidence)

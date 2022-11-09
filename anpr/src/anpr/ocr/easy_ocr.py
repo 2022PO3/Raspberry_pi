@@ -1,5 +1,6 @@
-from ocr import OCR, OCRResult, ResultLocation
 from easyocr import Reader
+
+from ocr import OCR, OCRResult, ResultLocation
 
 
 def createOCRResult(result: dict) -> OCRResult:
@@ -10,7 +11,8 @@ def createOCRResult(result: dict) -> OCRResult:
     @return: OCRResult object to use in different parts of code.
     """
     text = result[1]
-    location = ResultLocation.fromTopLeftBottomRight(topLeft=result[0][0], bottomRight=result[0][2])
+    location = ResultLocation.fromTopLeftBottomRight(
+        topLeft=result[0][0], bottomRight=result[0][2])
     confidence = result[2]
 
     return OCRResult(text, location, confidence)
@@ -21,6 +23,7 @@ class EasyOCR(OCR):
     EasyOCR is a subclass of OCR that implements EasyOCR to read text on images. The English language it uses is stored
     in the src/anpr/models directory.
     """
+
     def __init__(self, model_storage_directory: str = 'src/anpr/models'):
         """
         Default constructor of the EasyOCR class.
@@ -52,4 +55,3 @@ class EasyOCR(OCR):
 
         # Parse the dictionaries to OCRResult objects and return them in a list.
         return [createOCRResult(result) for result in results]
-
