@@ -24,7 +24,9 @@ class EasyOCR(OCR):
     in the src/anpr/models directory.
     """
 
-    def __init__(self, model_storage_directory: str = "../models"):
+    def __init__(
+        self, model_storage_directory: str = "~/Raspberry_pi/anpr/src/anpr/models"
+    ):
         """
         Default constructor of the EasyOCR class.
 
