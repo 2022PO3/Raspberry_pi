@@ -5,10 +5,9 @@ import subprocess
 
 import cv2
 import numpy
-import numpy as np
 import requests
 
-from ocr.ocr import OCR, OCRResult, ResultLocation
+from ocr import OCR, ResultLocation
 
 GARAGE_ID = 1
 
@@ -198,7 +197,7 @@ class ANPR:
         # Only return location on the image
         return [location for location, _ in largest_area_tuples]
 
-    def _pick_license_plate_location(self, gray: numpy.array, candidates: list[ResultLocation]) -> tuple[numpy.array | None, ResultLocation | None]:
+    def _pick_license_plate_location(self, gray: numpy.array, candidates: list[ResultLocation]) -> tuple[numpy.array, ResultLocation]:
         """
         Pick the best estimation of the position of the license plate. Based on shape, contrast and presence of text.
 
@@ -387,8 +386,10 @@ def send_backend_request(
 
 
 if __name__ == "__main__":
-    from src.anpr.ocr.easy_ocr import EasyOCR
-    from src.anpr.ocr.google_vision_ocr import GoogleVisionOCR
+    from ocr.easy_ocr import EasyOCR
+    from ocr.google_vision_ocr import GoogleVisionOCR
+
+    GoogleVisionOCR()
 
     # initialize our ANPR class
     anpr = ANPR(EasyOCR(), GoogleVisionOCR(),

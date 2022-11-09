@@ -28,7 +28,10 @@ class GoogleVisionOCR(OCR):
         self.default_confidence = default_confidence
 
         # Store the path to the API key in the environment
-        os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'src/anpr/parkeergarage-c76e9940c139.json'
+
+        print(os.getcwd())
+
+        os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = './parkeergarage-c76e9940c139.json'
 
         self.default_image_path = default_image_path
 

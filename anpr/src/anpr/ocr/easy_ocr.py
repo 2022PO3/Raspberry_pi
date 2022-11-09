@@ -1,6 +1,6 @@
 from easyocr import Reader
 
-from ocr import OCR, OCRResult, ResultLocation
+from src.anpr.ocr.ocr import OCR, OCRResult, ResultLocation
 
 
 def createOCRResult(result: dict) -> OCRResult:
@@ -24,7 +24,7 @@ class EasyOCR(OCR):
     in the src/anpr/models directory.
     """
 
-    def __init__(self, model_storage_directory: str = 'src/anpr/models'):
+    def __init__(self, model_storage_directory: str = 'models'):
         """
         Default constructor of the EasyOCR class.
 
