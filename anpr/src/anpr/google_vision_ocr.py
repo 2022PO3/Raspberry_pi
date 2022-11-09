@@ -23,7 +23,7 @@ class GoogleVisionOCR(OCR):
 
     def __init__(
         self,
-        default_image_path: str = "src/anpr/google_vision_image.png",
+        default_image_path: str = "google_vision_image.png",
         default_confidence: float = 1,
     ):
         """
