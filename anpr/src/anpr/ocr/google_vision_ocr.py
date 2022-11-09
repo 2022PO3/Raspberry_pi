@@ -1,6 +1,6 @@
 import numpy
 
-from anpr.ocr import OCR, OCRResult, ResultLocation
+from anpr.ocr.ocr import OCR, OCRResult, ResultLocation
 from google.cloud import vision
 import io
 import os
@@ -12,7 +12,11 @@ class GoogleVisionOCR(OCR):
     GoogleVisionOCR is a subclass of OCR. It implements the Google Vision API to read the text on images.
     """
 
-    def __init__(self, default_image_path: str = 'src/anpr/google_vision_image.png', default_confidence: float = 1):
+    def __init__(
+        self,
+        default_image_path: str = "src/anpr/google_vision_image.png",
+        default_confidence: float = 1,
+    ):
         """
         Default constructor of the GoogleVisionOCR class
 
@@ -26,7 +30,9 @@ class GoogleVisionOCR(OCR):
         self.default_confidence = default_confidence
 
         # Store the path to the API key in the environment
-        os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'src/anpr/parkeergarage-c76e9940c139.json'
+        os.environ[
+            "GOOGLE_APPLICATION_CREDENTIALS"
+        ] = "src/anpr/parkeergarage-c76e9940c139.json"
 
         self.default_image_path = default_image_path
 
@@ -46,7 +52,7 @@ class GoogleVisionOCR(OCR):
             path = self.default_image_path
 
         # Open the image
-        with io.open(path, 'rb') as image_file:
+        with io.open(path, "rb") as image_file:
             content = image_file.read()
 
         # Send image to the Google Vision API
@@ -56,12 +62,17 @@ class GoogleVisionOCR(OCR):
         # If an error is returned, raise an exception
         if response.error.message:
             raise Exception(
-                '{}\nFor more info on error messages, check: '
-                'https://cloud.google.com/apis/design/errors'.format(
-                    response.error.message))
+                "{}\nFor more info on error messages, check: "
+                "https://cloud.google.com/apis/design/errors".format(
+                    response.error.message
+                )
+            )
 
         # Parse the results returned by Google Vision to OCRResult objects and return them in a list.
-        return [self.createOCRResult(text_annotation) for text_annotation in response.text_annotations]
+        return [
+            self.createOCRResult(text_annotation)
+            for text_annotation in response.text_annotations
+        ]
 
     def getTextFromImage(self, image) -> list[OCRResult]:
         """
@@ -87,6 +98,10 @@ class GoogleVisionOCR(OCR):
         vertices = text_annotation.bounding_poly.vertices
         topLeft = (vertices[0].x, vertices[0].y)
         bottomRight = (vertices[2].x, vertices[2].y)
-        location = ResultLocation.fromTopLeftBottomRight(topLeft=topLeft, bottomRight=bottomRight)
-        confidence = self.default_confidence  # Google Vision API doesn't return a confidence level but is really accurate
+        location = ResultLocation.fromTopLeftBottomRight(
+            topLeft=topLeft, bottomRight=bottomRight
+        )
+        confidence = (
+            self.default_confidence
+        )  # Google Vision API doesn't return a confidence level but is really accurate
         return OCRResult(text, location, confidence)
