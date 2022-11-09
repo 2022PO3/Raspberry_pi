@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-=======
-import numpy
-
-from anpr.ocr.ocr import OCR, OCRResult, ResultLocation
-from google.cloud import vision
->>>>>>> ANPR
 import io
 import os
 from typing import Union
@@ -39,16 +32,9 @@ class GoogleVisionOCR(OCR):
         self.default_confidence = default_confidence
 
         # Store the path to the API key in the environment
-<<<<<<< HEAD
 
-        print(os.getcwd())
 
-        os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = './parkeergarage-c76e9940c139.json'
-=======
-        os.environ[
-            "GOOGLE_APPLICATION_CREDENTIALS"
-        ] = "src/anpr/parkeergarage-c76e9940c139.json"
->>>>>>> ANPR
+        os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'parkeergarage-c76e9940c139.json'
 
         self.default_image_path = default_image_path
 
@@ -114,16 +100,7 @@ class GoogleVisionOCR(OCR):
         vertices = text_annotation.bounding_poly.vertices
         topLeft = (vertices[0].x, vertices[0].y)
         bottomRight = (vertices[2].x, vertices[2].y)
-        location = ResultLocation.fromTopLeftBottomRight(
-<<<<<<< HEAD
-            topLeft=topLeft, bottomRight=bottomRight)
-        # Google Vision API doesn't return a confidence level but is really accurate
-        confidence = self.default_confidence
-=======
-            topLeft=topLeft, bottomRight=bottomRight
-        )
-        confidence = (
-            self.default_confidence
-        )  # Google Vision API doesn't return a confidence level but is really accurate
->>>>>>> ANPR
+        location = ResultLocation.fromTopLeftBottomRight(topLeft=topLeft, bottomRight=bottomRight)
+        confidence = self.default_confidence # Google Vision API doesn't return a confidence level but is really accurate
+
         return OCRResult(text, location, confidence)

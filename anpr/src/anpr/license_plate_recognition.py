@@ -386,8 +386,8 @@ def send_backend_request(
 
 
 if __name__ == "__main__":
-    from anpr.ocr.google_vision_ocr import GoogleVisionOCR
-    from anpr.ocr.easy_ocr import EasyOCR
+    from google_vision_ocr import GoogleVisionOCR
+    from easy_ocr import EasyOCR
     # initialize our ANPR class
     anpr = ANPR(EasyOCR(), GoogleVisionOCR(),
                 formats=["N-LLL-NNN"], verbosity=4)

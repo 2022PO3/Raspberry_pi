@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-=======
-from ocr.ocr import OCR, OCRResult, ResultLocation
->>>>>>> ANPR
+from ocr import OCR, OCRResult, ResultLocation
 from easyocr import Reader
-
-from src.anpr.ocr.ocr import OCR, OCRResult, ResultLocation
 
 
 def createOCRResult(result: dict) -> OCRResult:
@@ -15,13 +10,7 @@ def createOCRResult(result: dict) -> OCRResult:
     @return: OCRResult object to use in different parts of code.
     """
     text = result[1]
-    location = ResultLocation.fromTopLeftBottomRight(
-<<<<<<< HEAD
-        topLeft=result[0][0], bottomRight=result[0][2])
-=======
-        topLeft=result[0][0], bottomRight=result[0][2]
-    )
->>>>>>> ANPR
+    location = ResultLocation.fromTopLeftBottomRight(topLeft=result[0][0], bottomRight=result[0][2])
     confidence = result[2]
 
     return OCRResult(text, location, confidence)
@@ -33,13 +22,7 @@ class EasyOCR(OCR):
     in the src/anpr/models directory.
     """
 
-<<<<<<< HEAD
-    def __init__(self, model_storage_directory: str = 'models'):
-=======
-    def __init__(
-        self, model_storage_directory: str = "~/Raspberry_pi/anpr/src/anpr/models"
-    ):
->>>>>>> ANPR
+    def __init__(self, model_storage_directory: str = './models'):
         """
         Default constructor of the EasyOCR class.
 

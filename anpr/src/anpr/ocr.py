@@ -143,7 +143,7 @@ if __name__ == '__main__':
     # ocr = EasyOCR()
 
     # Load the image
-    image = cv2.imread('src/anpr/google_vision_image.png')
+    image = cv2.imread('google_vision_image.png')
 
     # Print text on the image
     print(ocr.getTextFromImage(image))
