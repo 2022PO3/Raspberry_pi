@@ -4,7 +4,7 @@ import re
 import subprocess
 
 import cv2
-import numpy
+import numpy as np
 import requests
 
 from ocr import OCR, ResultLocation
@@ -108,7 +108,7 @@ class ANPR:
         if verbosity <= self.verbosity:
             print(text)
 
-    def _locate_license_plate_candidates(self, gray, keep=15) -> list[numpy.array]:
+    def _locate_license_plate_candidates(self, gray, keep=15) -> list[np.array]:
         """
         This function searches for possible license plate candidates on an image. First , it looks for bright spots on
         the image as license plates have contrasting colors. Next, it will filter out the rectangular bright shapes
@@ -197,7 +197,7 @@ class ANPR:
         # Only return location on the image
         return [location for location, _ in largest_area_tuples]
 
-    def _pick_license_plate_location(self, gray: numpy.array, candidates: list[ResultLocation]) -> tuple[numpy.array, ResultLocation]:
+    def _pick_license_plate_location(self, gray: np.array, candidates: list[ResultLocation]) -> tuple[np.array, ResultLocation]:
         """
         Pick the best estimation of the position of the license plate. Based on shape, contrast and presence of text.
 
@@ -255,7 +255,7 @@ class ANPR:
             cv2.imshow("ROI", roi)
         return roi, lp_location
 
-    def find_and_ocr(self, image: numpy.array, doSelection: bool = True) -> list[LicensePlateResult]:
+    def find_and_ocr(self, image: np.array, doSelection: bool = True) -> list[LicensePlateResult]:
         """
         Find license plate candidates and get the final text on it.
 
@@ -330,7 +330,7 @@ def cleanup_text(text: str) -> str:
     return "".join([c if ord(c) < 128 else "" for c in text]).strip()
 
 
-def show_text_on_image(image: numpy.array, text: str, location: ResultLocation, waitKey=True) -> None:
+def show_text_on_image(image: np.array, text: str, location: ResultLocation, waitKey=True) -> None:
     """
     Show the text on the image with a rectangle surrounding it.
 
