@@ -27,7 +27,9 @@ class EasyOCR(OCR):
 
     def __init__(
         self,
-        model_storage_directory: str = os.path.join(os.getcwd(), "anpr/src/anpr/models"),
+        model_storage_directory: str = os.path.join(
+            os.getcwd(), "anpr/src/anpr/models"
+        ),
     ):
         """
         Default constructor of the EasyOCR class.
@@ -40,6 +42,7 @@ class EasyOCR(OCR):
         # Reader object for OCR
         self.reader = Reader(
             ["en"],
+            gpu=False,
             download_enabled=False,
             model_storage_directory=model_storage_directory,
         )
