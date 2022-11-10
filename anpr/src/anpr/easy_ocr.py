@@ -40,7 +40,6 @@ class EasyOCR(OCR):
         # Reader object for OCR
         self.reader = Reader(
             ["en"],
-            gpu=True,
             download_enabled=False,
             model_storage_directory=model_storage_directory,
         )
