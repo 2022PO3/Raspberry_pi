@@ -5,6 +5,7 @@ import subprocess
 
 import cv2
 import numpy
+import numpy as np
 import requests
 
 from ocr import OCR, ResultLocation
@@ -390,7 +391,7 @@ if __name__ == "__main__":
     from easy_ocr import EasyOCR
     # initialize our ANPR class
     anpr = ANPR(EasyOCR(), GoogleVisionOCR(),
-                formats=["N-LLL-NNN"], verbosity=4)
+                formats=["N-LLL-NNN"], verbosity=0)
 
     print("taking photo")
     path = "img.png"
