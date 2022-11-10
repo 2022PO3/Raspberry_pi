@@ -1,3 +1,4 @@
+import os
 from ocr import OCR, OCRResult, ResultLocation
 from easyocr import Reader
 
@@ -10,7 +11,9 @@ def createOCRResult(result: dict) -> OCRResult:
     @return: OCRResult object to use in different parts of code.
     """
     text = result[1]
-    location = ResultLocation.fromTopLeftBottomRight(topLeft=result[0][0], bottomRight=result[0][2])
+    location = ResultLocation.fromTopLeftBottomRight(
+        topLeft=result[0][0], bottomRight=result[0][2]
+    )
     confidence = result[2]
 
     return OCRResult(text, location, confidence)
@@ -22,7 +25,10 @@ class EasyOCR(OCR):
     in the src/anpr/models directory.
     """
 
-    def __init__(self, model_storage_directory: str = './models'):
+    def __init__(
+        self,
+        model_storage_directory: str = os.path.join(os.getcwd(), "anpr/src/anpr/models"),
+    ):
         """
         Default constructor of the EasyOCR class.
 
@@ -30,7 +36,7 @@ class EasyOCR(OCR):
         """
         # A string with all the possible characters in a license plate
         self.alphanumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-"
-
+        print(os.getcwd())
         # Reader object for OCR
         self.reader = Reader(
             ["en"],
