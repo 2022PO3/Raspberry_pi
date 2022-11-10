@@ -33,8 +33,9 @@ class GoogleVisionOCR(OCR):
 
         # Store the path to the API key in the environment
 
-
-        os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'parkeergarage-c76e9940c139.json'
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.path.join(
+            os.getcwd(), "anpr/src/anpr/parkeergarage-c76e9940c139.json"
+        )
 
         self.default_image_path = default_image_path
 
@@ -100,7 +101,11 @@ class GoogleVisionOCR(OCR):
         vertices = text_annotation.bounding_poly.vertices
         topLeft = (vertices[0].x, vertices[0].y)
         bottomRight = (vertices[2].x, vertices[2].y)
-        location = ResultLocation.fromTopLeftBottomRight(topLeft=topLeft, bottomRight=bottomRight)
-        confidence = self.default_confidence # Google Vision API doesn't return a confidence level but is really accurate
+        location = ResultLocation.fromTopLeftBottomRight(
+            topLeft=topLeft, bottomRight=bottomRight
+        )
+        confidence = (
+            self.default_confidence
+        )  # Google Vision API doesn't return a confidence level but is really accurate
 
         return OCRResult(text, location, confidence)
