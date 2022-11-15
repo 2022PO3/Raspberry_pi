@@ -2,6 +2,7 @@
 import os
 import re
 import subprocess
+from time import time
 
 import cv2
 import numpy as np
@@ -9,6 +10,7 @@ import requests
 
 from dotenv import load_dotenv
 from ocr import OCR, ResultLocation
+
 
 GARAGE_ID = 1
 
@@ -271,7 +273,7 @@ class ANPR:
         # convert the input image to grayscale, locate all candidate
         # license plate regions in the image, and then process the
         # candidates, leaving us with the *actual* license plate
-        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        # gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
         # If doSelection is set, firstly look for possible rectangular candidates. Otherwise, just perform OCR on the
         # entire image and find license plates in these results.
@@ -280,7 +282,7 @@ class ANPR:
             candidates = self._locate_license_plate_candidates(gray)
             (lp_image, location) = self._pick_license_plate_location(gray, candidates)
         else:
-            lp_image = gray
+            lp_image = image
 
         # Only OCR the license plate if the license plate ROI is not
         # empty
@@ -393,16 +395,21 @@ if __name__ == "__main__":
     from google_vision_ocr import GoogleVisionOCR
     from easy_ocr import EasyOCR
     # initialize our ANPR class
-    anpr = ANPR(EasyOCR(), GoogleVisionOCR(),
+    anpr = ANPR(None, GoogleVisionOCR(),
                 formats=["N-LLL-NNN"], verbosity=0)
 
-    print("Taking photo...")
     path = "img.png"
 
     for _ in range(5):
+        input('New Car?')
+        start = time()
+        print('Taking photo')
         takePhoto(path)
+        photo_time = time()
+        print(f'Time to take photo: {photo_time - start}')
         image = cv2.imread(path)
-        licence_plates = anpr.find_and_ocr(image, doSelection=True)
-        input()
-
-    # send_backend_request("1ABC123")
+        licence_plates = anpr.find_and_ocr(image, doSelection=False)
+        end = time()
+        print(f'Time to detect license plate: {end-photo_time}')
+        print(f'Total time: {end-start}')
+    send_backend_request("1ABC123")
