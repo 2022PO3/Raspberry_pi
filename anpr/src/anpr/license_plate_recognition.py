@@ -110,7 +110,7 @@ class ANPR:
         if verbosity <= self.verbosity:
             print(text)
 
-    def _locate_license_plate_candidates(self, gray, keep=15) -> list[np.array]:
+    def _locate_license_plate_candidates(self, gray, keep=15) -> list[ResultLocation]:
         """
         This function searches for possible license plate candidates on an image. First , it looks for bright spots on
         the image as license plates have contrasting colors. Next, it will filter out the rectangular bright shapes
@@ -197,7 +197,7 @@ class ANPR:
             area_location_tuples, key=lambda tup: tup[0], reverse=True)[:keep]
 
         # Only return location on the image
-        return [location for location, _ in largest_area_tuples]
+        return [location for _, location in largest_area_tuples]
 
     def _pick_license_plate_location(self, gray: np.array, candidates: list[ResultLocation]) -> tuple[np.array, ResultLocation]:
         """
@@ -398,9 +398,11 @@ if __name__ == "__main__":
 
     print("Taking photo...")
     path = "img.png"
-    takePhoto(path)
-    image = cv2.imread(path)
 
-    licence_plates = anpr.find_and_ocr(image, doSelection=True)
+    for _ in range(5):
+        takePhoto(path)
+        image = cv2.imread(path)
+        licence_plates = anpr.find_and_ocr(image, doSelection=True)
+        input()
 
-    send_backend_request("1ABC123")
+    # send_backend_request("1ABC123")
