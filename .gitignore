@@ -1,3 +1,13 @@
 *.DS_Store
 */afbeeldingen
 *.mov
+*.idea
+*.json
+.mypy_cache
+*.egg-info
+__pycache__
+build
+.tox
+.env
+*.png
+*.jpg
