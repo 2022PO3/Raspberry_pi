@@ -10,6 +10,7 @@ logging.basicConfig(
     filename="anpr_garage.log",
     filemode="w",
 )
+logger = logging.getLogger("anpr_garage")
 
 
 def setup_udms(trig_pin: int, echo_pin: int) -> None:
@@ -56,7 +57,7 @@ def take_picture(distance: float, sensor_no: int) -> None:
     """
     print(f"Sensor {sensor_no} distance: {distance}.")
     if distance < 3:
-        logging.info("Sensor {sensor_no} detected a car!")
+        logger.info("Sensor {sensor_no} detected a car!")
 
 
 if __name__ == "__main__":
