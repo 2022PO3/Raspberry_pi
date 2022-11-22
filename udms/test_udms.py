@@ -1,5 +1,15 @@
+import logging
 import RPi.GPIO as GPIO
 import time
+
+# Config of the logger for logging entrances and exits of the garage.
+log_format = "%(asctime)s: %(message)s"
+logging.basicConfig(
+    level=logging.INFO,
+    format=log_format,
+    filename="anpr_garage.log",
+    filemode="w",
+)
 
 
 def setup_udms(trig_pin: int, echo_pin: int) -> None:
@@ -46,7 +56,7 @@ def take_picture(distance: float, sensor_no: int) -> None:
     """
     print(f"Sensor {sensor_no} distance: {distance}.")
     if distance < 3:
-        print(f"Sensor {sensor_no} detected a car!")
+        logging.info("Sensor {sensor_no} detected a car!")
 
 
 if __name__ == "__main__":
