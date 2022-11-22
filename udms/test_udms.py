@@ -1,4 +1,5 @@
 import logging
+import subprocess
 import RPi.GPIO as GPIO
 import time
 
@@ -50,13 +51,24 @@ def calculate_distance(trig_pin: int, echo_pin: int, time_delta: int) -> float:
     return round(pulse_duration * 17150, 2)
 
 
-def take_picture(distance: float, sensor_no: int) -> None:
+def take_picture(distance: float, sensor_state: bool, sensor_no: int) -> bool:
     """
-    Takes picture when the distance is small enough (car is on top of the sensor).
+    Takes picture when the distance is small enough (car is on top of the sensor). The
+    `sensor_state` variable contains the boolean if a car is on top of the sensor. If it is,
+    the sensor will no longer log the fact that the car is on top of the sensor, except when
+    the car leaves the sensor. This way, only two log messages are written: one when the car
+    enters the sensor and one when it leaves. The return value is the newly assigned state.
     """
-    print(f"Sensor {sensor_no} distance: {distance}.")
-    if distance < 3:
-        logger.info(f"Sensor {sensor_no} detected a car!")
+    if distance < 5 and not sensor_state:
+        logger.info(f"Car entered sensor {sensor_no}")
+        subprocess.run(["bash", "take_image.sh", "image.jpg"])
+        logger.info(f"Took image of car on sensor {sensor_no}")
+        return not sensor_state
+    elif distance >= 5 and sensor_state:
+        logger.info(f"Car left sensor {sensor_no}")
+        return not sensor_state
+    else:
+        return sensor_state
 
 
 if __name__ == "__main__":
@@ -64,9 +76,17 @@ if __name__ == "__main__":
     TRIG_PIN1 = 7
     ECHO_PIN2 = 5
     TRIG_PIN2 = 3
+
+    sensor1_state = False
+    sensor2_state = False
+
     setup_udms(TRIG_PIN1, ECHO_PIN1, 1)
     setup_udms(TRIG_PIN2, ECHO_PIN2, 2)
     logger.info("Setup completed starting to measure distances.")
     while True:
-        take_picture(calculate_distance(TRIG_PIN1, ECHO_PIN1, 1), 1)
-        take_picture(calculate_distance(TRIG_PIN2, ECHO_PIN2, 1), 2)
+        sensor1_state = take_picture(
+            calculate_distance(TRIG_PIN1, ECHO_PIN1, 1), sensor1_state, 1
+        )
+        sensor2_state = take_picture(
+            calculate_distance(TRIG_PIN2, ECHO_PIN2, 1), sensor2_state, 2
+        )
