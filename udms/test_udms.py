@@ -44,6 +44,7 @@ def take_picture(distance: float, sensor_no: int) -> None:
     """
     Takes picture when the distance is small enough (car is on top of the sensor).
     """
+    print(f"Sensor {sensor_no} distance: {distance}.")
     if distance < 3:
         print(f"Sensor {sensor_no} detected a car!")
 
