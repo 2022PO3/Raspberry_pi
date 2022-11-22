@@ -16,17 +16,15 @@ def setup_udms(trig_pin: int, echo_pin: int) -> None:
 
 
 def calculate_distance(trig_pin: int, echo_pin: int, time_delta: int) -> None:
-    print("Calculating distance")
-
     GPIO.output(trig_pin, GPIO.HIGH)
 
     time.sleep(0.00001)
 
     GPIO.output(trig_pin, GPIO.LOW)
 
-    if GPIO.input(echo_pin) == 0:
+    while GPIO.input(echo_pin) == 0:
         pulse_start_time = time.time()
-    if GPIO.input(echo_pin) == 1:
+    while GPIO.input(echo_pin) == 1:
         pulse_end_time = time.time()
 
     pulse_duration = pulse_end_time - pulse_start_time
