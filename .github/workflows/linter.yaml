@@ -20,6 +20,6 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install tox tox-gh-actions
-      - name: Test with Tox
-        run: cd anpr; tox
+          pip install black
+      - name: Run Black linter
+        run: black .
