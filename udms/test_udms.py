@@ -1,35 +1,45 @@
 import RPi.GPIO as GPIO
 import time
 
-GPIO.setmode(GPIO.BOARD)
 
-PIN_TRIGGER = 7
-PIN_ECHO = 11
+def setup_udms(trig_pin: int, echo_pin: int) -> None:
+    GPIO.setmode(GPIO.BOARD)
 
-GPIO.setup(PIN_TRIGGER, GPIO.OUT)
-GPIO.setup(PIN_ECHO, GPIO.IN)
+    GPIO.setup(trig_pin, GPIO.OUT)
+    GPIO.setup(echo_pin, GPIO.IN)
 
-GPIO.output(PIN_TRIGGER, GPIO.LOW)
+    GPIO.output(trig_pin, GPIO.LOW)
 
-print("Waiting for sensor to settle")
+    print("Waiting for sensor to settle")
 
-time.sleep(2)
+    time.sleep(2)
 
-print("Calculating distance")
 
-GPIO.output(PIN_TRIGGER, GPIO.HIGH)
+def calculate_distance(trig_pin: int, echo_pin: int, time_delta: int) -> None:
+    print("Calculating distance")
 
-time.sleep(0.00001)
+    GPIO.output(trig_pin, GPIO.HIGH)
 
-GPIO.output(PIN_TRIGGER, GPIO.LOW)
+    time.sleep(0.00001)
 
-while GPIO.input(PIN_ECHO) == 0:
-    pulse_start_time = time.time()
-while GPIO.input(PIN_ECHO) == 1:
-    pulse_end_time = time.time()
+    GPIO.output(trig_pin, GPIO.LOW)
 
-pulse_duration = pulse_end_time - pulse_start_time
+    if GPIO.input(echo_pin) == 0:
+        pulse_start_time = time.time()
+    if GPIO.input(echo_pin) == 1:
+        pulse_end_time = time.time()
 
-distance = round(pulse_duration * 17150, 2)
+    pulse_duration = pulse_end_time - pulse_start_time
 
-print("Distance:", distance, "cm")
+    distance = round(pulse_duration * 17150, 2)
+
+    print("Distance:", distance, "cm")
+    time.sleep(time_delta)
+
+
+if __name__ == "__main__":
+    ECHO_PIN = 11
+    TRIG_PIN = 7
+    setup_udms(TRIG_PIN, ECHO_PIN)
+    while True:
+        calculate_distance(TRIG_PIN, ECHO_PIN, 1)
