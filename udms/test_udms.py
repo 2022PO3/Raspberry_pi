@@ -1,7 +1,8 @@
+import sys
+import time
 import logging
 import subprocess
 import RPi.GPIO as GPIO
-import time
 
 # Config of the logger for logging entrances and exits of the garage.
 log_format = "%(asctime)s: %(message)s"
@@ -12,6 +13,7 @@ logging.basicConfig(
     filemode="w",
 )
 logger = logging.getLogger("anpr_garage")
+logger.addHandler(logging.StreamHandler(sys.stdout))
 
 
 def setup_udms(trig_pin: int, echo_pin: int, sensor_no: int) -> None:
