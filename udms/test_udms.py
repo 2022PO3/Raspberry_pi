@@ -18,10 +18,12 @@ def setup_udms(trig_pin: int, echo_pin: int) -> None:
     time.sleep(2)
 
 
-def calculate_distance(trig_pin: int, echo_pin: int, time_delta: int) -> None:
+def calculate_distance(trig_pin: int, echo_pin: int, time_delta: int) -> float:
     """
     Reads on the distance measuring of the udms connected on the `trig_pin` and `echo_pin`.
     """
+    time.sleep(time_delta)
+
     GPIO.output(trig_pin, GPIO.HIGH)
 
     time.sleep(0.00001)
@@ -35,16 +37,15 @@ def calculate_distance(trig_pin: int, echo_pin: int, time_delta: int) -> None:
 
     pulse_duration = pulse_end_time - pulse_start_time
 
-    distance = round(pulse_duration * 17150, 2)
-
-    print("Distance:", distance, "cm")
-    time.sleep(time_delta)
+    return round(pulse_duration * 17150, 2)
 
 
-def take_picture(distance: float) -> None:
+def take_picture(distance: float, sensor_no: int) -> None:
     """
     Takes picture when the distance is small enough (car is on top of the sensor).
     """
+    if distance < 3:
+        print(f"Sensor {sensor_no} detected a car!")
 
 
 if __name__ == "__main__":
@@ -55,5 +56,5 @@ if __name__ == "__main__":
     setup_udms(TRIG_PIN1, ECHO_PIN1)
     setup_udms(TRIG_PIN2, ECHO_PIN2)
     while True:
-        calculate_distance(TRIG_PIN1, ECHO_PIN1, 1)
-        calculate_distance(TRIG_PIN2, ECHO_PIN2, 1)
+        take_picture(calculate_distance(TRIG_PIN1, ECHO_PIN1, 1), 1)
+        take_picture(calculate_distance(TRIG_PIN2, ECHO_PIN2, 1), 2)
