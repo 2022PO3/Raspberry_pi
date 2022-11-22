@@ -53,7 +53,7 @@ if __name__ == "__main__":
     ECHO_PIN2 = 5
     TRIG_PIN2 = 3
     setup_udms(TRIG_PIN1, ECHO_PIN1)
-    setup_udms(TRIG_PIN2, ECHO_PIN1)
+    setup_udms(TRIG_PIN2, ECHO_PIN2)
     while True:
         calculate_distance(TRIG_PIN1, ECHO_PIN1, 1)
         calculate_distance(TRIG_PIN2, ECHO_PIN2, 1)
