@@ -13,7 +13,7 @@ logging.basicConfig(
 logger = logging.getLogger("anpr_garage")
 
 
-def setup_udms(trig_pin: int, echo_pin: int) -> None:
+def setup_udms(trig_pin: int, echo_pin: int, sensor_no: int) -> None:
     """
     Sets up the udms on the `trig_pin` and `echo_pin`.
     """
@@ -24,9 +24,8 @@ def setup_udms(trig_pin: int, echo_pin: int) -> None:
 
     GPIO.output(trig_pin, GPIO.LOW)
 
-    print("Waiting for sensor to settle")
-
     time.sleep(2)
+    logger.info(f"Setup for sensor {sensor_no} completed.")
 
 
 def calculate_distance(trig_pin: int, echo_pin: int, time_delta: int) -> float:
@@ -57,7 +56,7 @@ def take_picture(distance: float, sensor_no: int) -> None:
     """
     print(f"Sensor {sensor_no} distance: {distance}.")
     if distance < 3:
-        logger.info("Sensor {sensor_no} detected a car!")
+        logger.info(f"Sensor {sensor_no} detected a car!")
 
 
 if __name__ == "__main__":
@@ -65,8 +64,9 @@ if __name__ == "__main__":
     TRIG_PIN1 = 7
     ECHO_PIN2 = 5
     TRIG_PIN2 = 3
-    setup_udms(TRIG_PIN1, ECHO_PIN1)
-    setup_udms(TRIG_PIN2, ECHO_PIN2)
+    setup_udms(TRIG_PIN1, ECHO_PIN1, 1)
+    setup_udms(TRIG_PIN2, ECHO_PIN2, 2)
+    logger.info("Setup completed starting to measure distances.")
     while True:
         take_picture(calculate_distance(TRIG_PIN1, ECHO_PIN1, 1), 1)
         take_picture(calculate_distance(TRIG_PIN2, ECHO_PIN2, 1), 2)
