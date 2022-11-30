@@ -1,12 +1,12 @@
 import RPi.GPIO as GPIO
 import logging
 import sys
-from src.entrance_system.udms_control import (
+from udms_control import (
     setup_udms,
     calculate_distance,
     take_picture,
 )
-from src.entrance_system.servo_control import setup_servo
+from servo_control import setup_servo
 
 #################
 # Logger config #
