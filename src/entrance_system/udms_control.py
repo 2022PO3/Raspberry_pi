@@ -1,7 +1,7 @@
 import time
 import subprocess
 import RPi.GPIO as GPIO
-import entrance_system.main1 as main1
+import main1
 from servo_control import open_barrier, close_barrier
 
 logger = main1.get_logger("rpi_garage")
