@@ -35,6 +35,7 @@ sensor1_state = False
 
 def setup_board() -> None:
     # Use pin numbers.
+    GPIO.setwarnings(False)
     GPIO.setmode(GPIO.BOARD)
     logger.info("Setup of board completed.")
 
@@ -54,4 +55,5 @@ if __name__ == "__main__":
             sensor1_state,
             1,
             servo1,
+            servo_no=1,
         )
