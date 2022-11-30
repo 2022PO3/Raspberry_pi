@@ -14,7 +14,6 @@ def get_logger(name: str) -> logging.Logger:
 
 
 logger = get_logger("rpi_garage")
-logger.addHandler(logging.StreamHandler(sys.stdout))
 
 #####################
 # Defining the pins #
