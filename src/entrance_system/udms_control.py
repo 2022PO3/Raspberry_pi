@@ -4,7 +4,7 @@ import RPi.GPIO as GPIO
 import main1
 from servo_control import open_barrier, close_barrier
 
-logger = main1.get_logger("rpi_garage")
+logger = main1.get_logger("udms_control")
 
 
 def setup_udms(trig_pin: int, echo_pin: int, sensor_no: int) -> None:
@@ -44,7 +44,13 @@ def calculate_distance(trig_pin: int, echo_pin: int, time_delta: int) -> float:
     return round(pulse_duration * 17150, 2)
 
 
-def take_picture(distance: float, sensor_state: bool, sensor_no: int, servo) -> bool:
+def take_picture(
+    distance: float,
+    sensor_state: bool,
+    sensor_no: int,
+    servo,
+    servo_no: int,
+) -> bool:
     """
     Takes picture when the distance is small enough (car is on top of the sensor). The
     `sensor_state` variable contains the boolean if a car is on top of the sensor. If it is,
@@ -56,33 +62,12 @@ def take_picture(distance: float, sensor_state: bool, sensor_no: int, servo) -> 
         logger.info(f"Car entered sensor {sensor_no}")
         subprocess.run(["bash", "take_image.sh", "image.jpg"])
         logger.info(f"Took image of car on sensor {sensor_no}")
-        open_barrier(servo)
+        open_barrier(servo, servo_no)
         return not sensor_state
     elif distance >= 5 and sensor_state:
         logger.info(f"Car left sensor {sensor_no}")
         time.sleep(2)
-        close_barrier(servo)
+        close_barrier(servo, servo_no)
         return not sensor_state
     else:
         return sensor_state
-
-
-if __name__ == "__main__":
-    ECHO_PIN1 = 11
-    TRIG_PIN1 = 7
-    ECHO_PIN2 = 5
-    TRIG_PIN2 = 3
-
-    sensor1_state = False
-    sensor2_state = False
-
-    setup_udms(TRIG_PIN1, ECHO_PIN1, 1)
-    setup_udms(TRIG_PIN2, ECHO_PIN2, 2)
-    logger.info("Setup completed starting to measure distances.")
-    while True:
-        sensor1_state = take_picture(
-            calculate_distance(TRIG_PIN1, ECHO_PIN1, 1), sensor1_state, 1
-        )
-        sensor2_state = take_picture(
-            calculate_distance(TRIG_PIN2, ECHO_PIN2, 1), sensor2_state, 2
-        )

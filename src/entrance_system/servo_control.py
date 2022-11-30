@@ -1,7 +1,7 @@
 import RPi.GPIO as GPIO
 import main1
 
-logger = main1.get_logger("rpi_garage")
+logger = main1.get_logger("servo_control")
 
 
 def setup_servo(servo_pin: int, pulse_frequency: int):
@@ -10,17 +10,17 @@ def setup_servo(servo_pin: int, pulse_frequency: int):
     return GPIO.PWM(servo_pin, pulse_frequency)
 
 
-def _set_angle(angle: int, servo) -> None:
+def _set_angle(angle: int, servo, servo_no: int) -> None:
     duty = angle / 18 + 2
     servo.ChangeDutyCycle(duty)
-    logger.info(f"Set {servo} to {angle} degrees.")
+    logger.info(f"Set {servo_no} to {angle} degrees.")
 
 
-def open_barrier(servo) -> None:
-    _set_angle(90, servo)
-    logger.info(f"Opened barrier of {servo}.")
+def open_barrier(servo, servo_no: int) -> None:
+    _set_angle(90, servo, servo_no)
+    logger.info(f"Opened barrier of {servo_no}.")
 
 
-def close_barrier(servo) -> None:
-    _set_angle(0, servo)
-    logger.info(f"Closed barrier of {servo}.")
+def close_barrier(servo, servo_no: int) -> None:
+    _set_angle(0, servo, servo_no)
+    logger.info(f"Closed barrier of {servo_no}.")
