@@ -1,8 +1,6 @@
 import RPi.GPIO as GPIO
 import logging
 import sys
-import udms_control
-import servo_control
 
 #################
 # Logger config #
@@ -46,6 +44,9 @@ def setup_board() -> None:
 
 
 if __name__ == "__main__":
+    import udms_control
+    import servo_control
+
     setup_board()
     udms_control.setup_udms(ECHO_PIN1, TRIG_PIN1, 1)
     servo1 = servo_control.setup_servo(SERVO_PIN1, PULSE_FREQUENCY)
