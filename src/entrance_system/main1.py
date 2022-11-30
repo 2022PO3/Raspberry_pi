@@ -1,6 +1,5 @@
 import RPi.GPIO as GPIO
 import logging
-import sys
 
 #################
 # Logger config #
