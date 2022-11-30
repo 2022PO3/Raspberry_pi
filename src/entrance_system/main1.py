@@ -10,14 +10,11 @@ def get_logger(name: str) -> logging.Logger:
     logging.basicConfig(
         level=logging.INFO, format=log_format, filename="rpi_garage.log", filemode="w"
     )
-    console = logging.StreamHandler()
-    console.setLevel(logging.INFO)
-    console.setFormatter(logging.Formatter(log_format))
-    logging.getLogger(name).addHandler(console)
     return logging.getLogger(name)
 
 
 logger = get_logger("rpi_garage")
+logger.addHandler(logging.StreamHandler(sys.stdout))
 
 #####################
 # Defining the pins #
