@@ -8,8 +8,7 @@ def setup_servo(servo_pin: int, pulse_frequency: int):
     GPIO.setup(servo_pin, GPIO.OUT)
     logger.info(f"Setup of servo on pin {servo_pin} completed.")
     servo = GPIO.PWM(servo_pin, pulse_frequency)
-    servo.start(2.5)
-    servo.ChangeDutyCycle(0)
+    servo.start(0)
     return servo
 
 
