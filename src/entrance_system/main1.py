@@ -14,7 +14,6 @@ def get_logger(name: str) -> logging.Logger:
     console.setLevel(logging.INFO)
     console.setFormatter(logging.Formatter(log_format))
     logging.getLogger(name).addHandler(console)
-    logging.getLogger(name).addHandler(logging.StreamHandler(sys.stdout))
     return logging.getLogger(name)
 
 
