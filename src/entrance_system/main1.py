@@ -1,11 +1,7 @@
 import RPi.GPIO as GPIO
 import logging
 import sys
-from udms_control import (
-    setup_udms,
-    calculate_distance,
-    take_picture,
-)
+import udms_control
 from servo_control import setup_servo
 
 #################
@@ -51,11 +47,14 @@ def setup_board() -> None:
 
 if __name__ == "__main__":
     setup_board()
-    setup_udms(ECHO_PIN1, TRIG_PIN1, 1)
+    udms_control.setup_udms(ECHO_PIN1, TRIG_PIN1, 1)
     servo1 = setup_servo(SERVO_PIN1, PULSE_FREQUENCY)
     logger.info("Setup of subsystem 1 completed successfully.")
 
     while True:
-        sensor1_state = take_picture(
-            calculate_distance(TRIG_PIN1, ECHO_PIN1, 1), sensor1_state, 1, servo1
+        sensor1_state = udms_control.take_picture(
+            udms_control.calculate_distance(TRIG_PIN1, ECHO_PIN1, 1),
+            sensor1_state,
+            1,
+            servo1,
         )
