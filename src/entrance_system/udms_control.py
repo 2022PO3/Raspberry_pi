@@ -1,19 +1,10 @@
-import sys
 import time
-import logging
 import subprocess
 import RPi.GPIO as GPIO
+import entrance_system.main1 as main1
+from servo_control import open_barrier, close_barrier
 
-# Config of the logger for logging entrances and exits of the garage.
-log_format = "%(asctime)s: %(message)s"
-logging.basicConfig(
-    level=logging.INFO,
-    format=log_format,
-    filename="anpr_garage.log",
-    filemode="w",
-)
-logger = logging.getLogger("anpr_garage")
-logger.addHandler(logging.StreamHandler(sys.stdout))
+logger = main1.get_logger("rpi_garage")
 
 
 def setup_udms(trig_pin: int, echo_pin: int, sensor_no: int) -> None:
@@ -28,7 +19,7 @@ def setup_udms(trig_pin: int, echo_pin: int, sensor_no: int) -> None:
     GPIO.output(trig_pin, GPIO.LOW)
 
     time.sleep(2)
-    logger.info(f"Setup for sensor {sensor_no} completed.")
+    logger.info(f"Setup of ultrasonic sensor {sensor_no} completed.")
 
 
 def calculate_distance(trig_pin: int, echo_pin: int, time_delta: int) -> float:
@@ -53,7 +44,7 @@ def calculate_distance(trig_pin: int, echo_pin: int, time_delta: int) -> float:
     return round(pulse_duration * 17150, 2)
 
 
-def take_picture(distance: float, sensor_state: bool, sensor_no: int) -> bool:
+def take_picture(distance: float, sensor_state: bool, sensor_no: int, servo) -> bool:
     """
     Takes picture when the distance is small enough (car is on top of the sensor). The
     `sensor_state` variable contains the boolean if a car is on top of the sensor. If it is,
@@ -65,9 +56,12 @@ def take_picture(distance: float, sensor_state: bool, sensor_no: int) -> bool:
         logger.info(f"Car entered sensor {sensor_no}")
         subprocess.run(["bash", "take_image.sh", "image.jpg"])
         logger.info(f"Took image of car on sensor {sensor_no}")
+        open_barrier(servo)
         return not sensor_state
     elif distance >= 5 and sensor_state:
         logger.info(f"Car left sensor {sensor_no}")
+        time.sleep(2)
+        close_barrier(servo)
         return not sensor_state
     else:
         return sensor_state
