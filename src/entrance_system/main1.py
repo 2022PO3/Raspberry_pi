@@ -2,7 +2,7 @@ import RPi.GPIO as GPIO
 import logging
 import sys
 import udms_control
-from servo_control import setup_servo
+import servo_control
 
 #################
 # Logger config #
@@ -48,7 +48,7 @@ def setup_board() -> None:
 if __name__ == "__main__":
     setup_board()
     udms_control.setup_udms(ECHO_PIN1, TRIG_PIN1, 1)
-    servo1 = setup_servo(SERVO_PIN1, PULSE_FREQUENCY)
+    servo1 = servo_control.setup_servo(SERVO_PIN1, PULSE_FREQUENCY)
     logger.info("Setup of subsystem 1 completed successfully.")
 
     while True:
