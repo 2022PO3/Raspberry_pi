@@ -47,7 +47,7 @@ if __name__ == "__main__":
     import servo_control
 
     setup_board()
-    udms_control.setup_udms(ECHO_PIN1, TRIG_PIN1, 1)
+    udms_control.setup_udms(TRIG_PIN1, ECHO_PIN1, 1)
     servo1 = servo_control.setup_servo(SERVO_PIN1, PULSE_FREQUENCY)
     logger.info("Setup of subsystem 1 completed successfully.")
 
