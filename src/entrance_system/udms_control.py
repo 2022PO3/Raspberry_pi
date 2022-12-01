@@ -1,4 +1,6 @@
 import time
+import os
+import requests
 import subprocess
 import RPi.GPIO as GPIO
 import main1
@@ -44,6 +46,9 @@ def calculate_distance(trig_pin: int, echo_pin: int, time_delta: int) -> float:
     return round(pulse_duration * 17150, 2)
 
 
+###################
+# Entrance system #
+###################
 def take_picture(
     distance: float,
     sensor_state: bool,
@@ -71,3 +76,34 @@ def take_picture(
         return not sensor_state
     else:
         return sensor_state
+
+
+######################
+# Parking lot system #
+######################
+def update_state(sensor_state: list[bool], distance: float) -> None:
+    """
+    Updates the given state of a UDMS and returns the newly updated state. This has the effect
+    that first element is pushed to the list, deleting the last element.
+    """
+    sensor_state = [True if distance < 5 else False] + sensor_state[:2]
+
+
+def make_request(
+    sensor_state: list[bool], parking_no: int, garage_id: int
+) -> list[bool]:
+    """
+    Makes request about the state of the parking lot to the Backend.
+    """
+    url = "https://po3backend.ddns.net/api/rpi-parking-lot"
+    headers = {"PO3-ORIGIN": "rpi", "PO3-RPI-KEY": os.environ["RPI-KEY"]}
+    body = {"garageId": garage_id, "parkingLotNo": parking_no}
+    if sensor_state == [True] * 3:
+        body |= {"occupied": True}
+        requests.post(url, body, headers=headers)
+        logger.info(f"Sent request that parking lot {parking_no} is occupied.")
+    elif sensor_state == [False] * 3:
+        body |= {"occupied": False}
+        requests.post(url, body, headers=headers)
+        logger.info(f"Sent request that parking lot {parking_no} is emptied.")
+    return sensor_state

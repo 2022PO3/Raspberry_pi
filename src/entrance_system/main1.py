@@ -12,7 +12,7 @@ def get_logger(name: str) -> logging.Logger:
     return logging.getLogger(name)
 
 
-logger = get_logger("rpi_garage")
+logger = get_logger("entrance_system")
 
 #####################
 # Defining the pins #
@@ -45,7 +45,7 @@ if __name__ == "__main__":
     setup_board()
     udms_control.setup_udms(TRIG_PIN1, ECHO_PIN1, 1)
     servo1 = servo_control.setup_servo(SERVO_PIN1, PULSE_FREQUENCY)
-    logger.info("Setup of subsystem 1 completed successfully.")
+    logger.info("Setup of entrance system completed successfully.")
 
     while True:
         sensor1_state = udms_control.take_picture(
