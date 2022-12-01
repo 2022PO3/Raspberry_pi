@@ -59,7 +59,7 @@ def update_parking_lot(
     Makes request about the state of the parking lot to the Backend.
     """
     url = "https://po3backend.ddns.net/api/rpi-parking-lot"
-    headers = {"PO3-ORIGIN": "rpi", "PO3-RPI-KEY": os.environ["RPI-KEY"]}
+    headers = {"PO3-ORIGIN": "rpi", "PO3-RPI-KEY": os.environ["RPI_KEY"]}
     body = {"garageId": garage_id, "parkingLotNo": parking_no}
     if distance < 5 and sensor_state == [True, False]:
         logger.info(f"Car entered parking lot {parking_no}.")
