@@ -1,6 +1,6 @@
 import RPi.GPIO as GPIO
 import logging
-
+import time
 
 #################
 # Logger config #
@@ -87,3 +87,4 @@ if __name__ == "__main__":
                 i,
                 GARAGE_ID,
             )
+            time.sleep(0.14)
