@@ -64,7 +64,7 @@ def print_digit(digit: int) -> None:
 def get_free_spots() -> int:
     url = f"https://po3backend.ddns.net/api/garage/{GARAGE_ID}"
     headers = {"PO3-ORIGIN": "rpi", "PO3-RPI-KEY": os.environ["RPI_KEY"]}
-    response = json.loads(requests.get(url, headers=headers))
+    response = json.loads(requests.get(url, headers=headers).text)
     return int(response["data"]["unoccupiedLots"])
 
 
