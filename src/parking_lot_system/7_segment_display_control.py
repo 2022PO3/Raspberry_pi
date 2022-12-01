@@ -14,7 +14,7 @@ logger = main.get_logger("display_control")
 GARAGE_ID = 11
 
 # Define pins [pinA, pinB, pinC, pinD, pinE, pinF, pinG]
-PINS = [15, 16, 17, 18, 19, 20, 21]
+PINS = [40, 38, 37, 36, 35, 33, 31]
 
 # Define 7 segment digits
 HIGH = 0
@@ -69,4 +69,10 @@ def get_free_spots() -> int:
 
 
 if __name__ == "__main__":
-    print(get_free_spots())
+    setup_board()
+    try:
+        while True:
+            print_digit(get_free_spots())
+            time.sleep(5)
+    except KeyboardInterrupt:
+        GPIO.cleanup()
