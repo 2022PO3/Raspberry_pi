@@ -50,8 +50,10 @@ if __name__ == "__main__":
     setup_udms(ECHO_PIN2, TRIG_PIN2, 2)
     servo2 = setup_servo(SERVO_PIN2, PULSE_FREQUENCY)
     logger.info("Setup of exit system completed successfully.")
-
-    while True:
-        sensor2_state = take_picture(
-            calculate_distance(TRIG_PIN2, ECHO_PIN2, 1), sensor2_state, 2, servo2
-        )
+    try:
+        while True:
+            sensor2_state = take_picture(
+                calculate_distance(TRIG_PIN2, ECHO_PIN2, 1), sensor2_state, 2, servo2
+            )
+    except KeyboardInterrupt:
+        GPIO.cleanup()

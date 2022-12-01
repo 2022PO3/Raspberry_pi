@@ -1,91 +1,72 @@
 import RPi.GPIO as GPIO
 import time
+import main
+import requests
+import json
+import os
 
+logger = main.get_logger("display_control")
 
-parking1_detected = True
-parking2_detected = True
-parking3_detected = True
-parking4_detected = True
-parking5_detected = True
-parking6_detected = True
+####################
+# Define constants #
+####################
 
-NUMBER_OF_SPACES = 6
+GARAGE_ID = 1
 
-GPIO.setwarnings(False)
-GPIO.setmode(GPIO.BOARD)
-
-# define pins [pinA, pinB, pinC, pinD, pinE, pinF, pinG]
+# Define pins [pinA, pinB, pinC, pinD, pinE, pinF, pinG]
 PINS = [15, 16, 17, 18, 19, 20, 21]
 
-# Setup
+# Define 7 segment digits
+HIGH = 0
+LOW = 1
+
+DIGITS = {
+    -1: [LOW, LOW, LOW, LOW, LOW, LOW, LOW],
+    0: [HIGH, HIGH, HIGH, HIGH, HIGH, LOW],
+    1: [LOW, HIGH, HIGH, LOW, LOW, LOW, LOW],
+    2: [HIGH, HIGH, LOW, HIGH, HIGH, LOW, HIGH],
+    3: [HIGH, HIGH, HIGH, HIGH, LOW, LOW, HIGH],
+    4: [HIGH, LOW, HIGH, HIGH, LOW, HIGH, HIGH],
+    5: [HIGH, LOW, HIGH, HIGH, LOW, HIGH, HIGH],
+    6: [HIGH, LOW, HIGH, HIGH, HIGH, HIGH, HIGH],
+}
+
+##################
+# Main functions #
+##################
+
+
+def setup_board() -> None:
+    GPIO.setwarnings(False)
+    GPIO.setmode(GPIO.BOARD)
+    logger.info("Setup of board completed.")
+
+
 def setup_display(pins: list[int]) -> None:
     for pin in pins:
         GPIO.setup(pin, GPIO.OUT)
-
-
-# define 7 segment digits
-high = 0
-low = 1
-
-digitclr = [low, low, low, low, low, low, low]
-digit0 = [high, high, high, high, high, low]
-digit1 = [low, high, high, low, low, low, low]
-digit2 = [high, high, low, high, high, low, high]
-digit3 = [high, high, high, high, low, low, high]
-digit4 = [low, high, high, low, low, high, high]
-digit5 = [high, low, high, high, low, high, high]
-digit6 = [high, low, high, high, high, high, high]
-digit7 = [high, high, high, low, low, low, low]
-digit8 = [high, high, high, high, high, high, high]
-digit9 = [high, high, high, high, low, high, high]
+    logger.info("Setup of screen completed.")
 
 
 def reset() -> None:
     for x in range(7):
-        GPIO.output(PINS[x], digitclr[x])
+        GPIO.output(PINS[x], DIGITS[-1][x])
         time.sleep(0.1)
 
 
-def print_digit(digit: list) -> None:
+def print_digit(digit: int) -> None:
     reset()
     for x in range(7):
-        GPIO.output(PINS[x], digit[x])
+        GPIO.output(PINS[x], DIGITS[digit][x])
+    logger.info(f"Printed digit {digit} on screen.")
 
 
-def free_spots() -> int:
-    """
-    Returns the number of free spots in the garage.
-    """
-    aantal_bezet = 0
-    if parking1_detected:
-        aantal_bezet += 1
-    if parking2_detected:
-        aantal_bezet += 1
-    if parking3_detected:
-        aantal_bezet += 1
-    if parking4_detected:
-        aantal_bezet += 1
-    if parking5_detected:
-        aantal_bezet += 1
-    if parking6_detected:
-        aantal_bezet += 1
-    return NUMBER_OF_SPACES - aantal_bezet
+def get_free_spots() -> int:
+    url = f"https://po3backend.ddns.net/api/garage/{GARAGE_ID}"
+    headers = {"PO3-ORIGIN": "rpi", "PO3-RPI-KEY": os.environ["RPI_KEY"]}
+    response = json.loads(requests.get(url, headers=headers))
+    return int(response["data"]["unoccupiedLots"])
 
 
-def print_spots() -> None:
-    """
-    Prints the correct number of spots on the 7-segment display.
-    """
-    digit = free_spots()
-    if digit == 1:
-        print_digit(digit1)
-    elif digit == 2:
-        print_digit(digit2)
-    elif digit == 3:
-        print_digit(digit3)
-    elif digit == 4:
-        print_digit(digit4)
-    elif digit == 5:
-        print_digit(digit5)
-    elif digit == 6:
-        print_digit(digit6)
+if __name__ == "__main__":
+    print(get_free_spots())

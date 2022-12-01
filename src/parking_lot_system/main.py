@@ -60,17 +60,19 @@ if __name__ == "__main__":
         udms_control.setup_udms(UDMS_PINS[i], i)
         led_control.setup_led(PARKING_LED_PINS[i])
     logger.info("Setup of parking lot system completed successfully.")
-
-    while True:
-        for i in range(1, 2):
-            distance = udms_control.calculate_distance(UDMS_PINS[i], 1)
-            print(distance)
-            print(state_dict[i])
-            state_dict[i] = udms_control.update_parking_lot(
-                state_dict[i],
-                distance,
-                PARKING_LED_PINS[i],
-                i,
-                GARAGE_ID,
-            )
-            time.sleep(0.14)
+    try:
+        while True:
+            for i in range(1, 2):
+                distance = udms_control.calculate_distance(UDMS_PINS[i], 1)
+                print(distance)
+                print(state_dict[i])
+                state_dict[i] = udms_control.update_parking_lot(
+                    state_dict[i],
+                    distance,
+                    PARKING_LED_PINS[i],
+                    i,
+                    GARAGE_ID,
+                )
+                time.sleep(0.14)
+    except KeyboardInterrupt:
+        GPIO.cleanup()

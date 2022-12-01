@@ -46,12 +46,14 @@ if __name__ == "__main__":
     udms_control.setup_udms(TRIG_PIN1, ECHO_PIN1, 1)
     servo1 = servo_control.setup_servo(SERVO_PIN1, PULSE_FREQUENCY)
     logger.info("Setup of entrance system completed successfully.")
-
-    while True:
-        sensor1_state = udms_control.take_picture(
-            udms_control.calculate_distance(TRIG_PIN1, ECHO_PIN1, 1),
-            sensor1_state,
-            1,
-            servo1,
-            servo_no=1,
-        )
+    try:
+        while True:
+            sensor1_state = udms_control.take_picture(
+                udms_control.calculate_distance(TRIG_PIN1, ECHO_PIN1, 1),
+                sensor1_state,
+                1,
+                servo1,
+                servo_no=1,
+            )
+    except KeyboardInterrupt:
+        GPIO.cleanup()
