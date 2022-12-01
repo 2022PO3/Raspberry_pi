@@ -11,7 +11,7 @@ logger = main.get_logger("display_control")
 # Define constants #
 ####################
 
-GARAGE_ID = 1
+GARAGE_ID = 11
 
 # Define pins [pinA, pinB, pinC, pinD, pinE, pinF, pinG]
 PINS = [15, 16, 17, 18, 19, 20, 21]

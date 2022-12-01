@@ -33,7 +33,7 @@ UDMS_PINS = {
 
 PULSE_FREQUENCY = 50
 
-GARAGE_ID = 1
+GARAGE_ID = 11
 
 ##################
 # Setting states #
