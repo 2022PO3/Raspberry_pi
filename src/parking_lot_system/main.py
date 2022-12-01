@@ -80,6 +80,8 @@ if __name__ == "__main__":
             distance = udms_control.calculate_distance(
                 eval(f"TRIG_PIN{i}"), eval(f"ECHO_PIN{i}"), 1
             )
+            print(distance)
+            print(sensor1_state)
             udms_control.update_parking_lot(
                 eval(f"sensor{i}_state"),
                 distance,
