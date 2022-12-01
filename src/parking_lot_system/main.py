@@ -20,24 +20,24 @@ logger = get_logger("parking_lot_system")
 #####################
 # LED pins
 PARKING1_LED_PIN = 37
-PARKING2_LED_PIN = 2
+PARKING2_LED_PIN = 40
 PARKING3_LED_PIN = 3
 PARKING4_LED_PIN = 4
 PARKING5_LED_PIN = 5
-PARKING6_LED_PIN = 6
+PARKING6_LED_PIN = 38
 
 # Pins for the ultrasonic sensors (the number refers to the parking lot number).
 TRIG_PIN1 = 11
 ECHO_PIN1 = 13
 TRIG_PIN2 = 9
-ECHO_PIN2 = 10
+ECHO_PIN2 = 29
 TRIG_PIN3 = 7
 ECHO_PIN3 = 12
-TRIG_PIN4 = 8
-ECHO_PIN4 = 14
+TRIG_PIN4 = 32
+ECHO_PIN4 = 36
 TRIG_PIN5 = 15
 ECHO_PIN5 = 16
-TRIG_PIN6 = 17
+TRIG_PIN6 = 35
 ECHO_PIN16 = 18
 
 PULSE_FREQUENCY = 50
