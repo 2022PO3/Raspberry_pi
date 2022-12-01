@@ -70,13 +70,13 @@ if __name__ == "__main__":
     import led_control
 
     setup_board()
-    for i in range(1, 7):
+    for i in range(1, 2):
         udms_control.setup_udms(eval(f"TRIG_PIN{i}"), eval(f"ECHO_PIN{i}"), i)
         led_control.setup_led(eval(f"PARKING{i}_LED_PIN"))
     logger.info("Setup of parking lot system completed successfully.")
 
     while True:
-        for i in range(1, 7):
+        for i in range(1, 2):
             distance = udms_control.calculate_distance(
                 eval(f"TRIG_PIN{i}"), eval(f"ECHO_PIN{i}"), 1
             )
