@@ -66,8 +66,7 @@ def setup_board() -> None:
 
 
 if __name__ == "__main__":
-    import led_control
-    from entrance_system import udms_control
+    import udms_control
 
     setup_board()
     for i in range(1, 7):
@@ -76,17 +75,10 @@ if __name__ == "__main__":
 
     while True:
         for i in range(1, 7):
-            led_control.update_led(
-                udms_control.make_request(
-                    udms_control.update_state(
-                        udms_control.calculate_distance(
-                            eval(f"TRIG_PIN{i}"), eval(f"ECHO_PIN{i}"), 1
-                        ),
-                        eval(f"sensor{i}_state"),
-                        i,
-                        GARAGE_ID,
-                    )
-                ),
-                eval(f"PARKING{i}_LED"),
-                i,
+            distance = udms_control.calculate_distance(
+                eval(f"TRIG_PIN{i}"), eval(f"ECHO_PIN{i}"), 1
+            )
+            udms_control.update_state(eval(f"sensor{i}_state"), distance)
+            udms_control.make_request(
+                eval(f"sensor{i}_state"), eval(f"PARKING{i}_LED"), i, GARAGE_ID
             )
