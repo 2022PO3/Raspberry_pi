@@ -79,15 +79,5 @@ def update_parking_lot(
         logger.info(f"Sent request that parking lot {parking_no} is emptied.")
         led_control.turn_on_green(led_pin_no, parking_no)
         return [False, False]
-    elif distance < 5 and sensor_state == [False, False]:
-        logger.info(
-            f"Detected entering car for the first time on parking lot {parking_no}."
-        )
-        return [True, False]
-    elif distance >= 5 and sensor_state == [True, True]:
-        logger.info(
-            f"Detected leaving car for the first time on parking lot {parking_no}."
-        )
-        return [False, True]
     else:
-        return sensor_state
+        return [True if distance < 5 else False] + [sensor_state[0]]
