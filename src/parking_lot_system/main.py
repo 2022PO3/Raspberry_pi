@@ -83,7 +83,7 @@ if __name__ == "__main__":
             udms_control.update_parking_lot(
                 eval(f"sensor{i}_state"),
                 distance,
-                eval(f"PARKING{i}_LED"),
+                eval(f"PARKING{i}_LED_PIN"),
                 i,
                 GARAGE_ID,
             )
