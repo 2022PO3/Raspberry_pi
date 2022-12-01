@@ -8,10 +8,12 @@ import main
 logger = main.get_logger("udms_control")
 
 
-def setup_udms(trig_pin: int, echo_pin: int, sensor_no: int) -> None:
+def setup_udms(pin_list: list[int], sensor_no: int) -> None:
     """
     Sets up the udms on the `trig_pin` and `echo_pin`.
+    Pin list is of the format: `[TRIG_PIN, ECHO_PIN]`.
     """
+    trig_pin, echo_pin = pin_list
     GPIO.setmode(GPIO.BOARD)
 
     GPIO.setup(trig_pin, GPIO.OUT)
@@ -23,10 +25,12 @@ def setup_udms(trig_pin: int, echo_pin: int, sensor_no: int) -> None:
     logger.info(f"Setup of ultrasonic sensor {sensor_no} completed.")
 
 
-def calculate_distance(trig_pin: int, echo_pin: int, time_delta: int) -> float:
+def calculate_distance(pin_list: list[int], time_delta: int) -> float:
     """
     Reads on the distance measuring of the udms connected on the `trig_pin` and `echo_pin`.
+    Pin list is of the format: `[TRIG_PIN, ECHO_PIN]`.
     """
+    trig_pin, echo_pin = pin_list
     time.sleep(time_delta)
 
     GPIO.output(trig_pin, GPIO.HIGH)
@@ -67,21 +71,21 @@ def update_parking_lot(
         requests.post(url, body, headers=headers)
         logger.info(f"Sent request that parking lot {parking_no} is occupied.")
         led_control.turn_on_red(led_pin_no, parking_no)
-        sensor_state = [True, True]
+        return [True, True]
     elif distance >= 5 and sensor_state == [False, True]:
         logger.info(f"Car left parking lot {parking_no}.")
         body |= {"occupied": False}
         requests.post(url, body, headers=headers)
         logger.info(f"Sent request that parking lot {parking_no} is emptied.")
         led_control.turn_on_green(led_pin_no, parking_no)
-        sensor_state = [False, False]
+        return [False, False]
     elif distance < 5 and sensor_state == [False, False]:
         logger.info(
             f"Detected entering car for the first time on parking lot {parking_no}."
         )
-        sensor_state = [True, False]
+        return [True, False]
     elif distance >= 5 and sensor_state == [True, True]:
         logger.info(
             f"Detected leaving car for the first time on parking lot {parking_no}."
         )
-        sensor_state = [False, True]
+        return [False, True]

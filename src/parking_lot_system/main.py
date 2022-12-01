@@ -18,27 +18,18 @@ logger = get_logger("parking_lot_system")
 #####################
 # Defining the pins #
 #####################
-# LED pins
-PARKING1_LED_PIN = 37
-PARKING2_LED_PIN = 40
-PARKING3_LED_PIN = 3
-PARKING4_LED_PIN = 22
-PARKING5_LED_PIN = 5
-PARKING6_LED_PIN = 38
+# LED pins in the format `parking_lot_no: pin_no`.
+PARKING_LED_PINS = {1: 37, 2: 40, 3: 3, 4: 22, 5: 38}
 
 # Pins for the ultrasonic sensors (the number refers to the parking lot number).
-TRIG_PIN1 = 11
-ECHO_PIN1 = 13
-TRIG_PIN2 = 23
-ECHO_PIN2 = 29
-TRIG_PIN3 = 7
-ECHO_PIN3 = 12
-TRIG_PIN4 = 32
-ECHO_PIN4 = 36
-TRIG_PIN5 = 15
-ECHO_PIN5 = 16
-TRIG_PIN6 = 35
-ECHO_PIN6 = 18
+UDMS_PINS = {
+    1: [11, 13],
+    2: [23, 29],
+    3: [7, 12],
+    4: [32, 36],
+    5: [15, 16],
+    6: [35, 18],
+}
 
 PULSE_FREQUENCY = 50
 
@@ -66,21 +57,19 @@ if __name__ == "__main__":
 
     setup_board()
     for i in range(1, 2):
-        udms_control.setup_udms(eval(f"TRIG_PIN{i}"), eval(f"ECHO_PIN{i}"), i)
-        led_control.setup_led(eval(f"PARKING{i}_LED_PIN"))
+        udms_control.setup_udms(UDMS_PINS[i], i)
+        led_control.setup_led(PARKING_LED_PINS[i])
     logger.info("Setup of parking lot system completed successfully.")
 
     while True:
         for i in range(1, 2):
-            distance = udms_control.calculate_distance(
-                eval(f"TRIG_PIN{i}"), eval(f"ECHO_PIN{i}"), 1
-            )
+            distance = udms_control.calculate_distance(UDMS_PINS[i], 1)
             print(distance)
             print(state_dict[1])
             state_dict[i] = udms_control.update_parking_lot(
                 state_dict[i],
                 distance,
-                eval(f"PARKING{i}_LED_PIN"),
+                PARKING_LED_PINS[i],
                 i,
                 GARAGE_ID,
             )
