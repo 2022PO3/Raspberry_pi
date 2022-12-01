@@ -73,7 +73,9 @@ if __name__ == "__main__":
     setup_display(PINS)
     try:
         while True:
-            print_digit(get_free_spots())
+            left_spots = get_free_spots()
+            print(left_spots)
+            print_digit(left_spots)
             time.sleep(5)
     except KeyboardInterrupt:
         GPIO.cleanup()
