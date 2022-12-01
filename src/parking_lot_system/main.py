@@ -47,15 +47,15 @@ GARAGE_ID = 1
 ##################
 # Setting states #
 ##################
-# The states are an array of length 3. This prevents false positives. Only when the sensor
-# detects a car (or no car) for three consecutive the car will be detected. The first element
-# indicates most recent measurement.
-sensor1_state = [False] * 3
-sensor2_state = [False] * 3
-sensor3_state = [False] * 3
-sensor4_state = [False] * 3
-sensor5_state = [False] * 3
-sensor6_state = [False] * 3
+# The states are an array of length 2. This prevents false positives. Only when the sensor
+# detects a car (or no car) for two consecutive times, the car will be detected. The first
+# element indicates most recent measurement.
+sensor1_state = [False] * 2
+sensor2_state = [False] * 2
+sensor3_state = [False] * 2
+sensor4_state = [False] * 2
+sensor5_state = [False] * 2
+sensor6_state = [False] * 2
 
 
 def setup_board() -> None:
@@ -78,7 +78,10 @@ if __name__ == "__main__":
             distance = udms_control.calculate_distance(
                 eval(f"TRIG_PIN{i}"), eval(f"ECHO_PIN{i}"), 1
             )
-            udms_control.update_state(eval(f"sensor{i}_state"), distance)
-            udms_control.make_request(
-                eval(f"sensor{i}_state"), eval(f"PARKING{i}_LED"), i, GARAGE_ID
+            udms_control.update_parking_lot(
+                eval(f"sensor{i}_state"),
+                distance,
+                eval(f"PARKING{i}_LED"),
+                i,
+                GARAGE_ID,
             )

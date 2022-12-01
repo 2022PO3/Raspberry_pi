@@ -48,17 +48,12 @@ def calculate_distance(trig_pin: int, echo_pin: int, time_delta: int) -> float:
 ######################
 # Parking lot system #
 ######################
-def update_state(sensor_state: list[bool], distance: float) -> list[bool]:
-    """
-    Updates the given state of a UDMS and returns the newly updated state. This has the effect
-    that first element is pushed to the list, deleting the last element.
-    """
-    sensor_state = [True if distance < 5 else False] + sensor_state[:2]
-    return sensor_state
-
-
-def make_request(
-    sensor_state: list[bool], led_pin_no, parking_no: int, garage_id: int
+def update_parking_lot(
+    sensor_state: list[bool],
+    distance: float,
+    led_pin_no: int,
+    parking_no: int,
+    garage_id: int,
 ) -> list[bool]:
     """
     Makes request about the state of the parking lot to the Backend.
@@ -66,14 +61,29 @@ def make_request(
     url = "https://po3backend.ddns.net/api/rpi-parking-lot"
     headers = {"PO3-ORIGIN": "rpi", "PO3-RPI-KEY": os.environ["RPI-KEY"]}
     body = {"garageId": garage_id, "parkingLotNo": parking_no}
-    if sensor_state == [True] * 3:
+    if distance < 5 and sensor_state == [True, False]:
+        logger.info(f"Car entered parking lot {parking_no}.")
         body |= {"occupied": True}
         requests.post(url, body, headers=headers)
         logger.info(f"Sent request that parking lot {parking_no} is occupied.")
         led_control.turn_on_red(led_pin_no, parking_no)
-    elif sensor_state == [False] * 3:
+        return [True, True]
+    elif distance >= 5 and sensor_state == [False, True]:
+        logger.info(f"Car left parking lot {parking_no}.")
         body |= {"occupied": False}
         requests.post(url, body, headers=headers)
         logger.info(f"Sent request that parking lot {parking_no} is emptied.")
         led_control.turn_on_green(led_pin_no, parking_no)
-    return sensor_state
+        return [False, False]
+    elif distance < 5 and sensor_state == [False, False]:
+        logger.info(
+            f"Detected entering car for the first time on parking lot {parking_no}."
+        )
+        return [True, False]
+    elif distance >= 5 and sensor_state == [True, True]:
+        logger.info(
+            f"Detected leaving car for the first time on parking lot {parking_no}."
+        )
+        return [False, True]
+    else:
+        return sensor_state
