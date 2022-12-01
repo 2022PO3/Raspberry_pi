@@ -1,6 +1,6 @@
 import time
 import os
-import subprocess
+import requests
 import led_control
 import RPi.GPIO as GPIO
 import main
@@ -68,14 +68,14 @@ def update_parking_lot(
     if distance < 5 and sensor_state == [True, False]:
         logger.info(f"Car entered parking lot {parking_no}.")
         body |= {"occupied": True}
-        subprocess.run(["bash", "make_request.sh", str(parking_no), "1"])
+        requests.put(url, json=body, headers=headers)
         logger.info(f"Sent request that parking lot {parking_no} is occupied.")
         led_control.turn_on_red(led_pin_no, parking_no)
         return [True, True]
     elif distance >= 5 and sensor_state == [False, True]:
         logger.info(f"Car left parking lot {parking_no}.")
         body |= {"occupied": False}
-        subprocess.run(["bash", "make_request.sh", str(parking_no), "2"])
+        requests.put(url, json=body, headers=headers)
         logger.info(f"Sent request that parking lot {parking_no} is emptied.")
         led_control.turn_on_green(led_pin_no, parking_no)
         return [False, False]
