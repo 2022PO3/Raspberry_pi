@@ -70,6 +70,7 @@ def get_free_spots() -> int:
 
 if __name__ == "__main__":
     setup_board()
+    setup_display(PINS)
     try:
         while True:
             print_digit(get_free_spots())
