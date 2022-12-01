@@ -29,7 +29,7 @@ PARKING6_LED_PIN = 38
 # Pins for the ultrasonic sensors (the number refers to the parking lot number).
 TRIG_PIN1 = 11
 ECHO_PIN1 = 13
-TRIG_PIN2 = 9
+TRIG_PIN2 = 23
 ECHO_PIN2 = 29
 TRIG_PIN3 = 7
 ECHO_PIN3 = 12
