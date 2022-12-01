@@ -19,7 +19,7 @@ def setup_udms(trig_pin: int, echo_pin: int, sensor_no: int) -> None:
 
     GPIO.output(trig_pin, GPIO.LOW)
 
-    time.sleep(2)
+    time.sleep(1)
     logger.info(f"Setup of ultrasonic sensor {sensor_no} completed.")
 
 
