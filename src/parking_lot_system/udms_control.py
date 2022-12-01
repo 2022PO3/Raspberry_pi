@@ -89,3 +89,5 @@ def update_parking_lot(
             f"Detected leaving car for the first time on parking lot {parking_no}."
         )
         return [False, True]
+    else:
+        return sensor_state

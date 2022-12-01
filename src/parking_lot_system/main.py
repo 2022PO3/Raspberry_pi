@@ -65,7 +65,7 @@ if __name__ == "__main__":
         for i in range(1, 2):
             distance = udms_control.calculate_distance(UDMS_PINS[i], 1)
             print(distance)
-            print(state_dict[1])
+            print(state_dict[i])
             state_dict[i] = udms_control.update_parking_lot(
                 state_dict[i],
                 distance,
