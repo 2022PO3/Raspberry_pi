@@ -26,10 +26,10 @@ logger = get_logger("exit_system")
 # Defining the pins #
 #####################
 # Ultrasonic Sensor 2 on th exit of the garage.
-ECHO_PIN2 = 5
-TRIG_PIN2 = 3
-# Servo motor exit.
-SERVO_PIN2 = 14
+ECHO_PIN2 = 18
+TRIG_PIN2 = 16
+# Servo motor entrance.
+SERVO_PIN2 = 12
 # Pulse frequency of the PWM-pins.
 PULSE_FREQUENCY = 50
 
@@ -53,7 +53,11 @@ if __name__ == "__main__":
     try:
         while True:
             sensor2_state = take_picture(
-                calculate_distance(TRIG_PIN2, ECHO_PIN2, 1), sensor2_state, 2, servo2
+                calculate_distance(TRIG_PIN2, ECHO_PIN2, 1),
+                sensor2_state,
+                2,
+                servo2,
+                servo_no=2,
             )
     except KeyboardInterrupt:
         GPIO.cleanup()

@@ -18,10 +18,10 @@ logger = get_logger("entrance_system")
 # Defining the pins #
 #####################
 # Ultrasonic Sensor 1 on the entrance of the garage.
-ECHO_PIN1 = 11
-TRIG_PIN1 = 7
+ECHO_PIN1 = 18
+TRIG_PIN1 = 16
 # Servo motor entrance.
-SERVO_PIN1 = 13
+SERVO_PIN1 = 12
 # Pulse frequency of the PWM-pins.
 PULSE_FREQUENCY = 50
 
