@@ -84,11 +84,11 @@ if __name__ == "__main__":
     import time
 
     from luma.core.virtual import sevensegment
-    from luma.lcd.device import ht1621
+    from luma.lcd.device import st7735
 
-    device = ht1621()
+    device = st7735()
     seg = sevensegment(device)
 
-    seg.text = 'HELLO'
+    seg.text = "HELLO"
 
     time.sleep(10)
