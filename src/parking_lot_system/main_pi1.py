@@ -18,14 +18,19 @@ logger = get_logger("parking_lot_system")
 #####################
 # Defining the pins #
 #####################
-# LED pins in the format `parking_lot_no: pin_no`.
-PARKING_LED_PINS = {1: 37, 2: 40, 3: 3}
+# LED pins in the format `parking_lot_no: pin_no`. The pins are in the order [RED, GREEN].
+PARKING_LED_PINS = {
+    1: (23, 29),
+    2: (31, 33),
+    3: (35, 37),
+}
 
-# Pins for the ultrasonic sensors (the number refers to the parking lot number).
+# Pins for the ultrasonic sensors (the number refers to the parking lot number). The pins are in
+# the order [TRIG, ECHO].
 UDMS_PINS = {
-    1: [11, 13],
-    2: [23, 29],
-    3: [7, 12],
+    1: (11, 3),
+    2: (13, 5),
+    3: (15, 7),
 }
 
 PULSE_FREQUENCY = 50
@@ -38,7 +43,7 @@ GARAGE_ID = 11
 # The states are an array of length 2. This prevents false positives. Only when the sensor
 # detects a car (or no car) for two consecutive times, the car will be detected. The first
 # element indicates most recent measurement.
-state_dict = {i: [False] * 2 for i in range(1, 7)}
+state_dict = {i: [False] * 2 for i in range(1, 4)}
 
 
 def setup_board() -> None:
@@ -53,16 +58,14 @@ if __name__ == "__main__":
     import led_control
 
     setup_board()
-    for i in range(1, 2):
+    for i in range(1, 4):
         udms_control.setup_udms(UDMS_PINS[i], i)
-        led_control.setup_led(PARKING_LED_PINS[i])
+        led_control.setup_led(PARKING_LED_PINS[i], i)
     logger.info("Setup of parking lot system completed successfully.")
     try:
         while True:
-            for i in range(1, 2):
+            for i in range(1, 4):
                 distance = udms_control.calculate_distance(UDMS_PINS[i], 1)
-                print(distance)
-                print(state_dict[i])
                 state_dict[i] = udms_control.update_parking_lot(
                     state_dict[i],
                     distance,

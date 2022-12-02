@@ -8,7 +8,7 @@ import parking_lot_system.main_pi1 as main_pi1
 logger = main_pi1.get_logger("udms_control")
 
 
-def setup_udms(pin_list: list[int], sensor_no: int) -> None:
+def setup_udms(pin_list: tuple[int, int], sensor_no: int) -> None:
     """
     Sets up the udms on the `trig_pin` and `echo_pin`.
     Pin list is of the format: `[TRIG_PIN, ECHO_PIN]`.
@@ -25,7 +25,7 @@ def setup_udms(pin_list: list[int], sensor_no: int) -> None:
     logger.info(f"Setup of ultrasonic sensor {sensor_no} completed.")
 
 
-def calculate_distance(pin_list: list[int], time_delta: int) -> float:
+def calculate_distance(pin_list: tuple[int, int], time_delta: int) -> float:
     """
     Reads on the distance measuring of the udms connected on the `trig_pin` and `echo_pin`.
     Pin list is of the format: `[TRIG_PIN, ECHO_PIN]`.
@@ -55,7 +55,7 @@ def calculate_distance(pin_list: list[int], time_delta: int) -> float:
 def update_parking_lot(
     sensor_state: list[bool],
     distance: float,
-    led_pin_no: int,
+    led_pin_no: tuple[int, int],
     parking_no: int,
     garage_id: int,
 ) -> list[bool]:

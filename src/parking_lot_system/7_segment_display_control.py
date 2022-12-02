@@ -69,7 +69,6 @@ def get_free_spots() -> int:
 
 
 if __name__ == "__main__":
-    """
     setup_board()
     setup_display(PINS)
     try:
@@ -80,15 +79,3 @@ if __name__ == "__main__":
             time.sleep(5)
     except KeyboardInterrupt:
         GPIO.cleanup()
-    """
-    import time
-
-    from luma.core.virtual import sevensegment
-    from luma.lcd.device import st7735
-
-    device = st7735()
-    seg = sevensegment(device)
-
-    seg.text = "HELLO"
-
-    time.sleep(10)
