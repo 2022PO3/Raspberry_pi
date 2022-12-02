@@ -1,7 +1,7 @@
 import RPi.GPIO as GPIO
-import main
+import parking_lot_system.main_pi1 as main_pi1
 
-logger = main.get_logger("led_control")
+logger = main_pi1.get_logger("led_control")
 
 
 def setup_led(pin_no: int) -> None:
@@ -10,11 +10,11 @@ def setup_led(pin_no: int) -> None:
     logger.info(f"Setup of LEDs on pin {pin_no} completed.")
 
 
-def turn_on_green(pin_no: int, parking_no: int) -> None:
-    GPIO.output(pin_no, GPIO.LOW)
-    logger.info(f"Turned on green LED in parking {parking_no}")
-
-
-def turn_on_red(pin_no: int, parking_no: int) -> None:
+def turn_on(pin_no: int, parking_no: int) -> None:
     GPIO.output(pin_no, GPIO.HIGH)
-    logger.info(f"Turned on red LED in parking {parking_no}")
+    logger.info(f"Turned on LED in parking {parking_no}.")
+
+
+def turn_off(pin_no: int, parking_no: int) -> None:
+    GPIO.output(pin_no, GPIO.LOW)
+    logger.info(f"Turned off LED in parking {parking_no}.")

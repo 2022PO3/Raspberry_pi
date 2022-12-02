@@ -1,11 +1,11 @@
 import RPi.GPIO as GPIO
 import time
-import main
+import parking_lot_system.main_pi1 as main_pi1
 import requests
 import json
 import os
 
-logger = main.get_logger("display_control")
+logger = main_pi1.get_logger("display_control")
 
 ####################
 # Define constants #

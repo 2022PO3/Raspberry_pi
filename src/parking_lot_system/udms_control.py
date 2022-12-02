@@ -3,9 +3,9 @@ import os
 import requests
 import led_control
 import RPi.GPIO as GPIO
-import main
+import parking_lot_system.main_pi1 as main_pi1
 
-logger = main.get_logger("udms_control")
+logger = main_pi1.get_logger("udms_control")
 
 
 def setup_udms(pin_list: list[int], sensor_no: int) -> None:
