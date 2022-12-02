@@ -47,7 +47,7 @@ def setup_board() -> None:
 
 if __name__ == "__main__":
     setup_board()
-    setup_udms(ECHO_PIN2, TRIG_PIN2, 2)
+    setup_udms(TRIG_PIN2, ECHO_PIN2, 2)
     servo2 = setup_servo(SERVO_PIN2, PULSE_FREQUENCY)
     logger.info("Setup of exit system completed successfully.")
     try:
