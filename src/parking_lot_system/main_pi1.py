@@ -1,19 +1,7 @@
-import RPi.GPIO as GPIO
-import logging
-import time
+"""
+This code is for the parking lot system of the first Raspberry Pi.
+"""
 
-#################
-# Logger config #
-#################
-def get_logger(name: str) -> logging.Logger:
-    log_format = "%(asctime)s: %(message)s (%(name)8s)"
-    logging.basicConfig(
-        level=logging.INFO, format=log_format, filename="rpi_garage.log", filemode="w"
-    )
-    return logging.getLogger(name)
-
-
-logger = get_logger("parking_lot_system")
 
 #####################
 # Defining the pins #
@@ -25,54 +13,15 @@ PARKING_LED_PINS = {
     3: (35, 37),
 }
 
-# Pins for the ultrasonic sensors (the number refers to the parking lot number). The pins are in
-# the order [TRIG, ECHO].
+# Pins for the ultrasonic sensors (the number refers to the parking lot number). The pins are # in the order [TRIG, ECHO].
 UDMS_PINS = {
     1: (11, 3),
     2: (13, 5),
     3: (15, 7),
 }
 
-PULSE_FREQUENCY = 50
-
-GARAGE_ID = 11
-
-##################
-# Setting states #
-##################
-# The states are an array of length 2. This prevents false positives. Only when the sensor
-# detects a car (or no car) for two consecutive times, the car will be detected. The first
-# element indicates most recent measurement.
-state_dict = {i: [False] * 2 for i in range(1, 4)}
-
-
-def setup_board() -> None:
-    # Use pin numbers.
-    GPIO.setwarnings(False)
-    GPIO.setmode(GPIO.BOARD)
-    logger.info("Setup of board completed.")
-
 
 if __name__ == "__main__":
-    import udms_control
-    import led_control
+    from main import run_parking_lot_system
 
-    setup_board()
-    for i in range(1, 4):
-        udms_control.setup_udms(UDMS_PINS[i], i)
-        led_control.setup_led(PARKING_LED_PINS[i], i)
-    logger.info("Setup of parking lot system completed successfully.")
-    try:
-        while True:
-            for i in range(1, 4):
-                distance = udms_control.calculate_distance(UDMS_PINS[i], 1)
-                state_dict[i] = udms_control.update_parking_lot(
-                    state_dict[i],
-                    distance,
-                    PARKING_LED_PINS[i],
-                    i,
-                    GARAGE_ID,
-                )
-                time.sleep(0.14)
-    except KeyboardInterrupt:
-        GPIO.cleanup()
+    run_parking_lot_system(UDMS_PINS, PARKING_LED_PINS, pi_no=1)

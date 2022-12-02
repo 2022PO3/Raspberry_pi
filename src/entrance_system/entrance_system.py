@@ -14,46 +14,39 @@ def get_logger(name: str) -> logging.Logger:
 
 logger = get_logger("entrance_system")
 
-#####################
-# Defining the pins #
-#####################
-# Ultrasonic Sensor 1 on the entrance of the garage.
-ECHO_PIN1 = 18
-TRIG_PIN1 = 16
-# Servo motor entrance.
-SERVO_PIN1 = 12
 # Pulse frequency of the PWM-pins.
 PULSE_FREQUENCY = 50
 
 ##################
 # Setting states #
 ##################
-sensor1_state = False
+sensor_state = False
 
 
-def setup_board() -> None:
+def _setup_board() -> None:
     # Use pin numbers.
     GPIO.setwarnings(False)
     GPIO.setmode(GPIO.BOARD)
     logger.info("Setup of board completed.")
 
 
-if __name__ == "__main__":
-    import udms_control
-    import servo_control
+def run_entrance_system(
+    trig_pin: int, echo_pin: int, servo_pin: int, *, system: str
+) -> None:
+    import entrance_system.udms_control as udms_control
+    import entrance_system.servo_control as servo_control
 
-    setup_board()
-    udms_control.setup_udms(TRIG_PIN1, ECHO_PIN1, 1)
-    servo1 = servo_control.setup_servo(SERVO_PIN1, PULSE_FREQUENCY)
+    _setup_board()
+    udms_control.setup_udms(trig_pin, echo_pin, 1)
+    servo = servo_control.setup_servo(servo_pin, PULSE_FREQUENCY)
     logger.info("Setup of entrance system completed successfully.")
     try:
         while True:
-            sensor1_state = udms_control.take_picture(
-                udms_control.calculate_distance(TRIG_PIN1, ECHO_PIN1, 1),
-                sensor1_state,
-                1,
-                servo1,
-                servo_no=1,
+            sensor_state = udms_control.take_picture(
+                udms_control.calculate_distance(trig_pin, echo_pin, 1),
+                sensor_state,
+                servo,
+                system=system,
             )
     except KeyboardInterrupt:
         GPIO.cleanup()

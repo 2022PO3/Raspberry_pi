@@ -1,12 +1,10 @@
 import time
-import os
-import requests
 import subprocess
 import RPi.GPIO as GPIO
-import main1
-from servo_control import open_barrier, close_barrier
+import entrance_system.entrance_system as entrance_system
+from entrance_system.servo_control import open_barrier, close_barrier
 
-logger = main1.get_logger("udms_control")
+logger = entrance_system.get_logger("udms_control")
 
 
 def setup_udms(trig_pin: int, echo_pin: int, sensor_no: int) -> None:
@@ -46,16 +44,7 @@ def calculate_distance(trig_pin: int, echo_pin: int, time_delta: int) -> float:
     return round(pulse_duration * 17150, 2)
 
 
-###################
-# Entrance system #
-###################
-def take_picture(
-    distance: float,
-    sensor_state: bool,
-    sensor_no: int,
-    servo,
-    servo_no: int,
-) -> bool:
+def take_picture(distance: float, sensor_state: bool, servo, *, system: str) -> bool:
     """
     Takes picture when the distance is small enough (car is on top of the sensor). The
     `sensor_state` variable contains the boolean if a car is on top of the sensor. If it is,
@@ -64,15 +53,15 @@ def take_picture(
     enters the sensor and one when it leaves. The return value is the newly assigned state.
     """
     if distance < 5 and not sensor_state:
-        logger.info(f"Car entered sensor {sensor_no}")
+        logger.info(f"Car entered {system} sensor.")
         subprocess.run(["bash", "take_image.sh", "image.jpg"])
-        logger.info(f"Took image of car on sensor {sensor_no}")
-        open_barrier(servo, servo_no)
+        logger.info(f"Took image of car {system}")
+        open_barrier(servo, system=system)
         return not sensor_state
     elif distance >= 5 and sensor_state:
-        logger.info(f"Car left sensor {sensor_no}")
+        logger.info(f"Car left entrance sensor")
         time.sleep(2)
-        close_barrier(servo, servo_no)
+        close_barrier(servo, system=system)
         return not sensor_state
     else:
         return sensor_state

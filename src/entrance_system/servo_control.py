@@ -1,8 +1,8 @@
 import RPi.GPIO as GPIO
-import main1
+import entrance_system.entrance_system as entrance_system
 from time import sleep
 
-logger = main1.get_logger("servo_control")
+logger = entrance_system.get_logger("servo_control")
 
 
 def setup_servo(servo_pin: int, pulse_frequency: int):
@@ -15,13 +15,13 @@ def setup_servo(servo_pin: int, pulse_frequency: int):
     return servo
 
 
-def open_barrier(servo, servo_no: int) -> None:
+def open_barrier(servo, *, system: str) -> None:
     servo.ChangeDutyCycle(12)
     sleep(1)
-    logger.info(f"Opened barrier of servo {servo_no}.")
+    logger.info(f"Opened barrier of {system}.")
 
 
-def close_barrier(servo, servo_no: int) -> None:
+def close_barrier(servo, *, system: str) -> None:
     servo.ChangeDutyCycle(7)
     sleep(1)
-    logger.info(f"Closed barrier of servo {servo_no}.")
+    logger.info(f"Closed barrier of {system}.")
