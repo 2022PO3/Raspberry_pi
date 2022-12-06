@@ -8,6 +8,8 @@ import os
 
 from typing import Any
 from logger import get_logger
+from PIL import Image
+from PIL import ImageDraw
 from PIL import ImageFont
 
 
@@ -56,15 +58,20 @@ def setup_display() -> TFT.ST7735:
         spi=SPI.SpiDev(SPI_PORT, SPI_DEVICE, max_speed_hz=SPEED_HZ),
     )
     disp.begin()
-    disp.clear((255, 0, 0))
+    disp.clear((255, 255, 255))
     logger.info("Setup of screen completed.")
     return disp
 
 
 def write(inst: TFT.ST7735, string: str, *, x: int, y: int) -> None:
-    font = ImageFont.truetype("fonts/OpenSans-Bold.ttf", size=20)
+    font = ImageFont.truetype("fonts/OpenSans-Bold.ttf", size=10)
     draw = inst.draw()
-    draw.text((x, y), string, font=font, fill=(255, 255, 255))
+    width, height = draw.textsize(string, font=font)
+    textimage = Image.new("RGBA", (width, height), (0, 0, 0, 0))
+    textdraw = ImageDraw.Draw(textimage)
+    textdraw.text((0, 0), string, font=font, fill=(255, 255, 255))
+    rotated = textimage.rotate(90, expand=1)
+    inst.buffer.paste(rotated, (x, y), rotated)
     inst.display()
 
 
