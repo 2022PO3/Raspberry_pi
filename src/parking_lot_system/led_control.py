@@ -1,5 +1,5 @@
 import RPi.GPIO as GPIO
-import parking_lot_system.main_pi1 as main_pi1
+import main_pi1 as main_pi1
 
 logger = main_pi1.get_logger("led_control")
 
