@@ -56,15 +56,15 @@ def setup_display() -> TFT.ST7735:
         spi=SPI.SpiDev(SPI_PORT, SPI_DEVICE, max_speed_hz=SPEED_HZ),
     )
     disp.begin()
-    disp.clear((255, 0, 0))
+    disp.clear((255, 255, 255))
     logger.info("Setup of screen completed.")
     return disp
 
 
-def write(inst: TFT.ST7735, string: str, *, x: int, y: int) -> None:
-    font = ImageFont.truetype("fonts/OpenSans-Bold.ttf", size=20)
+def write(inst: TFT.ST7735, string: str, *, font_size: int, x: int, y: int) -> None:
+    font = ImageFont.truetype("fonts/OpenSans-Bold.ttf", size=font_size)
     draw = inst.draw()
-    draw.text((x, y), string, font=font, fill=(255, 255, 255))
+    draw.text((x, y), string, font=font, fill=(0, 0, 0))
     inst.display()
 
 
@@ -84,13 +84,15 @@ if __name__ == "__main__":
     try:
         while True:
             garage_info = get_free_spots()
-            write(disp, garage_info.name, x=10, y=30)
+            disp.clear((255, 255, 255))
             write(
                 disp,
-                f"Free spots left: {garage_info.left_spots}/{garage_info.total_spots}",
-                x=10,
-                y=10,
+                f"{garage_info.left_spots}/{garage_info.total_spots}",
+                font_size=30,
+                x=40,
+                y=30,
             )
+            write(disp, garage_info.name, font_size=17, x=1, y=10)
             logger.info("Written output to screen.")
             time.sleep(5)
     except KeyboardInterrupt:
