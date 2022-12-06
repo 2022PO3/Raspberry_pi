@@ -15,13 +15,10 @@ logger = get_logger("display_control")
 ####################
 # Define constants #
 ####################
-
 GARAGE_ID = 11
-
 WIDTH = 128
 HEIGHT = 160
 SPEED_HZ = 4000000
-
 
 # Raspberry Pi configuration.
 DC = 24
@@ -29,20 +26,9 @@ RST = 25
 SPI_PORT = 0
 SPI_DEVICE = 0
 
-# Define pins [pinA, pinB, pinC, pinD, pinE, pinF, pinG]
-PINS = [40, 38, 37, 36, 35, 33, 31]
-
 ##################
 # Main functions #
 ##################
-
-
-def setup_board() -> None:
-    GPIO.setwarnings(False)
-    GPIO.setmode(GPIO.BOARD)
-    logger.info("Setup of board completed.")
-
-
 def setup_display() -> TFT.ST7735:
     # Create TFT LCD display class.
     disp = TFT.ST7735(
@@ -73,7 +59,6 @@ def get_free_spots() -> int:
 
 
 if __name__ == "__main__":
-    setup_board()
     disp = setup_display()
     try:
         while True:
