@@ -9,6 +9,7 @@ import os
 from typing import Any
 from logger import get_logger
 from PIL import ImageFont
+from PIL import Image
 
 
 logger = get_logger("display_control")
@@ -82,9 +83,13 @@ def get_free_spots() -> GarageInfo:
 if __name__ == "__main__":
     disp = setup_display()
     try:
+        image = Image.open("cat.jpg")
+        disp.display(image)
         while True:
             garage_info = get_free_spots()
             disp.clear((255, 255, 255))
+            disp.display()
+            write(disp, garage_info.name, font_size=17, x=1, y=10)
             write(
                 disp,
                 f"{garage_info.left_spots}/{garage_info.total_spots}",
@@ -92,7 +97,6 @@ if __name__ == "__main__":
                 x=40,
                 y=30,
             )
-            write(disp, garage_info.name, font_size=17, x=1, y=10)
             logger.info("Written output to screen.")
             time.sleep(5)
     except KeyboardInterrupt:
