@@ -7,11 +7,6 @@ logger = get_logger("entrance_system")
 # Pulse frequency of the PWM-pins.
 PULSE_FREQUENCY = 50
 
-##################
-# Setting states #
-##################
-sensor_state = False
-
 
 def _setup_board() -> None:
     # Use pin numbers.
@@ -27,6 +22,7 @@ def run_entrance_system(
     import servo_control
 
     _setup_board()
+    sensor_state = False
     udms_control.setup_udms(trig_pin, echo_pin, 1)
     servo = servo_control.setup_servo(servo_pin, PULSE_FREQUENCY)
     logger.info("Setup of entrance system completed successfully.")
