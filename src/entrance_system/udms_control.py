@@ -1,8 +1,8 @@
 import time
 import subprocess
 import RPi.GPIO as GPIO
-import entrance_system.entrance_system as entrance_system
-from entrance_system.servo_control import open_barrier, close_barrier
+import entrance_system
+from servo_control import open_barrier, close_barrier
 
 logger = entrance_system.get_logger("udms_control")
 

@@ -1,5 +1,5 @@
 import RPi.GPIO as GPIO
-import entrance_system.entrance_system as entrance_system
+import entrance_system
 from time import sleep
 
 logger = entrance_system.get_logger("servo_control")
