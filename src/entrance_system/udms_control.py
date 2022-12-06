@@ -54,7 +54,7 @@ def take_picture(distance: float, sensor_state: bool, servo, *, system: str) -> 
     """
     if distance < 5 and not sensor_state:
         logger.info(f"Car entered {system} sensor.")
-        subprocess.run(["bash", "take_image.sh", "image.jpg"])
+        subprocess.run(["bash", "$HOME/Raspberry_pi/take_image.sh", "image.jpg"])
         logger.info(f"Took image of car {system}")
         open_barrier(servo, system=system)
         return not sensor_state
