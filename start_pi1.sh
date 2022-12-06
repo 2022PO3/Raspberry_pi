@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "Start entrance system..."
-python ~/Raspberry_Pi/src/entrance_system/main_pi1.py &
+python ~/Raspberry_pi/src/entrance_system/main_pi1.py &
 
 echo "Start parking lot system..."
 python ~/Raspberry_pi/src/parking_lot_sytem/main_pi1.py &
