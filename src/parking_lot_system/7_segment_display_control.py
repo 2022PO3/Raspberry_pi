@@ -83,12 +83,11 @@ def get_free_spots() -> GarageInfo:
 if __name__ == "__main__":
     disp = setup_display()
     try:
-        image = Image.open("logo_parking_boys.jpg")
-        disp.display(image)
         while True:
             garage_info = get_free_spots()
             disp.clear((255, 255, 255))
-            disp.display()
+            image = Image.open("logo_parking_boys.jpg")
+            disp.display(image.resize((WIDTH, HEIGHT / 4)))
             write(disp, garage_info.name, font_size=17, x=1, y=10)
             write(
                 disp,
