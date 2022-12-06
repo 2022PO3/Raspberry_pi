@@ -86,16 +86,16 @@ if __name__ == "__main__":
         while True:
             garage_info = get_free_spots()
             disp.clear((255, 255, 255))
-            image = Image.open("logo_parking_boys.jpg")
-            disp.display(image.resize((WIDTH, HEIGHT / 4)))
-            write(disp, garage_info.name, font_size=17, x=1, y=10)
+            image = Image.open("logo_parking_boys.png")
+            #write(disp, garage_info.name, font_size=17, x=1, y=10)
             write(
                 disp,
                 f"{garage_info.left_spots}/{garage_info.total_spots}",
-                font_size=30,
-                x=40,
-                y=30,
+                font_size=65,
+                x=14,
+                y=60,
             )
+            disp.display(image.resize((WIDTH, int(HEIGHT / 4))))
             logger.info("Written output to screen.")
             time.sleep(5)
     except KeyboardInterrupt:
