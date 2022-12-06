@@ -1,9 +1,7 @@
 import ST7735 as TFT
-import Adafruit_GPIO as AGPIO
 import Adafruit_GPIO.SPI as SPI
 import RPi.GPIO as GPIO
 import time
-import main_pi1
 import requests
 import json
 import os
