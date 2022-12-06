@@ -1,9 +1,15 @@
+import ST7735 as TFT
+import Adafruit_GPIO as AGPIO
+import Adafruit_GPIO.SPI as SPI
 import RPi.GPIO as GPIO
 import time
 import parking_lot_system.main_pi1 as main_pi1
 import requests
 import json
 import os
+
+from PIL import ImageFont
+
 
 logger = main_pi1.get_logger("display_control")
 
@@ -13,23 +19,19 @@ logger = main_pi1.get_logger("display_control")
 
 GARAGE_ID = 11
 
+WIDTH = 128
+HEIGHT = 160
+SPEED_HZ = 4000000
+
+
+# Raspberry Pi configuration.
+DC = 24
+RST = 25
+SPI_PORT = 0
+SPI_DEVICE = 0
+
 # Define pins [pinA, pinB, pinC, pinD, pinE, pinF, pinG]
 PINS = [40, 38, 37, 36, 35, 33, 31]
-
-# Define 7 segment digits
-HIGH = 0
-LOW = 1
-
-DIGITS = {
-    -1: [LOW, LOW, LOW, LOW, LOW, LOW, LOW],
-    0: [HIGH, HIGH, HIGH, HIGH, HIGH, LOW],
-    1: [LOW, HIGH, HIGH, LOW, LOW, LOW, LOW],
-    2: [HIGH, HIGH, LOW, HIGH, HIGH, LOW, HIGH],
-    3: [HIGH, HIGH, HIGH, HIGH, LOW, LOW, HIGH],
-    4: [HIGH, LOW, HIGH, HIGH, LOW, HIGH, HIGH],
-    5: [HIGH, LOW, HIGH, HIGH, LOW, HIGH, HIGH],
-    6: [HIGH, LOW, HIGH, HIGH, HIGH, HIGH, HIGH],
-}
 
 ##################
 # Main functions #
@@ -42,23 +44,26 @@ def setup_board() -> None:
     logger.info("Setup of board completed.")
 
 
-def setup_display(pins: list[int]) -> None:
-    for pin in pins:
-        GPIO.setup(pin, GPIO.OUT)
+def setup_display() -> TFT.ST7735:
+    # Create TFT LCD display class.
+    disp = TFT.ST7735(
+        DC,
+        rst=RST,
+        spi=SPI.SpiDev(SPI_PORT, SPI_DEVICE, max_speed_hz=SPEED_HZ),
+    )
+    disp.begin()
+    disp.clear((255, 0, 0))
     logger.info("Setup of screen completed.")
+    return disp
 
 
-def reset() -> None:
-    for x in range(7):
-        GPIO.output(PINS[x], DIGITS[-1][x])
-        time.sleep(0.1)
+def write(inst: TFT.ST7735, string: str) -> None:
+    font = ImageFont.load_default(size=15)
+    inst.text((10, 10), string, font=font, fill=(255, 255, 255))
 
 
-def print_digit(digit: int) -> None:
-    reset()
-    for x in range(7):
-        GPIO.output(PINS[x], DIGITS[digit][x])
-    logger.info(f"Printed digit {digit} on screen.")
+def reset(inst: TFT.ST7735) -> None:
+    inst.reset()
 
 
 def get_free_spots() -> int:
@@ -70,12 +75,12 @@ def get_free_spots() -> int:
 
 if __name__ == "__main__":
     setup_board()
-    setup_display(PINS)
+    disp = setup_display()
     try:
         while True:
             left_spots = get_free_spots()
             print(left_spots)
-            print_digit(left_spots)
+            write(disp, f"{left_spots}/6")
             time.sleep(5)
     except KeyboardInterrupt:
         GPIO.cleanup()

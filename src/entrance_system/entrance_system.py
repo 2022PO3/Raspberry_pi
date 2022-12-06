@@ -33,8 +33,8 @@ def _setup_board() -> None:
 def run_entrance_system(
     trig_pin: int, echo_pin: int, servo_pin: int, *, system: str
 ) -> None:
-    import entrance_system.udms_control as udms_control
-    import entrance_system.servo_control as servo_control
+    import udms_control
+    import servo_control
 
     _setup_board()
     udms_control.setup_udms(trig_pin, echo_pin, 1)
