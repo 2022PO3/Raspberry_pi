@@ -62,7 +62,7 @@ def setup_display() -> TFT.ST7735:
 
 
 def write(inst: TFT.ST7735, string: str, *, x: int, y: int) -> None:
-    font = ImageFont.load_default(size=15)
+    font = ImageFont.truetype("fonts/OpenSans-Bold.ttf", size=20)
     inst.text((x, y), string, font=font, fill=(255, 255, 255))
 
 
