@@ -1,10 +1,10 @@
 import time
 import subprocess
 import RPi.GPIO as GPIO
-import entrance_system
+from logger import get_logger
 from servo_control import open_barrier, close_barrier
 
-logger = entrance_system.get_logger("udms_control")
+logger = get_logger("udms_control")
 
 
 def setup_udms(trig_pin: int, echo_pin: int, sensor_no: int) -> None:

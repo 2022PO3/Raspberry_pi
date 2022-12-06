@@ -3,15 +3,16 @@ import Adafruit_GPIO as AGPIO
 import Adafruit_GPIO.SPI as SPI
 import RPi.GPIO as GPIO
 import time
-import parking_lot_system.main_pi1 as main_pi1
+import main_pi1
 import requests
 import json
 import os
 
+from logger import get_logger
 from PIL import ImageFont
 
 
-logger = main_pi1.get_logger("display_control")
+logger = get_logger("display_control")
 
 ####################
 # Define constants #

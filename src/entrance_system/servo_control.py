@@ -1,8 +1,8 @@
 import RPi.GPIO as GPIO
-import entrance_system
+from logger import get_logger
 from time import sleep
 
-logger = entrance_system.get_logger("servo_control")
+logger = get_logger("servo_control")
 
 
 def setup_servo(servo_pin: int, pulse_frequency: int):

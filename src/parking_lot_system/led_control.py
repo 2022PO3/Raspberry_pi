@@ -1,7 +1,7 @@
 import RPi.GPIO as GPIO
-import main_pi1 as main_pi1
+from logger import get_logger
 
-logger = main_pi1.get_logger("led_control")
+logger = get_logger("led_control")
 
 
 def setup_led(pin_tuple: tuple[int, int], parking_no: int) -> None:
