@@ -9,7 +9,7 @@ def setup_led(pin_tuple: tuple[int, int], parking_no: int) -> None:
     GPIO.setup(red_pin, GPIO.OUT)
     GPIO.output(red_pin, GPIO.LOW)
     GPIO.setup(green_pin, GPIO.OUT)
-    GPIO.output(green_pin, GPIO.LOW)
+    GPIO.output(green_pin, GPIO.HIGH)
     logger.info(f"Setup of LEDs of parking {parking_no} completed.")
 
 

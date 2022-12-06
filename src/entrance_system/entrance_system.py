@@ -1,5 +1,6 @@
 import RPi.GPIO as GPIO
 from logger import get_logger
+from time import sleep
 
 logger = get_logger("entrance_system")
 
@@ -37,5 +38,6 @@ def run_entrance_system(
                 servo,
                 system=system,
             )
+            sleep(1)
     except KeyboardInterrupt:
         GPIO.cleanup()
