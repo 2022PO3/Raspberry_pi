@@ -3,6 +3,7 @@ import logging
 from logging import Logger, RootLogger, WARNING
 
 root = RootLogger(WARNING)
+MSG_LENGTH = 55
 
 
 class RPiLogger(Logger):
@@ -10,6 +11,7 @@ class RPiLogger(Logger):
         super().__init__(*args)
 
     def info(self, msg: object, *args, **kwargs) -> None:
+        msg += " " * (MSG_LENGTH - len(msg))
         return super().info(msg, *args, **kwargs)
 
 
