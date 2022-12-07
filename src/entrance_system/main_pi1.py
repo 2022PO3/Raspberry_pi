@@ -6,7 +6,7 @@ This code is for the entrance system of the first Raspberry Pi, which controls t
 # Defining the pins #
 #####################
 ECHO_PIN = 16
-TRIG_PIN = 18
+TRIG_PIN = 40
 SERVO_PIN = 12
 
 if __name__ == "__main__":
