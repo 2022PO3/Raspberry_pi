@@ -81,7 +81,7 @@ def get_free_spots() -> GarageInfo:
     return GarageInfo.fromJSON(response)
 
 
-if __name__ == "__main__":
+def write_to_screen() -> None:
     disp = setup_display()
     try:
         while True:
@@ -100,3 +100,7 @@ if __name__ == "__main__":
             time.sleep(5)
     except KeyboardInterrupt:
         GPIO.cleanup()
+
+
+if __name__ == "__main__":
+    write_to_screen()
