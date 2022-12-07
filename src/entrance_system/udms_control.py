@@ -75,7 +75,7 @@ def take_picture(
             logger.info(justify_logs(f"Took image of {system} car ", 44))
         except subprocess.CalledProcessError:
             logger.info(justify_logs(f"Image taking on {system} failed", 44))
-        if "success" in str(output):
+        if "success" in str(output).lower():
             servo_state = open_barrier(servo, servo_state, system=system)
         else:
             logger.info(justify_logs(f"Licence plate check of {system} failed", 44))
