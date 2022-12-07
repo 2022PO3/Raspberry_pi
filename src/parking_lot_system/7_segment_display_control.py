@@ -64,7 +64,9 @@ def setup_display() -> TFT.ST7735:
 
 
 def write(inst: TFT.ST7735, string: str, *, font_size: int, x: int, y: int) -> None:
-    font = ImageFont.truetype("src/parking_lot_system/fonts/OpenSans-Bold.ttf", size=font_size)
+    font = ImageFont.truetype(
+        "src/parking_lot_system/fonts/OpenSans-Bold.ttf", size=font_size
+    )
     draw = inst.draw()
     draw.text((x, y), string, font=font, fill=(0, 0, 0))
     inst.display()
@@ -86,7 +88,7 @@ if __name__ == "__main__":
     try:
         while True:
             garage_info = get_free_spots()
-            disp.clear((255, 0, 255))
+            disp.clear((255, 255, 255))
             image = Image.open("src/parking_lot_system/logo_parking_boys.png")
             write(
                 disp,
@@ -100,4 +102,3 @@ if __name__ == "__main__":
             time.sleep(5)
     except KeyboardInterrupt:
         GPIO.cleanup()
-
