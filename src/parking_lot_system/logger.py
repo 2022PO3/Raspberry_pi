@@ -1,6 +1,5 @@
 import logging
 
-MSG_LENGTH = 55
 
 #################
 # Logger config #
@@ -17,5 +16,5 @@ def get_logger(name: str) -> logging.Logger:
     return logging.getLogger(name)
 
 
-def justify_logs(msg: str) -> str:
-    return msg + " " * (MSG_LENGTH - len(msg))
+def justify_logs(msg: str, length: int = 55) -> str:
+    return msg + " " * (length - len(msg))
