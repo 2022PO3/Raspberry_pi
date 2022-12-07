@@ -23,7 +23,7 @@ def run_entrance_system(
 
     _setup_board()
     sensor_state = False
-    udms_control.setup_udms(trig_pin, echo_pin, 1, system=system)
+    udms_control.setup_udms(trig_pin, echo_pin, system=system)
     servo = servo_control.setup_servo(servo_pin, PULSE_FREQUENCY)
     logger.info(justify_logs("Setup of entrance system completed.", 44))
     try:
