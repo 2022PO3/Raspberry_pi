@@ -23,15 +23,17 @@ def run_entrance_system(
 
     _setup_board()
     sensor_state = False
+    servo_state = False
     udms_control.setup_udms(trig_pin, echo_pin, system=system)
     servo = servo_control.setup_servo(servo_pin, PULSE_FREQUENCY)
     logger.info(justify_logs("Setup of entrance system completed.", 44))
     try:
         while True:
-            sensor_state = udms_control.take_picture(
+            sensor_state, servo_state = udms_control.take_picture(
                 udms_control.calculate_distance(trig_pin, echo_pin, 1),
                 sensor_state,
                 servo,
+                servo_state,
                 system=system,
             )
             sleep(1)

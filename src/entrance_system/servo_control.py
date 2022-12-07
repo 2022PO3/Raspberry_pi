@@ -5,7 +5,12 @@ from time import sleep
 logger = get_logger("servo_control")
 
 
-def setup_servo(servo_pin: int, pulse_frequency: int):
+class Servo:
+    def ChangeDutyCycle(self, amount: int) -> None:
+        ...
+
+
+def setup_servo(servo_pin: int, pulse_frequency: int) -> Servo:
     GPIO.setup(servo_pin, GPIO.OUT)
     logger.info(justify_logs(f"Setup of servo on pin {servo_pin} completed.", 44))
     servo = GPIO.PWM(servo_pin, pulse_frequency)
@@ -15,13 +20,17 @@ def setup_servo(servo_pin: int, pulse_frequency: int):
     return servo
 
 
-def open_barrier(servo, *, system: str) -> None:
-    servo.ChangeDutyCycle(12)
-    sleep(1)
-    logger.info(justify_logs(f"Opened barrier of {system}.", 44))
+def open_barrier(servo: Servo, servo_state: bool, *, system: str) -> bool:
+    if not servo_state:
+        servo.ChangeDutyCycle(12)
+        sleep(1)
+        logger.info(justify_logs(f"Opened barrier of {system}.", 44))
+    return not servo_state
 
 
-def close_barrier(servo, *, system: str) -> None:
-    servo.ChangeDutyCycle(7)
-    sleep(1)
-    logger.info(justify_logs(f"Closed barrier of {system}.", 44))
+def close_barrier(servo: Servo, servo_state: bool, *, system: str) -> bool:
+    if servo_state:
+        servo.ChangeDutyCycle(7)
+        sleep(1)
+        logger.info(justify_logs(f"Closed barrier of {system}.", 44))
+    return not servo_state

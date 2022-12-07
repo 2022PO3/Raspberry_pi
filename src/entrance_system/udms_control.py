@@ -4,7 +4,7 @@ import os
 import RPi.GPIO as GPIO
 
 from logger import get_logger, justify_logs
-from servo_control import open_barrier, close_barrier
+from servo_control import open_barrier, close_barrier, Servo
 
 logger = get_logger("udms_control")
 
@@ -46,13 +46,21 @@ def calculate_distance(trig_pin: int, echo_pin: int, time_delta: int) -> float:
     return round(pulse_duration * 17150, 2)
 
 
-def take_picture(distance: float, sensor_state: bool, servo, *, system: str) -> bool:
+def take_picture(
+    distance: float,
+    sensor_state: bool,
+    servo: Servo,
+    servo_state: bool,
+    *,
+    system: str,
+) -> tuple[bool, bool]:
     """
     Takes picture when the distance is small enough (car is on top of the sensor). The
     `sensor_state` variable contains the boolean if a car is on top of the sensor. If it is,
     the sensor will no longer log the fact that the car is on top of the sensor, except when
     the car leaves the sensor. This way, only two log messages are written: one when the car
-    enters the sensor and one when it leaves. The return value is the newly assigned state.
+    enters the sensor and one when it leaves. The return value isa tuple of the sensor state
+    and the servo state.
     """
     if distance < 5 and not sensor_state:
         logger.info(justify_logs(f"Car entered {system} sensor.", 44))
@@ -68,14 +76,15 @@ def take_picture(distance: float, sensor_state: bool, servo, *, system: str) -> 
         except subprocess.CalledProcessError:
             logger.info(justify_logs(f"Image taking on {system} failed", 44))
         if "success" in str(output):
-            open_barrier(servo, system=system)
+            servo_state = open_barrier(servo, servo_state, system=system)
         else:
             logger.info(justify_logs(f"Licence plate check of {system} failed", 44))
-        return not sensor_state
+            print(output)
+        return not sensor_state, servo_state
     elif distance >= 5 and sensor_state:
         logger.info(justify_logs(f"Car left {system} sensor", 44))
         time.sleep(2)
-        close_barrier(servo, system=system)
-        return not sensor_state
+        servo_state = close_barrier(servo, servo_state, system=system)
+        return not sensor_state, servo_state
     else:
-        return sensor_state
+        return sensor_state, servo_state
