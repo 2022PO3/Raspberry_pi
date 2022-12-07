@@ -72,10 +72,6 @@ def write(inst: TFT.ST7735, string: str, *, font_size: int, x: int, y: int) -> N
     inst.display()
 
 
-def reset(inst: TFT.ST7735) -> None:
-    inst.reset()
-
-
 def get_free_spots() -> GarageInfo:
     url = f"https://po3backend.ddns.net/api/garage/{GARAGE_ID}"
     headers = {"PO3-ORIGIN": "rpi", "PO3-RPI-KEY": os.environ["RPI_KEY"]}
