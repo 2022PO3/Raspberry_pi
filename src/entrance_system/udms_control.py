@@ -65,24 +65,21 @@ def take_picture(
     if distance < 5 and not sensor_state:
         logger.info(justify_logs(f"Car entered {system} sensor.", 44))
         try:
-            output = subprocess.run(
+            output = subprocess.check_output(
                 [
                     "bash",
                     f"{os.environ['HOME']}/Raspberry_pi/src/entrance_system/take_image.sh",
                     "image.jpg",
-                ],
-                stdout=subprocess.DEVNULL,
-                capture_output=True,
-                text=True,
+                ]
             )
             logger.info(justify_logs(f"Took image of {system} car ", 44))
         except subprocess.CalledProcessError:
             logger.info(justify_logs(f"Image taking on {system} failed", 44))
-        if "success" in str(output.stdout).lower():
+        if "success" in str(output).lower():
             servo_state = open_barrier(servo, servo_state, system=system)
         else:
             logger.info(justify_logs(f"Licence plate check of {system} failed", 44))
-            print(output.stdout)
+            print(output)
         return not sensor_state, servo_state
     elif distance >= 5 and sensor_state:
         logger.info(justify_logs(f"Car left {system} sensor", 44))
