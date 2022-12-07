@@ -1,6 +1,8 @@
 import time
 import subprocess
+import os
 import RPi.GPIO as GPIO
+
 from logger import get_logger
 from servo_control import open_barrier, close_barrier
 
@@ -54,7 +56,9 @@ def take_picture(distance: float, sensor_state: bool, servo, *, system: str) -> 
     """
     if distance < 5 and not sensor_state:
         logger.info(f"Car entered {system} sensor.")
-        subprocess.run(["bash", "$HOME/Raspberry_pi/take_image.sh", "image.jpg"])
+        subprocess.run(
+            ["bash", f"{os.environ['HOME']}/Raspberry_pi/take_image.sh", "image.jpg"]
+        )
         logger.info(f"Took image of car {system}")
         open_barrier(servo, system=system)
         return not sensor_state
