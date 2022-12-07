@@ -9,6 +9,7 @@ function ctrl_c() {
 
 stty -echoctl
 trap 'ctrl_c ${pid_entrance} ${pid_parking}' SIGINT
+rm rpi_garage.log
 
 echo "Start entrance system..."
 python src/entrance_system/main_pi${1}.py &

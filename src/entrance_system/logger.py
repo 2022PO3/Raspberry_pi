@@ -9,7 +9,7 @@ def get_logger(name: str) -> logging.Logger:
         level=logging.INFO,
         format=log_format,
         filename="rpi_garage.log",
-        filemode="w",
+        filemode="a",
         datefmt="%Y-%m-%d %H:%M:%S",
     )
     return logging.getLogger(name)
