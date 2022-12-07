@@ -70,7 +70,8 @@ def take_picture(
                     "bash",
                     f"{os.environ['HOME']}/Raspberry_pi/src/entrance_system/take_image.sh",
                     "image.jpg",
-                ]
+                ],
+                stdout=subprocess.DEVNULL,
             )
             logger.info(justify_logs(f"Took image of {system} car ", 44))
         except subprocess.CalledProcessError:
