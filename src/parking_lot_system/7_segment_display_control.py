@@ -8,7 +8,7 @@ import os
 import socket
 
 from typing import Any
-from logger import get_logger
+from logger import get_logger, justify_logs
 from PIL import ImageFont
 from PIL import Image
 
@@ -59,7 +59,7 @@ def setup_display() -> TFT.ST7735:
     )
     disp.begin()
     disp.clear((255, 255, 255))
-    logger.info("Setup of screen completed.")
+    logger.info(justify_logs("Setup of screen completed."))
     return disp
 
 
@@ -98,7 +98,7 @@ if __name__ == "__main__":
                 y=60,
             )
             disp.display(image.resize((WIDTH, int(HEIGHT / 4))))
-            logger.info("Written output to screen.")
+            logger.info(justify_logs("Written output to screen."))
             time.sleep(5)
     except KeyboardInterrupt:
         GPIO.cleanup()
