@@ -1,13 +1,17 @@
 #!/bin/bash
 
 echo "Start entrance system..."
-python ~/Raspberry_pi/src/entrance_system/main_pi1.py &
+python src/entrance_system/main_pi1.py &
+sleep 1
 
 echo "Start parking lot system..."
-python ~/Raspberry_pi/src/parking_lot_sytem/main_pi1.py &
+python src/parking_lot_system/main_pi1.py &
+sleep 1
 
 echo "Start 7 segment display system..."
-python ~/Raspberry_pi/src/parking_lot_system/7_segment_display_control.py
+python src/parking_lot_system/7_segment_display_control.py
+sleep 1
 
 echo "Startup completed. Opening log..."
-tail -f ~/Raspberry_pi/rpi_garage.log
+sleep 1
+tail -f rpi_garage.log

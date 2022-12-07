@@ -5,6 +5,7 @@ import time
 import requests
 import json
 import os
+import socket
 
 from typing import Any
 from logger import get_logger
@@ -87,7 +88,6 @@ if __name__ == "__main__":
             garage_info = get_free_spots()
             disp.clear((255, 255, 255))
             image = Image.open("logo_parking_boys.png")
-            #write(disp, garage_info.name, font_size=17, x=1, y=10)
             write(
                 disp,
                 f"{garage_info.left_spots}/{garage_info.total_spots}",
