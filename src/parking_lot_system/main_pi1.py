@@ -8,7 +8,7 @@ This code is for the parking lot system of the first Raspberry Pi.
 #####################
 # LED pins in the format `parking_lot_no: pin_no`. The pins are in the order [RED, GREEN].
 PARKING_LED_PINS = {
-    1: (23, 29),
+    1: (38, 29),
     2: (31, 33),
     3: (35, 37),
 }
