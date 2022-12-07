@@ -59,7 +59,7 @@ def setup_display() -> TFT.ST7735:
     )
     disp.begin()
     disp.clear((255, 255, 255))
-    logger.info(justify_logs("Setup of screen completed.", 26))
+    logger.info(justify_logs("Setup of screen completed.", 44))
     return disp
 
 
@@ -98,7 +98,7 @@ if __name__ == "__main__":
                 y=60,
             )
             disp.display(image.resize((WIDTH, int(HEIGHT / 4))))
-            logger.info(justify_logs("Written output to screen.", 26))
+            logger.info(justify_logs("Written output to screen.", 44))
             time.sleep(5)
     except KeyboardInterrupt:
         GPIO.cleanup()

@@ -3,7 +3,7 @@ import subprocess
 import os
 import RPi.GPIO as GPIO
 
-from logger import get_logger
+from logger import get_logger, justify_logs
 from servo_control import open_barrier, close_barrier
 
 logger = get_logger("udms_control")
@@ -21,7 +21,7 @@ def setup_udms(trig_pin: int, echo_pin: int, sensor_no: int) -> None:
     GPIO.output(trig_pin, GPIO.LOW)
 
     time.sleep(1)
-    logger.info(f"Setup of ultrasonic sensor {sensor_no} completed.")
+    logger.info(justify_logs(f"Setup of ultrasonic sensor {sensor_no} completed.", 44))
 
 
 def calculate_distance(trig_pin: int, echo_pin: int, time_delta: int) -> float:
@@ -55,15 +55,15 @@ def take_picture(distance: float, sensor_state: bool, servo, *, system: str) -> 
     enters the sensor and one when it leaves. The return value is the newly assigned state.
     """
     if distance < 5 and not sensor_state:
-        logger.info(f"Car entered {system} sensor.")
+        logger.info(justify_logs(f"Car entered {system} sensor.", 44))
         subprocess.run(
             ["bash", f"{os.environ['HOME']}/Raspberry_pi/take_image.sh", "image.jpg"]
         )
-        logger.info(f"Took image of car {system}")
+        logger.info(justify_logs(f"Took image of car {system}", 44))
         open_barrier(servo, system=system)
         return not sensor_state
     elif distance >= 5 and sensor_state:
-        logger.info(f"Car left entrance sensor")
+        logger.info(justify_logs(f"Car left entrance sensor", 44))
         time.sleep(2)
         close_barrier(servo, system=system)
         return not sensor_state

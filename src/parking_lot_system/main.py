@@ -1,6 +1,6 @@
 import RPi.GPIO as GPIO
 import time
-from logger import get_logger
+from logger import get_logger, justify_logs
 
 
 logger = get_logger("parking_lot_system")
@@ -32,7 +32,7 @@ def _setup_board() -> None:
     # Use pin numbers.
     GPIO.setwarnings(False)
     GPIO.setmode(GPIO.BOARD)
-    logger.info("Setup of board completed.")
+    logger.info(justify_logs("Setup of board completed.", 44))
 
 
 def run_parking_lot_system(
@@ -55,7 +55,7 @@ def run_parking_lot_system(
     for i in rng:
         udms_control.setup_udms(udms_pins[i], i)
         led_control.setup_led(parking_led_pins[i], i)
-    logger.info("Setup of parking lot system completed successfully.")
+    logger.info(justify_logs("Setup of parking lot system completed.", 44))
     try:
         while True:
             for i in rng:

@@ -1,5 +1,5 @@
 import RPi.GPIO as GPIO
-from logger import get_logger
+from logger import get_logger, justify_logs
 from time import sleep
 
 logger = get_logger("entrance_system")
@@ -12,7 +12,7 @@ def _setup_board() -> None:
     # Use pin numbers.
     GPIO.setwarnings(False)
     GPIO.setmode(GPIO.BOARD)
-    logger.info("Setup of board completed.")
+    logger.info(justify_logs("Setup of board completed.", 44))
 
 
 def run_entrance_system(
@@ -25,7 +25,7 @@ def run_entrance_system(
     sensor_state = False
     udms_control.setup_udms(trig_pin, echo_pin, 1)
     servo = servo_control.setup_servo(servo_pin, PULSE_FREQUENCY)
-    logger.info("Setup of entrance system completed successfully.")
+    logger.info(justify_logs("Setup of entrance system completed.", 44))
     try:
         while True:
             sensor_state = udms_control.take_picture(

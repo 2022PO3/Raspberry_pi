@@ -13,3 +13,7 @@ def get_logger(name: str) -> logging.Logger:
         datefmt="%Y-%m-%d %H:%M:%S",
     )
     return logging.getLogger(name)
+
+
+def justify_logs(msg: str, length: int = 55) -> str:
+    return msg + " " * (length - len(msg))

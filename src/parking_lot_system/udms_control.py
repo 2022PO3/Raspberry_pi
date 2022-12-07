@@ -3,7 +3,7 @@ import os
 import requests
 import led_control
 import RPi.GPIO as GPIO
-from logger import get_logger
+from logger import get_logger, justify_logs
 
 logger = get_logger("udms_control")
 
@@ -22,7 +22,7 @@ def setup_udms(pin_list: tuple[int, int], sensor_no: int) -> None:
     GPIO.output(trig_pin, GPIO.LOW)
 
     time.sleep(1)
-    logger.info(f"Setup of ultrasonic sensor {sensor_no} completed.")
+    logger.info(justify_logs(f"Setup of ultrasonic sensor {sensor_no} completed.", 44))
 
 
 def calculate_distance(pin_list: tuple[int, int], time_delta: int) -> float:
@@ -66,17 +66,21 @@ def update_parking_lot(
     headers = {"PO3-ORIGIN": "rpi", "PO3-RPI-KEY": os.environ["RPI_KEY"]}
     body = {"garageId": garage_id, "parkingLotNo": parking_no}
     if distance < 5 and sensor_state == [True, False]:
-        logger.info(f"Car entered parking lot {parking_no}.")
+        logger.info(justify_logs(f"Car entered parking lot {parking_no}.", 44))
         body |= {"occupied": True}
         requests.put(url, json=body, headers=headers)
-        logger.info(f"Sent request that parking lot {parking_no} is occupied.")
+        logger.info(
+            justify_logs(f"Sent request that parking lot {parking_no} is occupied.", 44)
+        )
         led_control.turn_on_red(led_pin_no, parking_no)
         return [True, True]
     elif distance >= 5 and sensor_state == [False, True]:
         logger.info(f"Car left parking lot {parking_no}.")
         body |= {"occupied": False}
         requests.put(url, json=body, headers=headers)
-        logger.info(f"Sent request that parking lot {parking_no} is emptied.")
+        logger.info(
+            justify_logs(f"Sent request that parking lot {parking_no} is emptied.", 44)
+        )
         led_control.turn_on_green(led_pin_no, parking_no)
         return [False, False]
     else:

@@ -1,5 +1,5 @@
 import RPi.GPIO as GPIO
-from logger import get_logger
+from logger import get_logger, justify_logs
 from time import sleep
 
 logger = get_logger("servo_control")
@@ -7,7 +7,7 @@ logger = get_logger("servo_control")
 
 def setup_servo(servo_pin: int, pulse_frequency: int):
     GPIO.setup(servo_pin, GPIO.OUT)
-    logger.info(f"Setup of servo on pin {servo_pin} completed.")
+    logger.info(justify_logs(f"Setup of servo on pin {servo_pin} completed.", 44))
     servo = GPIO.PWM(servo_pin, pulse_frequency)
     servo.start(0)
     servo.ChangeDutyCycle(7)
@@ -18,10 +18,10 @@ def setup_servo(servo_pin: int, pulse_frequency: int):
 def open_barrier(servo, *, system: str) -> None:
     servo.ChangeDutyCycle(12)
     sleep(1)
-    logger.info(f"Opened barrier of {system}.")
+    logger.info(justify_logs(f"Opened barrier of {system}.", 44))
 
 
 def close_barrier(servo, *, system: str) -> None:
     servo.ChangeDutyCycle(7)
     sleep(1)
-    logger.info(f"Closed barrier of {system}.")
+    logger.info(justify_logs(f"Closed barrier of {system}.", 44))
