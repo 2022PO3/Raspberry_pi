@@ -9,7 +9,7 @@ from servo_control import open_barrier, close_barrier
 logger = get_logger("udms_control")
 
 
-def setup_udms(trig_pin: int, echo_pin: int, sensor_no: int) -> None:
+def setup_udms(trig_pin: int, echo_pin: int, sensor_no: int, *, system: str) -> None:
     """
     Sets up the udms on the `trig_pin` and `echo_pin`.
     """
@@ -21,7 +21,7 @@ def setup_udms(trig_pin: int, echo_pin: int, sensor_no: int) -> None:
     GPIO.output(trig_pin, GPIO.LOW)
 
     time.sleep(1)
-    logger.info(justify_logs(f"Setup of ultrasonic sensor {sensor_no} completed.", 44))
+    logger.info(justify_logs(f"Setup of {system} sensor {sensor_no} completed.", 44))
 
 
 def calculate_distance(trig_pin: int, echo_pin: int, time_delta: int) -> float:
@@ -57,7 +57,11 @@ def take_picture(distance: float, sensor_state: bool, servo, *, system: str) -> 
     if distance < 5 and not sensor_state:
         logger.info(justify_logs(f"Car entered {system} sensor.", 44))
         subprocess.run(
-            ["bash", f"{os.environ['HOME']}/Raspberry_pi/take_image.sh", "image.jpg"]
+            [
+                "bash",
+                f"{os.environ['HOME']}/Raspberry_pi/src/entrance_system/take_image.sh",
+                "image.jpg",
+            ]
         )
         logger.info(justify_logs(f"Took image of car {system}", 44))
         open_barrier(servo, system=system)

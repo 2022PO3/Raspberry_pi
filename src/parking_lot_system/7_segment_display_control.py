@@ -94,7 +94,6 @@ if __name__ == "__main__":
                 y=60,
             )
             disp.display(image.resize((WIDTH, int(HEIGHT / 4))))
-            logger.info(justify_logs("Written output to screen.", 44))
             time.sleep(5)
     except KeyboardInterrupt:
         GPIO.cleanup()
