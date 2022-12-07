@@ -1,17 +1,25 @@
 import logging
 
-from logging import Logger, RootLogger, WARNING
+from logging import Logger, RootLogger, WARNING, Manager
 
 root = RootLogger(WARNING)
 MSG_LENGTH = 55
 
 
+class RPILoggerManager(Manager):
+    def __init__(self, rootnode: RootLogger) -> None:
+        super().__init__(rootnode)
+
+
 class RPiLogger(Logger):
+    manager = RPILoggerManager
+
     def __init__(self, *args) -> None:
         super().__init__(*args)
 
-    def info(self, msg: object, *args, **kwargs) -> None:
+    def info(self, msg, *args, **kwargs) -> None:
         msg += " " * (MSG_LENGTH - len(msg))
+        print("executing function")
         return super().info(msg, *args, **kwargs)
 
 
