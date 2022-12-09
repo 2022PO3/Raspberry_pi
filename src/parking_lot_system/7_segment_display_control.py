@@ -5,7 +5,6 @@ import time
 import requests
 import json
 import os
-import socket
 
 from typing import Any
 from logger import get_logger, justify_logs

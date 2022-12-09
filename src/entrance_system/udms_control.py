@@ -79,7 +79,6 @@ def take_picture(
             servo_state = open_barrier(servo, servo_state, system=system)
         else:
             logger.info(justify_logs(f"Licence plate check of {system} failed", 44))
-            print(output)
         return not sensor_state, servo_state
     elif distance >= 5 and sensor_state:
         logger.info(justify_logs(f"Car left {system} sensor", 44))
