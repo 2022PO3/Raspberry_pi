@@ -24,6 +24,7 @@ def open_barrier(servo: Servo, servo_state: bool, *, system: str) -> bool:
     if not servo_state:
         servo.ChangeDutyCycle(12)
         sleep(1)
+        servo.ChangeDutyCycle(0)
         logger.info(justify_logs(f"Opened barrier of {system}.", 44))
     return not servo_state
 
@@ -32,5 +33,6 @@ def close_barrier(servo: Servo, servo_state: bool, *, system: str) -> bool:
     if servo_state:
         servo.ChangeDutyCycle(7)
         sleep(1)
+        servo.ChangeDutyCycle(0)
         logger.info(justify_logs(f"Closed barrier of {system}.", 44))
     return not servo_state
