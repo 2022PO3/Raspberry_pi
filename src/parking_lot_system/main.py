@@ -26,7 +26,7 @@ def run_parking_lot_system(
     import udms_control
     import led_control
 
-    rng = range(1, 4) if pi_no else range(4, 7)
+    rng = range(1, 4) if pi_no == 1 else range(4, 7)
 
     # The states are an array of length 2. This prevents false positives. Only when the sensor
     # detects a car (or no car) for two consecutive times, the car will be detected. The first
