@@ -15,7 +15,7 @@ def setup_servo(servo_pin: int, pulse_frequency: int) -> Servo:
     logger.info(justify_logs(f"Setup of servo on pin {servo_pin} completed.", 44))
     servo = GPIO.PWM(servo_pin, pulse_frequency)
     servo.start(0)
-    servo.ChangeDutyCycle(7)
+    servo.ChangeDutyCycle(0)
     sleep(1)
     return servo
 
