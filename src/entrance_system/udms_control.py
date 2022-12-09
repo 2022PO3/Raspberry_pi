@@ -72,16 +72,17 @@ def take_picture(
                     "image.jpg",
                 ]
             )
-            logger.info(justify_logs(f"Took image of {system} car ", 44))
+            logger.info(justify_logs(f"Took image of {system} car.", 44))
+            if "success" in str(output).lower():
+                servo_state = open_barrier(servo, servo_state, system=system)
         except subprocess.CalledProcessError:
-            logger.info(justify_logs(f"Image taking on {system} failed", 44))
-        if "success" in str(output).lower():
-            servo_state = open_barrier(servo, servo_state, system=system)
+            logger.info(justify_logs(f"Image taking on {system} failed.", 44))
+
         else:
-            logger.info(justify_logs(f"Licence plate check of {system} failed", 44))
+            logger.info(justify_logs(f"Licence plate check of {system} failed.", 44))
         return not sensor_state, servo_state
     elif distance >= 5 and sensor_state:
-        logger.info(justify_logs(f"Car left {system} sensor", 44))
+        logger.info(justify_logs(f"Car left {system} sensor.", 44))
         time.sleep(2)
         servo_state = close_barrier(servo, servo_state, system=system)
         return not sensor_state, servo_state

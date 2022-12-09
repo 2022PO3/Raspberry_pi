@@ -66,22 +66,22 @@ def update_parking_lot(
     headers = {"PO3-ORIGIN": "rpi", "PO3-RPI-KEY": os.environ["RPI_KEY"]}
     body = {"garageId": garage_id, "parkingLotNo": parking_no}
     if distance < 5 and sensor_state == [True, False]:
+        led_control.turn_on_red(led_pin_no, parking_no)
         logger.info(justify_logs(f"Car entered parking lot {parking_no}.", 44))
         body |= {"occupied": True}
         requests.put(url, json=body, headers=headers)
         logger.info(
             justify_logs(f"Sent request that parking lot {parking_no} is occupied.", 44)
         )
-        led_control.turn_on_red(led_pin_no, parking_no)
         return [True, True]
     elif distance >= 5 and sensor_state == [False, True]:
+        led_control.turn_on_green(led_pin_no, parking_no)
         logger.info(f"Car left parking lot {parking_no}.")
         body |= {"occupied": False}
         requests.put(url, json=body, headers=headers)
         logger.info(
             justify_logs(f"Sent request that parking lot {parking_no} is emptied.", 44)
         )
-        led_control.turn_on_green(led_pin_no, parking_no)
         return [False, False]
     else:
         return [True if distance < 5 else False] + [sensor_state[0]]
