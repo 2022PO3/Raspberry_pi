@@ -40,15 +40,18 @@ def run_parking_lot_system(
     logger.info(justify_logs("Setup of parking lot system completed.", 44))
     try:
         while True:
-            for i in rng:
-                distance = udms_control.calculate_distance(udms_pins[i], 1)
-                state_dict[i] = udms_control.update_parking_lot(
-                    state_dict[i],
-                    distance,
-                    parking_led_pins[i],
-                    i,
-                    GARAGE_ID,
-                )
-                time.sleep(0.14)
+            try:
+                for i in rng:
+                    distance = udms_control.calculate_distance(udms_pins[i], 1)
+                    state_dict[i] = udms_control.update_parking_lot(
+                        state_dict[i],
+                        distance,
+                        parking_led_pins[i],
+                        i,
+                        GARAGE_ID,
+                    )
+                    time.sleep(0.14)
+            except Exception as e:
+                logger.error(f"Some error occurred: {e}.")
     except KeyboardInterrupt:
         GPIO.cleanup()

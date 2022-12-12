@@ -29,13 +29,16 @@ def run_entrance_system(
     logger.info(justify_logs("Setup of entrance system completed.", 44))
     try:
         while True:
-            sensor_state, servo_state = udms_control.take_picture(
-                udms_control.calculate_distance(trig_pin, echo_pin, 1),
-                sensor_state,
-                servo,
-                servo_state,
-                system=system,
-            )
-            sleep(1)
+            try:
+                sensor_state, servo_state = udms_control.take_picture(
+                    udms_control.calculate_distance(trig_pin, echo_pin, 1),
+                    sensor_state,
+                    servo,
+                    servo_state,
+                    system=system,
+                )
+                sleep(1)
+            except Exception as e:
+                logger.error(f"Some error occurred: {e}.")
     except KeyboardInterrupt:
         GPIO.cleanup()
