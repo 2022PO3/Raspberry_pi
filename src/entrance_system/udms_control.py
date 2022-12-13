@@ -42,7 +42,7 @@ def calculate_distance(trig_pin: int, echo_pin: int, time_delta: int) -> float:
         pulse_end_time = time.time()
 
     pulse_duration = pulse_end_time - pulse_start_time
-    logger.info("Distance: ", round(pulse_duration * 17150, 2))
+    logger.info("Distance: ", str(round(pulse_duration * 17150, 2)))
     return round(pulse_duration * 17150, 2)
 
 
