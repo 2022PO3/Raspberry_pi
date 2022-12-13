@@ -62,7 +62,7 @@ def take_picture(
     enters the sensor and one when it leaves. The return value isa tuple of the sensor state
     and the servo state.
     """
-    if distance < 7 and not sensor_state:
+    if distance < 10 and not sensor_state:
         logger.info(justify_logs(f"Car entered {system} sensor.", 44))
         try:
             output = subprocess.check_output(
