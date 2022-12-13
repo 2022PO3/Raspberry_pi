@@ -68,7 +68,7 @@ def take_picture(
             output = subprocess.check_output(
                 [
                     "bash",
-                    f"{os.environ['HOME']}/Raspberry_pi/src/entrance_system/take_image.sh",
+                    f"{os.environ['HOME']}/raspberry_pi/src/entrance_system/take_image.sh",
                     "image.jpg",
                 ]
             )
