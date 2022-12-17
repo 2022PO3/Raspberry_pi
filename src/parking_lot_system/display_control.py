@@ -2,10 +2,8 @@ import ST7735 as TFT
 import Adafruit_GPIO.SPI as SPI
 import RPi.GPIO as GPIO
 import time
-import requests
-import json
-import os
 
+from models.garage import get_free_spots
 from typing import Any
 from logger import get_logger, justify_logs
 from PIL import ImageFont
@@ -71,19 +69,12 @@ def write(inst: TFT.ST7735, string: str, *, font_size: int, x: int, y: int) -> N
     inst.display()
 
 
-def get_free_spots() -> GarageInfo:
-    url = f"https://po3backend.ddns.net/api/garage/{GARAGE_ID}"
-    headers = {"PO3-ORIGIN": "rpi", "PO3-RPI-KEY": os.environ["RPI_KEY"]}
-    response = json.loads(requests.get(url, headers=headers).text)
-    return GarageInfo.fromJSON(response)
-
-
 if __name__ == "__main__":
     disp = setup_display()
     try:
         while True:
             try:
-                garage_info = get_free_spots()
+                garage_info = get_free_spots(GARAGE_ID)
             except Exception as e:
                 logger.error(f"Some error occurred: {e}.")
                 pass

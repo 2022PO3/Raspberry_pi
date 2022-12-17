@@ -4,6 +4,7 @@ import requests
 import led_control
 import RPi.GPIO as GPIO
 from logger import get_logger, justify_logs
+from models import reservation
 
 logger = get_logger("udms_control")
 
@@ -58,6 +59,7 @@ def update_parking_lot(
     led_pin_no: tuple[int, int],
     parking_no: int,
     garage_id: int,
+    reservation_dict: dict[int, reservation.Reservation],
 ) -> list[bool]:
     """
     Makes request about the state of the parking lot to the Backend.
@@ -65,6 +67,14 @@ def update_parking_lot(
     url = "https://po3backend.ddns.net/api/rpi-parking-lot"
     headers = {"PO3-ORIGIN": "rpi", "PO3-RPI-KEY": os.environ["RPI_KEY"]}
     body = {"garageId": garage_id, "parkingLotNo": parking_no}
+    p_lot_r = reservation_dict[parking_no]
+    if p_lot_r.is_active():
+        led_control.turn_on_red(led_pin_no, parking_no)
+        logger.info(
+            justify_logs(f"Parking lot {parking_no} is booked on {p_lot_r.from_date}.", 44)
+        )
+        return [True, True]
+
     if distance < 5 and sensor_state == [True, False]:
         led_control.turn_on_red(led_pin_no, parking_no)
         logger.info(justify_logs(f"Car entered parking lot {parking_no}.", 44))
