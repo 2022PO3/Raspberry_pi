@@ -12,9 +12,6 @@ stty -echoctl
 trap 'ctrl_c ${pid_entrance} ${pid_parking} ${pid_display}' SIGINT
 rm -f rpi_garage.log
 
-echo 'Setting up Google Vison authentication...'
-gcloud auth login --brief --no-activate --cred-file="$HOME/raspberry_pi/google_vision_api_credentials.json"
-gcloud config set project "po3backend"
 
 echo "Start entrance system..."
 python src/entrance_system/main_pi${1}.py &
