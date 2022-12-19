@@ -1,5 +1,5 @@
-import ST7735 as TFT
-import Adafruit_GPIO.SPI as SPI
+import ST7735 as TFT  # type: ignore
+import Adafruit_GPIO.SPI as SPI  # type: ignore
 import RPi.GPIO as GPIO
 import time
 

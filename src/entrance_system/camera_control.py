@@ -3,7 +3,7 @@ import os
 import re
 
 from logger import get_logger, log
-from picamera import PiCamera
+from picamera import PiCamera  # type: ignore
 from google.cloud import vision
 
 
@@ -48,7 +48,6 @@ def get_text_from_image_path(client: vision.ImageAnnotatorClient, path: str) -> 
             "{}\nFor more info on error messages, check: "
             "https://cloud.google.com/apis/design/errors".format(response.error.message)
         )
-    log(".", logger)
     return response.text_annotations[0].description
 
 

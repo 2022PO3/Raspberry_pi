@@ -29,14 +29,13 @@ class Reservation:
         return {
             parkingLotNo: Reservation(
                 json["parkingLot"]["parkingLotNo"],
-                parse(json["from_date"]),
-                parse(json["to_date"]),
+                parse(json["from_date"]),  # type: ignore
+                parse(json["to_date"]),  # type: ignore
             )
         }
 
     @classmethod
     def from_list_json(cls, json: dict[str, Any]) -> list[dict[int, "Reservation"]]:
-        print(json)
         try:
             data = json["data"]
             return [
@@ -44,6 +43,7 @@ class Reservation:
             ]
         except KeyError:
             print(json["errors"])
+            return []
 
 
 def get_garage_reservations(garage_id: int) -> list[dict[int, "Reservation"]]:
