@@ -17,3 +17,7 @@ def get_logger(name: str) -> logging.Logger:
 
 def justify_logs(msg: str, length: int = 55) -> str:
     return msg + " " * (length - len(msg))
+
+
+def log(msg: str, logger: logging.Logger) -> None:
+    logger.info(justify_logs(msg, 44))
