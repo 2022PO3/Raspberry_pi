@@ -3,7 +3,7 @@ import Adafruit_GPIO.SPI as SPI
 import RPi.GPIO as GPIO
 import time
 
-from models.garage import get_free_spots
+from garage import get_free_spots
 from typing import Any
 from logger import get_logger, justify_logs
 from PIL import ImageFont

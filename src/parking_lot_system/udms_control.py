@@ -4,7 +4,7 @@ import requests
 import led_control
 import RPi.GPIO as GPIO
 from logger import get_logger, justify_logs
-from models import reservation
+import reservation
 
 logger = get_logger("udms_control")
 
