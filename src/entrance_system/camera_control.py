@@ -10,14 +10,18 @@ from google.cloud import vision
 logger = get_logger("camera_control")
 
 
-camera = PiCamera(resolution=(320, 320))
-camera.resolution = (1024, 768)
-camera.capture("foo.jpg")
-log("Image taken.", logger)
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.path.join(
-    os.getcwd(), "google_vision_api_credentials.json"
-)
-client = vision.ImageAnnotatorClient()
+def setup_google() -> vision.ImageAnnotatorClient:
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.path.join(
+        os.getcwd(), "google_vision_api_credentials.json"
+    )
+    return vision.ImageAnnotatorClient()
+
+
+def take_image(path: str) -> None:
+    camera = PiCamera(resolution=(320, 320))
+    camera.resolution = (1024, 768)
+    camera.capture(path)
+    log("Image taken.", logger)
 
 
 def get_text_from_image_path(path: str) -> str:
@@ -54,6 +58,8 @@ def filter_licence_plate(detected_licence_plate: str) -> str:
 
 
 if __name__ == "__main__":
+    client = setup_google()
+    take_image("image.jpg")
     detected_licence_plate_text = get_text_from_image_path(
         "/home/marcus/po3/Raspberry_pi/src/entrance_system/image.jpg"
     )
