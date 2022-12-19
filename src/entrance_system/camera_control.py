@@ -2,7 +2,6 @@ import io
 import os
 import re
 
-from time import perf_counter
 from logger import get_logger, log
 from picamera import PiCamera
 from google.cloud import vision
@@ -40,6 +39,7 @@ def get_text_from_image_path(client: vision.ImageAnnotatorClient, path: str) -> 
         content = image_file.read()
 
     # Send image to the Google Vision API
+    log("Sending image to vision API.", logger)
     image = vision.Image(content=content)
     response = client.text_detection(image=image)
 
@@ -48,7 +48,7 @@ def get_text_from_image_path(client: vision.ImageAnnotatorClient, path: str) -> 
             "{}\nFor more info on error messages, check: "
             "https://cloud.google.com/apis/design/errors".format(response.error.message)
         )
-
+    log(".", logger)
     return response.text_annotations[0].description
 
 
@@ -56,6 +56,7 @@ def filter_licence_plate(detected_licence_plate: str) -> str:
     licence_plate_text = re.sub(r"\W", "", detected_licence_plate)
     matches = re.findall(r"\d[A-Z]{3}\d{3}", licence_plate_text)
     if matches is not None:
+        log(f"Detected licence plate {matches[0]}.", logger)
         return matches[0]
     return ""
 
