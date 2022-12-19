@@ -60,7 +60,7 @@ def filter_licence_plate(detected_licence_plate: str) -> str:
 if __name__ == "__main__":
     client = setup_google()
     take_image("image.jpg")
-    detected_licence_plate_text = get_text_from_image_path(
-        "/home/marcus/po3/Raspberry_pi/src/entrance_system/image.jpg"
-    )
-    print(filter_licence_plate(detected_licence_plate_text))
+    # detected_licence_plate_text = get_text_from_image_path(
+    #    "/home/marcus/po3/Raspberry_pi/src/entrance_system/image.jpg"
+    # )
+# print(filter_licence_plate(detected_licence_plate_text))
