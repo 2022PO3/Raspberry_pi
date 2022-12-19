@@ -36,13 +36,14 @@ class Reservation:
 
     @classmethod
     def from_list_json(cls, json: dict[str, Any]) -> list[dict[int, "Reservation"]]:
+        print(json)
         try:
             data = json["data"]
             return [
                 Reservation.from_json(json_reservation) for json_reservation in data
             ]
         except KeyError:
-            print(json["error"])
+            print(json["errors"])
 
 
 def get_garage_reservations(garage_id: int) -> list[dict[int, "Reservation"]]:
