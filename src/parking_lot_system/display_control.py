@@ -3,6 +3,7 @@ import Adafruit_GPIO.SPI as SPI  # type: ignore
 import RPi.GPIO as GPIO
 import time
 
+from dotenv import load_dotenv
 from garage import get_free_spots
 from typing import Any
 from logger import get_logger, justify_logs
@@ -11,6 +12,7 @@ from PIL import Image
 
 
 logger = get_logger("display_control")
+load_dotenv()
 
 ####################
 # Define constants #

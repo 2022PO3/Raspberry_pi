@@ -50,7 +50,7 @@ def calculate_distance(trig_pin: int, echo_pin: int, time_delta: int) -> float:
 
 
 def send_licence_plate(licence_plate: str, garage_id: int) -> Response:
-    url = f"https://po3backend.ddns.net/api/garage/{garage_id}"
+    url = f"{os.getenv('SERVER_URL')}/api/garage/{garage_id}"
     headers = {"PO3-ORIGIN": "rpi", "PO3-RPI-KEY": os.environ["RPI_KEY"]}
     response = post(
         url,

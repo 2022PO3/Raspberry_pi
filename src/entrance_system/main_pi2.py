@@ -1,3 +1,5 @@
+from dotenv import load_dotenv
+
 """
 This code is for the entrance system of the second Raspberry Pi, which controls the exit of the garage.
 """
@@ -8,6 +10,7 @@ This code is for the entrance system of the second Raspberry Pi, which controls 
 ECHO_PIN = 16
 TRIG_PIN = 18
 SERVO_PIN = 12
+load_dotenv()
 
 if __name__ == "__main__":
     from entrance_system import run_entrance_system

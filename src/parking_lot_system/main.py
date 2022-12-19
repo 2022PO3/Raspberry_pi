@@ -1,3 +1,6 @@
+from dotenv import load_dotenv
+
+
 import RPi.GPIO as GPIO
 import time
 import reservation
@@ -9,6 +12,8 @@ logger = get_logger("parking_lot_system")
 PULSE_FREQUENCY = 50
 
 GARAGE_ID = 11
+
+load_dotenv()
 
 
 def _setup_board() -> None:
