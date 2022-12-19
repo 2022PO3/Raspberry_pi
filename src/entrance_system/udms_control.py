@@ -1,12 +1,16 @@
 import time
-import subprocess
 import os
+from requests import post, Response
+
 import RPi.GPIO as GPIO
 
-from logger import get_logger, justify_logs
+from logger import get_logger, log
 from servo_control import open_barrier, close_barrier, Servo
+from camera_control import detect_licence_plate
 
 logger = get_logger("udms_control")
+
+GARAGE_ID = 11
 
 
 def setup_udms(trig_pin: int, echo_pin: int, *, system: str) -> None:
@@ -21,7 +25,7 @@ def setup_udms(trig_pin: int, echo_pin: int, *, system: str) -> None:
     GPIO.output(trig_pin, GPIO.LOW)
 
     time.sleep(1)
-    logger.info(justify_logs(f"Setup of {system} sensor completed.", 44))
+    log(f"Setup of {system} sensor completed.", logger)
 
 
 def calculate_distance(trig_pin: int, echo_pin: int, time_delta: int) -> float:
@@ -42,11 +46,26 @@ def calculate_distance(trig_pin: int, echo_pin: int, time_delta: int) -> float:
         pulse_end_time = time.time()
 
     pulse_duration = pulse_end_time - pulse_start_time
-    logger.info(f"Distance: {str(round(pulse_duration * 17150, 2))}")
     return round(pulse_duration * 17150, 2)
 
 
-def take_picture(
+def send_licence_plate(licence_plate: str, garage_id: int) -> Response:
+    url = f"https://po3backend.ddns.net/api/garage/{garage_id}"
+    headers = {"PO3-ORIGIN": "rpi", "PO3-RPI-KEY": os.environ["RPI_KEY"]}
+    response = post(
+        url,
+        data={"licencePlate": licence_plate},
+        headers=headers,
+    )
+
+    return response
+
+
+def can_enter(response: Response) -> bool:
+    return response.status_code == 200
+
+
+def run_enter_detection(
     distance: float,
     sensor_state: bool,
     servo: Servo,
@@ -63,26 +82,16 @@ def take_picture(
     and the servo state.
     """
     if distance < 10 and not sensor_state:
-        logger.info(justify_logs(f"Car entered {system} sensor.", 44))
-        try:
-            output = subprocess.check_output(
-                [
-                    "bash",
-                    f"{os.environ['HOME']}/raspberry_pi/src/entrance_system/take_image.sh",
-                    "image.jpg",
-                ]
-            )
-            logger.info(justify_logs(f"Took image of {system} car.", 44))
-            if "success" in str(output).lower():
-                servo_state = open_barrier(servo, servo_state, system=system)
-        except subprocess.CalledProcessError:
-            logger.info(justify_logs(f"Image taking on {system} failed.", 44))
-
-        else:
-            logger.info(justify_logs(f"Licence plate check of {system} failed.", 44))
+        log(f"Car entered {system} sensor.", logger)
+        licence_plate_system = detect_licence_plate()
+        log("Posting request to backend.", logger)
+        resp = send_licence_plate(licence_plate_system, GARAGE_ID)
+        if can_enter(resp):
+            servo_state = open_barrier(servo, servo_state, system=system)
+        log("Car cannot entere the parking", logger)
         return not sensor_state, servo_state
     elif distance >= 5 and sensor_state:
-        logger.info(justify_logs(f"Car left {system} sensor.", 44))
+        log(f"Car left {system} sensor.", logger)
         time.sleep(2)
         servo_state = close_barrier(servo, servo_state, system=system)
         return not sensor_state, servo_state
