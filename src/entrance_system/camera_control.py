@@ -27,7 +27,7 @@ def take_image(path: str) -> None:
     log("Image taken.", logger)
 
 
-def get_text_from_image_path(path: str) -> str:
+def get_text_from_image_path(client: vision.ImageAnnotatorClient, path: str) -> str:
     """
     This method reads the text on the image at the given path, using Google Vision API.
 
@@ -60,10 +60,8 @@ def filter_licence_plate(detected_licence_plate: str) -> str:
     return ""
 
 
-if __name__ == "__main__":
+def detect_licence_plate() -> str:
+    home = os.environ["HOME"]
     client = setup_google()
     take_image("image.jpg")
-    start = perf_counter()
-    detected_licence_plate_text = get_text_from_image_path("~/raspberry_pi/image.jpg")
-    print(perf_counter() - start)
-    print(filter_licence_plate(detected_licence_plate_text))
+    return get_text_from_image_path(client, f"{home}/raspberry_pi/image.jpg")
