@@ -36,14 +36,18 @@ class Reservation:
 
     @classmethod
     def from_list_json(cls, json: dict[str, Any]) -> list[dict[int, "Reservation"]]:
-        print(json)
-        return [
-            Reservation.from_json(json_reservation) for json_reservation in json["data"]
-        ]
+        try:
+            data = json["data"]
+            return [
+                Reservation.from_json(json_reservation)
+                for json_reservation in json["data"]
+            ]
+        except KeyError:
+            pass
 
 
 def get_garage_reservations(garage_id: int) -> list[dict[int, "Reservation"]]:
-    url = f"https://po3backend.ddns.net/api/reservations/{garage_id}"
+    url = f"https://po3backend.ddns.net/api/rpi/reservations/{garage_id}"
     headers = {"PO3-ORIGIN": "rpi", "PO3-RPI-KEY": os.environ["RPI_KEY"]}
     response = json.loads(requests.get(url, headers=headers).text)
     return Reservation.from_list_json(response)
