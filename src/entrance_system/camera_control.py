@@ -18,7 +18,7 @@ def setup_google() -> vision.ImageAnnotatorClient:
 
 
 def take_image(path: str) -> None:
-    camera = PiCamera(resolution=(320, 320))
+    camera = PiCamera(resolution=(320, 320), vflip=True, hflip=True)
     camera.resolution = (1024, 768)
     camera.capture(path)
     log("Image taken.", logger)
