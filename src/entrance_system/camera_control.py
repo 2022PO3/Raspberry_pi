@@ -2,6 +2,7 @@ import io
 import os
 import re
 
+from time import perf_counter
 from logger import get_logger, log
 from picamera import PiCamera
 from google.cloud import vision
@@ -19,7 +20,7 @@ def setup_google() -> vision.ImageAnnotatorClient:
 
 def take_image(path: str) -> None:
     camera = PiCamera()
-    camera.resolution = (1024, 768)
+    camera.resolution = (320, 320)
     camera.vflip = True
     camera.hflip = True
     camera.capture(path)
@@ -62,7 +63,7 @@ def filter_licence_plate(detected_licence_plate: str) -> str:
 if __name__ == "__main__":
     client = setup_google()
     take_image("image.jpg")
-    # detected_licence_plate_text = get_text_from_image_path(
-    #    "/home/marcus/po3/Raspberry_pi/src/entrance_system/image.jpg"
-    # )
-# print(filter_licence_plate(detected_licence_plate_text))
+    start = perf_counter()
+    detected_licence_plate_text = get_text_from_image_path("~/raspberry_pi/image.jpg")
+    print(perf_counter() - start)
+    print(filter_licence_plate(detected_licence_plate_text))
