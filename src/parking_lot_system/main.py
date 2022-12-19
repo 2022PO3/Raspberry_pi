@@ -1,7 +1,8 @@
 import RPi.GPIO as GPIO
 import time
+import reservation
+
 from logger import get_logger, justify_logs
-from models import reservation
 
 logger = get_logger("parking_lot_system")
 
@@ -50,7 +51,7 @@ def run_parking_lot_system(
                         parking_led_pins[i],
                         i,
                         GARAGE_ID,
-                        reservation_dict,
+                        reservation_dict[i],
                     )
                     time.sleep(0.3)
             except Exception as e:
