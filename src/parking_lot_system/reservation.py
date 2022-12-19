@@ -39,11 +39,10 @@ class Reservation:
         try:
             data = json["data"]
             return [
-                Reservation.from_json(json_reservation)
-                for json_reservation in json["data"]
+                Reservation.from_json(json_reservation) for json_reservation in data
             ]
         except KeyError:
-            print(data["error"])
+            print(json["error"])
 
 
 def get_garage_reservations(garage_id: int) -> list[dict[int, "Reservation"]]:
