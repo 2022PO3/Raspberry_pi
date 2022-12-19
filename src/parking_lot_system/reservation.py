@@ -36,6 +36,7 @@ class Reservation:
 
     @classmethod
     def from_list_json(cls, json: dict[str, Any]) -> list[dict[int, "Reservation"]]:
+        print(json)
         return [
             Reservation.from_json(json_reservation) for json_reservation in json["data"]
         ]
