@@ -64,14 +64,16 @@ def update_parking_lot(
     """
     Makes request about the state of the parking lot to the Backend.
     """
-    url = "https://po3backend.ddns.net/api/rpi-parking-lot"
+    url = "https://po3backend.ddns.net/api/rpi/parking-lot"
     headers = {"PO3-ORIGIN": "rpi", "PO3-RPI-KEY": os.environ["RPI_KEY"]}
     body = {"garageId": garage_id, "parkingLotNo": parking_no}
     p_lot_r = reservation_dict[parking_no]
     if p_lot_r.is_active():
         led_control.turn_on_red(led_pin_no, parking_no)
         logger.info(
-            justify_logs(f"Parking lot {parking_no} is booked on {p_lot_r.from_date}.", 44)
+            justify_logs(
+                f"Parking lot {parking_no} is booked on {p_lot_r.from_date}.", 44
+            )
         )
         return [True, True]
 
