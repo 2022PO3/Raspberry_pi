@@ -43,7 +43,7 @@ class Reservation:
                 for json_reservation in json["data"]
             ]
         except KeyError:
-            pass
+            print(data["error"])
 
 
 def get_garage_reservations(garage_id: int) -> list[dict[int, "Reservation"]]:
