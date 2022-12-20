@@ -45,7 +45,6 @@ class Reservation:
                 reservation_dict | {r.parking_lot_no: r}
             return reservation_dict
         except KeyError:
-            print(json["errors"])
             return dict()
 
 
