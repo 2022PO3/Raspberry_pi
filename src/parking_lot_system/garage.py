@@ -2,7 +2,10 @@ import os
 import json
 import requests
 
+from logger import get_logger, log
 from typing import Any
+
+logger = get_logger("garage_control")
 
 
 class Garage:
@@ -20,8 +23,13 @@ class Garage:
         )
 
 
-def get_free_spots(garage_id: int) -> "Garage":
+def get_free_spots(garage_id: int) -> "Garage" | None:
     url = f"{os.getenv('SERVER_URL')}api/rpi/garage/{garage_id}"
     headers = {"PO3-ORIGIN": "rpi", "PO3-RPI-KEY": os.environ["RPI_KEY"]}
-    response = json.loads(requests.get(url, headers=headers).text)
-    return Garage.fromJSON(response)
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        response_json = json.loads(requests.get(url, headers=headers).text)
+        return Garage.fromJSON(response_json)
+    else:
+        log(f"Request returned a non-200 status code: {response.status_code}.", logger)
+    return None
