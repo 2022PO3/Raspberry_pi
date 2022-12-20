@@ -48,11 +48,11 @@ def calculate_distance(trig_pin: int, echo_pin: int) -> float:
 
 
 def send_licence_plate(licence_plate: str, garage_id: int) -> Response:
-    url = f"{os.getenv('SERVER_URL')}api/garage/{garage_id}"
+    url = f"{os.getenv('SERVER_URL')}api/rpi/licence-plates"
     headers = {"PO3-ORIGIN": "rpi", "PO3-RPI-KEY": os.environ["RPI_KEY"]}
     response = post(
         url,
-        data={"licencePlate": licence_plate},
+        data={"licencePlate": licence_plate, "garageId": garage_id},
         headers=headers,
     )
 

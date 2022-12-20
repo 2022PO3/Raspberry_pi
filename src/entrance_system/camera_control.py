@@ -57,6 +57,7 @@ def filter_licence_plate(detected_licence_plate: str) -> str:
     if matches is not None:
         log(f"Detected licence plate {matches[0]}.", logger)
         return matches[0]
+    log(f"No licence plate detected.")
     return ""
 
 
