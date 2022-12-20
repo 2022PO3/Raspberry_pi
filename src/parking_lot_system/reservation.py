@@ -25,6 +25,7 @@ class Reservation:
         """
         Returns whether this reservation is active or not.
         """
+        print(datetime.now().astimezone())
         return (
             self.from_date - timedelta(hours=8)
             < datetime.now().astimezone()
@@ -44,6 +45,7 @@ class Reservation:
         try:
             data = json["data"]
             reservation_dict: dict[int, Reservation] = dict()
+            print(f"{data=}")
             for json_reservation in data:
                 r = Reservation.from_json(json_reservation)
                 reservation_dict | {r.parking_lot_no: r}
