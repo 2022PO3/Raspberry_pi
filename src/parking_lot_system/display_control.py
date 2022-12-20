@@ -79,16 +79,19 @@ if __name__ == "__main__":
                 garage_info = get_free_spots(GARAGE_ID)
             except Exception as e:
                 logger.error(f"Some error occurred: {e}.")
-                pass
+                raise e
             disp.clear((255, 255, 255))
             image = Image.open("src/parking_lot_system/logo_parking_boys.png")
-            write(
-                disp,
-                f"{garage_info.left_spots}/{garage_info.total_spots}",
-                font_size=65,
-                x=14,
-                y=60,
-            )
+            try:
+                write(
+                    disp,
+                    f"{garage_info.left_spots}/{garage_info.total_spots}",
+                    font_size=65,
+                    x=14,
+                    y=60,
+                )
+            except UnboundLocalError:
+                pass
             disp.display(image.resize((WIDTH, int(HEIGHT / 4))))
             time.sleep(1)
     except KeyboardInterrupt:
