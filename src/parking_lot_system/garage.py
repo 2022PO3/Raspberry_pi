@@ -9,10 +9,17 @@ logger = get_logger("garage_control")
 
 
 class Garage:
-    def __init__(self, name: str, total_spots: int, free_spots: int) -> None:
+    def __init__(
+        self,
+        name: str,
+        total_spots: int,
+        free_spots: int,
+        reservations: int,
+    ) -> None:
         self.name = name
         self.total_spots = total_spots
         self.entered = free_spots
+        self.reservations = reservations
 
     @classmethod
     def fromJSON(cls, json: dict[str, Any]) -> "Garage":
@@ -20,6 +27,7 @@ class Garage:
             json["data"]["name"],
             len(json["data"]["parkingLots"]),
             int(json["data"]["entered"]),
+            int(json["data"]["reservations"]),
         )
 
 
