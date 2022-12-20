@@ -78,7 +78,7 @@ def update_parking_lot(
             )
             return [True, True]
     logger.info(f"{parking_no}: {distance}")
-    if distance < 10 and sensor_state == [True, False]:
+    if distance < 15 and sensor_state == [True, False]:
         led_control.turn_on_red(led_pin_no, parking_no)
         logger.info(justify_logs(f"Car entered parking lot {parking_no}.", 44))
         body |= {"occupied": True}
@@ -87,7 +87,7 @@ def update_parking_lot(
             justify_logs(f"Sent request that parking lot {parking_no} is occupied.", 44)
         )
         return [True, True]
-    elif distance >= 10 and sensor_state == [False, True]:
+    elif distance >= 15 and sensor_state == [False, True]:
         led_control.turn_on_green(led_pin_no, parking_no)
         logger.info(f"Car left parking lot {parking_no}.")
         body |= {"occupied": False}
@@ -97,4 +97,4 @@ def update_parking_lot(
         )
         return [False, False]
     else:
-        return [True if distance < 5 else False] + [sensor_state[0]]
+        return [True if distance < 15 else False] + [sensor_state[0]]
