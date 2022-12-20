@@ -56,7 +56,7 @@ def run_parking_lot_system(
                         parking_led_pins[i],
                         i,
                         GARAGE_ID,
-                        reservation_dict[i],
+                        reservation_dict,
                     )
                     time.sleep(0.3)
             except Exception as e:

@@ -24,30 +24,29 @@ class Reservation:
         return self.from_date - timedelta(hours=8) < datetime.now() < self.to_date
 
     @classmethod
-    def from_json(cls, json: dict[str, Any]) -> dict[int, "Reservation"]:
+    def from_json(cls, json: dict[str, Any]) -> "Reservation":
         parkingLotNo: int = json["parkingLot"]["parkingLotNo"]
-        return {
-            parkingLotNo: Reservation(
-                json["parkingLot"]["parkingLotNo"],
-                parse(json["from_date"]),  # type: ignore
-                parse(json["to_date"]),  # type: ignore
-            )
-        }
+        return Reservation(
+            json["parkingLot"]["parkingLotNo"],
+            parse(json["from_date"]),  # type: ignore
+            parse(json["to_date"]),  # type: ignore
+        )
 
     @classmethod
-    def from_list_json(cls, json: dict[str, Any]) -> list[dict[int, "Reservation"]]:
+    def from_list_json(cls, json: dict[str, Any]) -> dict[int, "Reservation"]:
         try:
             data = json["data"]
-            print(data)
-            return [
-                Reservation.from_json(json_reservation) for json_reservation in data
-            ]
+            reservation_dict: dict[int, Reservation]
+            for json_reservation in data:
+                r = Reservation.from_json(json_reservation)
+                reservation_dict | {r.parking_lot_no: r}
+            return reservation_dict
         except KeyError:
             print(json["errors"])
-            return []
+            return dict()
 
 
-def get_garage_reservations(garage_id: int) -> list[dict[int, "Reservation"]]:
+def get_garage_reservations(garage_id: int) -> dict[int, "Reservation"]:
     url = f"{os.getenv('SERVER_URL')}api/rpi/reservations/{garage_id}"
     headers = {"PO3-ORIGIN": "rpi", "PO3-RPI-KEY": os.environ["RPI_KEY"]}
     response = json.loads(requests.get(url, headers=headers).text)
