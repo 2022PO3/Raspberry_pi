@@ -77,9 +77,9 @@ def update_parking_lot(
                 )
             )
             return [True, True]
-    if sensor_state[0]:
+    if distance < 15:
         led_control.turn_on_red(led_pin_no, parking_no)
-    elif not sensor_state[0]:
+    elif distance >= 15:
         led_control.turn_on_green(led_pin_no, parking_no)
 
     if distance < 15 and sensor_state == [True, False]:
