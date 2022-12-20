@@ -61,5 +61,6 @@ def run_parking_lot_system(
                     time.sleep(0.3)
             except Exception as e:
                 logger.error(f"Some error occurred: {e}.")
+                raise e
     except KeyboardInterrupt:
         GPIO.cleanup()
