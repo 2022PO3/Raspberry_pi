@@ -25,7 +25,6 @@ class Reservation:
 
     @classmethod
     def from_json(cls, json: dict[str, Any]) -> "Reservation":
-        parkingLotNo: int = json["parkingLot"]["parkingLotNo"]
         return Reservation(
             json["parkingLot"]["parkingLotNo"],
             parse(json["from_date"]),  # type: ignore
@@ -36,7 +35,7 @@ class Reservation:
     def from_list_json(cls, json: dict[str, Any]) -> dict[int, "Reservation"]:
         try:
             data = json["data"]
-            reservation_dict: dict[int, Reservation]
+            reservation_dict: dict[int, Reservation] = dict()
             for json_reservation in data:
                 r = Reservation.from_json(json_reservation)
                 reservation_dict | {r.parking_lot_no: r}
