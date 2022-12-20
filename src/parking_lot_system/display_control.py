@@ -59,7 +59,7 @@ if __name__ == "__main__":
     try:
         while True:
             try:
-                garage_info = get_free_spots(GARAGE_ID)
+                garage = get_free_spots(GARAGE_ID)
             except Exception as e:
                 logger.error(f"Some error occurred: {e}.")
                 raise e
@@ -68,7 +68,7 @@ if __name__ == "__main__":
             try:
                 write(
                     disp,
-                    f"{garage_info.total_spots - garage_info.entered - garage_info.reservations}/{garage_info.total_spots}",
+                    f"{garage.total_spots - garage.entered - garage.reservations}/{garage.total_spots}",
                     font_size=65,
                     x=14,
                     y=60,

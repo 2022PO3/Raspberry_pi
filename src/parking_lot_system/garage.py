@@ -13,16 +13,17 @@ class Garage:
         self,
         name: str,
         total_spots: int,
-        free_spots: int,
+        entered: int,
         reservations: int,
     ) -> None:
         self.name = name
         self.total_spots = total_spots
-        self.entered = free_spots
+        self.entered = entered
         self.reservations = reservations
 
     @classmethod
     def fromJSON(cls, json: dict[str, Any]) -> "Garage":
+        print(f"{json=}")
         return Garage(
             json["data"]["name"],
             len(json["data"]["parkingLots"]),
