@@ -1,9 +1,13 @@
 import json
 import requests
 import os
+
+from logger import get_logger, log
 from typing import Any
 from datetime import datetime, timedelta
 from dateparser import parse
+
+logger = get_logger("reservation_control")
 
 
 class Reservation:
@@ -48,5 +52,10 @@ class Reservation:
 def get_garage_reservations(garage_id: int) -> dict[int, "Reservation"]:
     url = f"{os.getenv('SERVER_URL')}api/rpi/reservations/{garage_id}"
     headers = {"PO3-ORIGIN": "rpi", "PO3-RPI-KEY": os.environ["RPI_KEY"]}
-    response = json.loads(requests.get(url, headers=headers).text)
-    return Reservation.from_list_json(response)
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        response_json = json.loads(requests.get(url, headers=headers).text)
+        return Reservation.from_list_json(response_json)
+    else:
+        log(f"Request returned a non-200 status code: {response.status_code}.", logger)
+    return dict()
