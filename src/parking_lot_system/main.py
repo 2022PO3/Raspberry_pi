@@ -9,6 +9,9 @@ from logger import get_logger, justify_logs
 
 logger = get_logger("parking_lot_system")
 
+RED = 1
+GREEN = 0
+
 PULSE_FREQUENCY = 50
 
 GARAGE_ID = 11
@@ -32,12 +35,13 @@ def run_parking_lot_system(
     import udms_control
     import led_control
 
-    rng = range(1, 4) if pi_no == 1 else range(4, 7)
+    rng = range(1, 4) if pi_no == 2 else range(4, 7)
 
     # The states are an array of length 2. This prevents false positives. Only when the sensor
     # detects a car (or no car) for two consecutive times, the car will be detected. The first
     # element indicates most recent measurement.
     state_dict = {i: [False] * 2 for i in rng}
+    led_state_dict = {i: GREEN for i in rng}
 
     _setup_board()
     for i in rng:
@@ -53,6 +57,7 @@ def run_parking_lot_system(
                     state_dict[i] = udms_control.update_parking_lot(
                         state_dict[i],
                         distance,
+                        led_state_dict[i],
                         parking_led_pins[i],
                         i,
                         GARAGE_ID,

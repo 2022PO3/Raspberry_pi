@@ -55,6 +55,7 @@ def calculate_distance(pin_list: tuple[int, int]) -> float:
 def update_parking_lot(
     sensor_state: list[bool],
     distance: float,
+    led_state: int,
     led_pin_no: tuple[int, int],
     parking_no: int,
     garage_id: int,
@@ -77,9 +78,9 @@ def update_parking_lot(
             )
             return [True, True]
     if distance < 15:
-        led_control.turn_on_red(led_pin_no, parking_no)
+        led_control.turn_on_red(led_pin_no, parking_no, led_state)
     elif distance >= 15:
-        led_control.turn_on_green(led_pin_no, parking_no)
+        led_control.turn_on_green(led_pin_no, parking_no, led_state)
 
     if distance < 15 and sensor_state == [True, False]:
         logger.info(justify_logs(f"Car entered parking lot {parking_no}.", 44))
