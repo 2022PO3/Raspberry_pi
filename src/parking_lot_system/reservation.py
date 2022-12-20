@@ -48,7 +48,7 @@ class Reservation:
             print(f"{data=}")
             for json_reservation in data:
                 r = Reservation.from_json(json_reservation)
-                reservation_dict | {r.parking_lot_no: r}
+                reservation_dict |= {r.parking_lot_no: r}
             return reservation_dict
         except KeyError:
             return dict()
