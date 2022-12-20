@@ -58,7 +58,7 @@ def filter_licence_plate(detected_licence_plate: str) -> str:
         log(f"Detected licence plate {matches[0]}.", logger)
         return matches[0]
     log(f"No licence plate detected.")
-    return ""
+    return "1AAA000"
 
 
 def detect_licence_plate(camera: PiCamera) -> str:
