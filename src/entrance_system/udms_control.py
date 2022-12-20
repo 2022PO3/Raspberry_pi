@@ -84,6 +84,7 @@ def run_enter_detection(
         licence_plate_system = detect_licence_plate()
         log("Posting request to backend.", logger)
         resp = send_licence_plate(licence_plate_system, GARAGE_ID)
+        print(resp)
         if can_enter(resp):
             servo_state = open_barrier(servo, servo_state, system=system)
         log("Car cannot enter the parking", logger)
