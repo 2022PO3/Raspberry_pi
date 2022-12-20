@@ -66,4 +66,6 @@ def detect_licence_plate() -> str:
     home = os.environ["HOME"]
     client = setup_google()
     take_image("image.jpg")
-    return get_text_from_image_path(client, f"{home}/raspberry_pi/image.jpg")
+    return filter_licence_plate(
+        get_text_from_image_path(client, f"{home}/raspberry_pi/image.jpg")
+    )
