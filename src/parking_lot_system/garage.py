@@ -16,6 +16,7 @@ class Garage:
 
     @classmethod
     def fromJSON(cls, json: dict[str, Any]) -> "Garage":
+        print(json)
         return Garage(
             json["data"]["name"],
             len(json["data"]["parking_lots"]),
