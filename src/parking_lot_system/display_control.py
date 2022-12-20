@@ -66,6 +66,9 @@ if __name__ == "__main__":
             disp.clear((255, 255, 255))
             image = Image.open("src/parking_lot_system/logo_parking_boys.png")
             try:
+                print(
+                    f"{garage_info.total_spots - garage_info.entered}/{garage_info.total_spots}"
+                )
                 write(
                     disp,
                     f"{garage_info.total_spots - garage_info.entered}/{garage_info.total_spots}",
