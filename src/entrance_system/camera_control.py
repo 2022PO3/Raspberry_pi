@@ -47,7 +47,10 @@ def get_text_from_image_path(client: vision.ImageAnnotatorClient, path: str) -> 
             "{}\nFor more info on error messages, check: "
             "https://cloud.google.com/apis/design/errors".format(response.error.message)
         )
-    return response.text_annotations[0].description
+    try:
+        return response.text_annotations[0].description
+    except IndexError:
+        return "1AAA000"
 
 
 def filter_licence_plate(detected_licence_plate: str) -> str:
