@@ -77,7 +77,6 @@ def update_parking_lot(
                 )
             )
             return [True, True]
-    logger.info(f"{parking_no}: {distance}")
     if sensor_state[0]:
         led_control.turn_on_red(led_pin_no, parking_no)
     elif not sensor_state[0]:
