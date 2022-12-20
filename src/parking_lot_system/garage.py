@@ -12,7 +12,7 @@ class Garage:
     def __init__(self, name: str, total_spots: int, free_spots: int) -> None:
         self.name = name
         self.total_spots = total_spots
-        self.left_spots = free_spots
+        self.entered = free_spots
 
     @classmethod
     def fromJSON(cls, json: dict[str, Any]) -> "Garage":
