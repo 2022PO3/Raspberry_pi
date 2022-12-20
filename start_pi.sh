@@ -29,7 +29,7 @@ if [ ${1} -eq 1 ]; then
     echo "Start display..."
     python src/parking_lot_system/display_control.py &
     sleep 1
-    pid_display=$(pgrep -f src/parking_lot_system/7_segment_display_control.py)
+    pid_display=$(pgrep -f src/parking_lot_system/display_control.py)
     echo "Display running with PID ${pid_display}."
     sleep 1
 fi
