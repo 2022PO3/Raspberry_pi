@@ -31,7 +31,7 @@ def run_entrance_system(
         while True:
             try:
                 sensor_state, servo_state = udms_control.run_enter_detection(
-                    udms_control.calculate_distance(trig_pin, echo_pin, 1),
+                    udms_control.calculate_distance(trig_pin, echo_pin),
                     sensor_state,
                     servo,
                     servo_state,

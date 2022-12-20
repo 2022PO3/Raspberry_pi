@@ -49,7 +49,7 @@ def run_parking_lot_system(
             reservation_dict = reservation.get_garage_reservations(GARAGE_ID)
             try:
                 for i in rng:
-                    distance = udms_control.calculate_distance(udms_pins[i], 1)
+                    distance = udms_control.calculate_distance(udms_pins[i])
                     state_dict[i] = udms_control.update_parking_lot(
                         state_dict[i],
                         distance,

@@ -26,13 +26,12 @@ def setup_udms(pin_list: tuple[int, int], sensor_no: int) -> None:
     logger.info(justify_logs(f"Setup of ultrasonic sensor {sensor_no} completed.", 44))
 
 
-def calculate_distance(pin_list: tuple[int, int], time_delta: int) -> float:
+def calculate_distance(pin_list: tuple[int, int]) -> float:
     """
     Reads on the distance measuring of the udms connected on the `trig_pin` and `echo_pin`.
     Pin list is of the format: `[TRIG_PIN, ECHO_PIN]`.
     """
     trig_pin, echo_pin = pin_list
-    time.sleep(time_delta)
 
     GPIO.output(trig_pin, GPIO.HIGH)
 

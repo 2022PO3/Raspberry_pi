@@ -28,12 +28,10 @@ def setup_udms(trig_pin: int, echo_pin: int, *, system: str) -> None:
     log(f"Setup of {system} sensor completed.", logger)
 
 
-def calculate_distance(trig_pin: int, echo_pin: int, time_delta: int) -> float:
+def calculate_distance(trig_pin: int, echo_pin: int) -> float:
     """
     Reads on the distance measuring of the udms connected on the `trig_pin` and `echo_pin`.
     """
-    time.sleep(time_delta)
-
     GPIO.output(trig_pin, GPIO.HIGH)
 
     time.sleep(0.00001)
