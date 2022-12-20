@@ -23,7 +23,7 @@ class Garage:
         )
 
 
-def get_free_spots(garage_id: int) -> "Garage" | None:
+def get_free_spots(garage_id: int):
     url = f"{os.getenv('SERVER_URL')}api/rpi/garage/{garage_id}"
     headers = {"PO3-ORIGIN": "rpi", "PO3-RPI-KEY": os.environ["RPI_KEY"]}
     response = requests.get(url, headers=headers)

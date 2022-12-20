@@ -17,8 +17,7 @@ def setup_google() -> vision.ImageAnnotatorClient:
     return vision.ImageAnnotatorClient()
 
 
-def take_image(path: str) -> None:
-    camera = PiCamera()
+def take_image(camera: PiCamera, path: str) -> None:
     camera.resolution = (320, 320)
     camera.vflip = True
     camera.hflip = True
@@ -62,10 +61,10 @@ def filter_licence_plate(detected_licence_plate: str) -> str:
     return ""
 
 
-def detect_licence_plate() -> str:
+def detect_licence_plate(camera: PiCamera) -> str:
     home = os.environ["HOME"]
     client = setup_google()
-    take_image("image.jpg")
+    take_image(camera, "image.jpg")
     return filter_licence_plate(
         get_text_from_image_path(client, f"{home}/raspberry_pi/image.jpg")
     )
