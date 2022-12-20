@@ -25,8 +25,11 @@ class Reservation:
         """
         Returns whether this reservation is active or not.
         """
-        print(datetime.now())
-        return self.from_date - timedelta(hours=8) < datetime.now() < self.to_date
+        return (
+            self.from_date - timedelta(hours=8)
+            < datetime.now().astimezone()
+            < self.to_date
+        )
 
     @classmethod
     def from_json(cls, json: dict[str, Any]) -> "Reservation":
