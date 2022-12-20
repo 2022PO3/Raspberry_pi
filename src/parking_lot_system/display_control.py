@@ -68,7 +68,7 @@ if __name__ == "__main__":
             try:
                 write(
                     disp,
-                    f"{garage_info.entered}/{garage_info.total_spots}",
+                    f"{garage_info.total_spots - garage_info.entered}/{garage_info.total_spots}",
                     font_size=65,
                     x=14,
                     y=60,
