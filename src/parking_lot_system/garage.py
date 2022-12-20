@@ -19,7 +19,7 @@ class Garage:
         print(json)
         return Garage(
             json["data"]["name"],
-            len(json["data"]["parking_lots"]),
+            len(json["data"]["parkingLots"]),
             int(json["data"]["entered"]),
         )
 
