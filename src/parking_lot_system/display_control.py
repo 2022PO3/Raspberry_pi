@@ -94,6 +94,6 @@ if __name__ == "__main__":
             except UnboundLocalError:
                 pass
             disp.display(image.resize((WIDTH, int(HEIGHT / 4))))
-            time.sleep(1)
+            time.sleep(2)
     except KeyboardInterrupt:
         GPIO.cleanup()
