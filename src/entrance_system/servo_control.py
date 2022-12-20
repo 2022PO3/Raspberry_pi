@@ -6,7 +6,7 @@ logger = get_logger("servo_control")
 
 
 class Servo:
-    def ChangeDutyCycle(self, amount: int) -> None:
+    def ChangeDutyCycle(self, amount: float) -> None:
         ...
 
 
@@ -22,7 +22,9 @@ def setup_servo(servo_pin: int, pulse_frequency: int) -> Servo:
 
 def open_barrier(servo: Servo, servo_state: bool, *, system: str) -> bool:
     if not servo_state:
-        servo.ChangeDutyCycle(4) if system == "entrance" else servo.ChangeDutyCycle(12)
+        servo.ChangeDutyCycle(3.5) if system == "entrance" else servo.ChangeDutyCycle(
+            12
+        )
         sleep(1)
         servo.ChangeDutyCycle(0)
         logger.info(justify_logs(f"Opened barrier of {system}.", 44))

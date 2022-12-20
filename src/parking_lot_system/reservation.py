@@ -55,6 +55,7 @@ def get_garage_reservations(garage_id: int) -> dict[int, "Reservation"]:
     if response.status_code == 200:
         try:
             response_json = json.loads(requests.get(url, headers=headers).text)
+            print(response_json)
         except json.decoder.JSONDecodeError:
             log("Request returned an empty response.", logger)
         return Reservation.from_list_json(response_json)
