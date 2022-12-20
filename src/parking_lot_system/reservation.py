@@ -39,7 +39,7 @@ class Reservation:
             json["parkingLot"]["parkingLotNo"],
             parse(json["fromDate"]),  # type: ignore
             parse(json["toDate"]),  # type: ignore
-            json["is_valid"],
+            json["isValid"],
         )
 
     @classmethod
