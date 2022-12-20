@@ -53,6 +53,7 @@ def get_text_from_image_path(client: vision.ImageAnnotatorClient, path: str) -> 
 
 def filter_licence_plate(detected_licence_plate: str) -> str:
     licence_plate_text = re.sub(r"\W", "", detected_licence_plate)
+    log(f"Received this licence plate from Google: {licence_plate_text}.", logger)
     matches = re.findall(r"\d[A-Z]{3}\d{3}", licence_plate_text)
     if matches is not None:
         log(f"Detected licence plate {matches[0]}.", logger)

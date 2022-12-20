@@ -90,6 +90,6 @@ if __name__ == "__main__":
                 y=60,
             )
             disp.display(image.resize((WIDTH, int(HEIGHT / 4))))
-            time.sleep(5)
+            time.sleep(1)
     except KeyboardInterrupt:
         GPIO.cleanup()
