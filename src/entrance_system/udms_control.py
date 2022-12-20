@@ -91,7 +91,7 @@ def run_enter_detection(
             servo_state = open_barrier(servo, servo_state, system=system)
         log("Car cannot enter the parking", logger)
         return not sensor_state, servo_state
-    elif distance >= 5 and sensor_state:
+    elif distance >= 10 and sensor_state:
         log(f"Car left {system} sensor.", logger)
         time.sleep(2)
         servo_state = close_barrier(servo, servo_state, system=system)
