@@ -50,6 +50,7 @@ def run_parking_lot_system(
     try:
         while True:
             reservation_dict = reservation.get_garage_reservations(GARAGE_ID)
+            print(f"{reservation_dict=}")
             try:
                 for i in rng:
                     distance = udms_control.calculate_distance(udms_pins[i])
