@@ -54,7 +54,10 @@ def get_garage_reservations(garage_id: int) -> dict[int, "Reservation"]:
     headers = {"PO3-ORIGIN": "rpi", "PO3-RPI-KEY": os.environ["RPI_KEY"]}
     response = requests.get(url, headers=headers)
     if response.status_code == 200:
-        response_json = json.loads(requests.get(url, headers=headers).text)
+        try:
+            response_json = json.loads(requests.get(url, headers=headers).text)
+        except json.decoder.JSONDecodeError:
+            log("Request returned an empty response.", logger)
         return Reservation.from_list_json(response_json)
     else:
         log(f"Request returned a non-200 status code: {response.status_code}.", logger)
