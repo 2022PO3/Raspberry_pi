@@ -34,7 +34,6 @@ class Reservation:
 
     @classmethod
     def from_json(cls, json: dict[str, Any]) -> "Reservation":
-        print(f"{json=}")
         return Reservation(
             json["parkingLot"]["parkingLotNo"],
             parse(json["from_date"]),  # type: ignore
@@ -51,7 +50,8 @@ class Reservation:
                 r = Reservation.from_json(json_reservation)
                 reservation_dict | {r.parking_lot_no: r}
             return reservation_dict
-        except KeyError:
+        except KeyError as e:
+            raise e
             return dict()
 
 
