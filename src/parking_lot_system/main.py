@@ -40,8 +40,7 @@ def run_parking_lot_system(
     # The states are an array of length 2. This prevents false positives. Only when the sensor
     # detects a car (or no car) for two consecutive times, the car will be detected. The first
     # element indicates most recent measurement.
-    state_dict = {i: [False] * 2 for i in rng}
-    led_state_dict = {i: GREEN for i in rng}
+    state = {i: {"pl_state": [False, False], "led_state": GREEN} for i in rng}
 
     _setup_board()
     for i in rng:
@@ -54,10 +53,10 @@ def run_parking_lot_system(
             try:
                 for i in rng:
                     distance = udms_control.calculate_distance(udms_pins[i])
-                    state_dict[i] = udms_control.update_parking_lot(
-                        state_dict[i],
+                    state[i] = udms_control.update_parking_lot(
+                        state[i]["pl_state"],
                         distance,
-                        led_state_dict[i],
+                        state[i]["led_state"],
                         parking_led_pins[i],
                         i,
                         GARAGE_ID,

@@ -4,6 +4,7 @@ import requests
 import led_control
 import RPi.GPIO as GPIO
 from logger import get_logger, justify_logs
+from typing import Any
 import reservation
 
 logger = get_logger("udms_control")
@@ -60,7 +61,7 @@ def update_parking_lot(
     parking_no: int,
     garage_id: int,
     reservation_dict: dict[int, reservation.Reservation],
-) -> list[bool]:
+) -> dict[str, Any]:
     """
     Makes request about the state of the parking lot to the Backend.
     """
@@ -70,17 +71,17 @@ def update_parking_lot(
     if parking_no in reservation_dict:
         p_lot_r = reservation_dict[parking_no]
         if p_lot_r.is_active():
-            led_control.turn_on_red(led_pin_no, parking_no, led_state)
+            led_state = led_control.turn_on_red(led_pin_no, parking_no, led_state)
             logger.info(
                 justify_logs(
                     f"Parking lot {parking_no} is booked on {p_lot_r.from_date}.", 44
                 )
             )
-            return [True, True]
+            return {"pl_state": [True, True], "led_state": led_state}
     if distance < 15:
-        led_control.turn_on_red(led_pin_no, parking_no, led_state)
+        led_state = led_control.turn_on_red(led_pin_no, parking_no, led_state)
     elif distance >= 15:
-        led_control.turn_on_green(led_pin_no, parking_no, led_state)
+        led_state = led_control.turn_on_green(led_pin_no, parking_no, led_state)
 
     if distance < 15 and sensor_state == [True, False]:
         logger.info(justify_logs(f"Car entered parking lot {parking_no}.", 44))
@@ -89,7 +90,7 @@ def update_parking_lot(
         logger.info(
             justify_logs(f"Sent request that parking lot {parking_no} is occupied.", 44)
         )
-        return [True, True]
+        return {"pl_state": [True, True], "led_state": led_state}
     elif distance >= 15 and sensor_state == [False, True]:
         logger.info(f"Car left parking lot {parking_no}.")
         body |= {"occupied": False}
@@ -97,6 +98,9 @@ def update_parking_lot(
         logger.info(
             justify_logs(f"Sent request that parking lot {parking_no} is emptied.", 44)
         )
-        return [False, False]
+        return {"pl_state": [False, False], "led_state": led_state}
     else:
-        return [True if distance < 15 else False] + [sensor_state[0]]
+        return {
+            "pl_state": [True if distance < 15 else False] + [sensor_state[0]],
+            "led_state": led_state,
+        }
