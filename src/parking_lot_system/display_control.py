@@ -39,6 +39,7 @@ class GarageInfo:
 
     @classmethod
     def fromJSON(cls, json: dict[str, Any]) -> "GarageInfo":
+        print(json)
         return GarageInfo(
             json["data"]["name"],
             json["data"]["parkingLots"],
