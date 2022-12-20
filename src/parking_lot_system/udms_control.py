@@ -77,7 +77,7 @@ def update_parking_lot(
                 )
             )
             return [True, True]
-
+    logger.info(f"{parking_no}: {distance}")
     if distance < 5 and sensor_state == [True, False]:
         led_control.turn_on_red(led_pin_no, parking_no)
         logger.info(justify_logs(f"Car entered parking lot {parking_no}.", 44))
