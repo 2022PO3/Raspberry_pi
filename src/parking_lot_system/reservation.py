@@ -16,10 +16,12 @@ class Reservation:
         parking_lot_no: int,
         from_date: datetime,
         to_date: datetime,
+        is_valid: bool,
     ) -> None:
         self.parking_lot_no = parking_lot_no
         self.from_date = from_date
         self.to_date = to_date
+        self.is_valid = is_valid
 
     def is_active(self) -> bool:
         """
@@ -29,7 +31,7 @@ class Reservation:
             self.from_date - timedelta(hours=8)
             < datetime.now().astimezone()
             < self.to_date
-        )
+        ) and self.is_valid
 
     @classmethod
     def from_json(cls, json: dict[str, Any]) -> "Reservation":
@@ -37,6 +39,7 @@ class Reservation:
             json["parkingLot"]["parkingLotNo"],
             parse(json["fromDate"]),  # type: ignore
             parse(json["toDate"]),  # type: ignore
+            json["is_valid"],
         )
 
     @classmethod
