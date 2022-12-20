@@ -59,7 +59,7 @@ def update_parking_lot(
     led_pin_no: tuple[int, int],
     parking_no: int,
     garage_id: int,
-    reservation_dict_list: dict[int, reservation.Reservation],
+    reservation_dict: dict[int, reservation.Reservation],
 ) -> list[bool]:
     """
     Makes request about the state of the parking lot to the Backend.
@@ -67,7 +67,8 @@ def update_parking_lot(
     url = "https://po3backend.ddns.net/api/rpi/parking-lot"
     headers = {"PO3-ORIGIN": "rpi", "PO3-RPI-KEY": os.environ["RPI_KEY"]}
     body = {"garageId": garage_id, "parkingLotNo": parking_no}
-    p_lot_r = reservation_dict_list[parking_no]
+    p_lot_r = reservation_dict[parking_no]
+    print(p_lot_r)
     if p_lot_r.is_active():
         led_control.turn_on_red(led_pin_no, parking_no)
         logger.info(
