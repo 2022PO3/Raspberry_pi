@@ -4,6 +4,7 @@ from requests import post, Response
 
 import RPi.GPIO as GPIO
 
+from picamera import PiCamera
 from logger import get_logger, log
 from servo_control import open_barrier, close_barrier, Servo
 from camera_control import detect_licence_plate
@@ -11,6 +12,8 @@ from camera_control import detect_licence_plate
 logger = get_logger("udms_control")
 
 GARAGE_ID = 11
+
+camera = PiCamera()
 
 
 def setup_udms(trig_pin: int, echo_pin: int, *, system: str) -> None:
@@ -81,7 +84,7 @@ def run_enter_detection(
     """
     if distance < 10 and not sensor_state:
         log(f"Car entered {system} sensor.", logger)
-        licence_plate_system = detect_licence_plate()
+        licence_plate_system = detect_licence_plate(camera)
         log("Posting request to backend.", logger)
         resp = send_licence_plate(licence_plate_system, GARAGE_ID)
         print(resp.text)

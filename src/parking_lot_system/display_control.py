@@ -28,24 +28,6 @@ RST = 25
 SPI_PORT = 0
 SPI_DEVICE = 0
 
-###################
-# Type definition #
-###################
-class GarageInfo:
-    def __init__(self, name: str, total_spots: int, left_spots: int) -> None:
-        self.name = name
-        self.total_spots = total_spots
-        self.left_spots = left_spots
-
-    @classmethod
-    def fromJSON(cls, json: dict[str, Any]) -> "GarageInfo":
-        print(json)
-        return GarageInfo(
-            json["data"]["name"],
-            json["data"]["parkingLots"],
-            json["data"]["unoccupiedLots"],
-        )
-
 
 ##################
 # Main functions #
@@ -86,7 +68,7 @@ if __name__ == "__main__":
             try:
                 write(
                     disp,
-                    f"{garage_info.left_spots}/{garage_info.total_spots}",
+                    f"{garage_info.entered}/{garage_info.total_spots}",
                     font_size=65,
                     x=14,
                     y=60,
@@ -94,6 +76,6 @@ if __name__ == "__main__":
             except UnboundLocalError:
                 pass
             disp.display(image.resize((WIDTH, int(HEIGHT / 4))))
-            time.sleep(2)
+            time.sleep(5)
     except KeyboardInterrupt:
         GPIO.cleanup()
