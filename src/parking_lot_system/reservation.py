@@ -47,7 +47,7 @@ class Reservation:
 
 
 def get_garage_reservations(garage_id: int) -> list[dict[int, "Reservation"]]:
-    url = f"{os.getenv('SERVER_URL')}/api/rpi/reservations/{garage_id}"
+    url = f"{os.getenv('SERVER_URL')}api/rpi/reservations/{garage_id}"
     headers = {"PO3-ORIGIN": "rpi", "PO3-RPI-KEY": os.environ["RPI_KEY"]}
     print(requests.get(url, headers=headers).text)
     response = json.loads(requests.get(url, headers=headers).text)

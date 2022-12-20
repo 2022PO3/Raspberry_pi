@@ -21,7 +21,7 @@ class Garage:
 
 
 def get_free_spots(garage_id: int) -> "Garage":
-    url = f"{os.getenv('SERVER_URL')}/api/rpi/garage/{garage_id}"
+    url = f"{os.getenv('SERVER_URL')}api/rpi/garage/{garage_id}"
     headers = {"PO3-ORIGIN": "rpi", "PO3-RPI-KEY": os.environ["RPI_KEY"]}
     response = json.loads(requests.get(url, headers=headers).text)
     return Garage.fromJSON(response)
