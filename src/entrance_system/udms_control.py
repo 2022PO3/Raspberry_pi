@@ -52,7 +52,7 @@ def send_licence_plate(licence_plate: str, garage_id: int) -> Response:
     headers = {"PO3-ORIGIN": "rpi", "PO3-RPI-KEY": os.environ["RPI_KEY"]}
     response = post(
         url,
-        data={"licencePlate": licence_plate, "garageId": garage_id},
+        json={"licencePlate": licence_plate, "garageId": garage_id},
         headers=headers,
     )
 
