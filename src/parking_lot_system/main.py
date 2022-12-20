@@ -62,7 +62,7 @@ def run_parking_lot_system(
                         GARAGE_ID,
                         reservation_dict,
                     )
-                    time.sleep(0.3)
+                    time.sleep(0.5)
             except Exception as e:
                 logger.error(f"Some error occurred: {e}.")
     except KeyboardInterrupt:
