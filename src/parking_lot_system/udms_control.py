@@ -105,7 +105,11 @@ def update_parking_lot(
         logger.info(
             justify_logs(f"Sent request that parking lot {parking_no} is emptied.", 44)
         )
-        return {"pl_state": [False, False], "led_state": led_state}
+        return {
+            "pl_state": [False, False],
+            "led_state": led_state,
+            "booked_state": booked_state,
+        }
     else:
         return {
             "pl_state": [True if distance < 15 else False] + [sensor_state[0]],
