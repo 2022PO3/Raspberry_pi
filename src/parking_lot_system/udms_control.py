@@ -73,13 +73,6 @@ def update_parking_lot(
         p_lot_r = reservation_dict[parking_no]
         if p_lot_r.is_active():
             led_state = led_control.turn_on_red(led_pin_no, parking_no, led_state)
-            if not booked_state:
-                logger.info(
-                    justify_logs(
-                        f"Parking lot {parking_no} is booked on {p_lot_r.from_date}.",
-                        44,
-                    )
-                )
             return {
                 "pl_state": [True, True],
                 "led_state": led_state,
