@@ -25,9 +25,7 @@ def take_image(camera: PiCamera, path: str) -> None:
     log("Image taken.", logger)
 
 
-def get_text_from_image_path(
-    client: vision.ImageAnnotatorClient, path: str
-) -> str | None:
+def get_text_from_image_path(client: vision.ImageAnnotatorClient, path: str) -> str:
     """
     This method reads the text on the image at the given path, using Google Vision API.
 
@@ -55,7 +53,7 @@ def get_text_from_image_path(
         return None
 
 
-def filter_licence_plate(detected_licence_plate: str | None) -> str | None:
+def filter_licence_plate(detected_licence_plate: str) -> str:
     if detected_licence_plate is None:
         return None
     licence_plate_text = re.sub(r"\W", "", detected_licence_plate)
@@ -68,7 +66,7 @@ def filter_licence_plate(detected_licence_plate: str | None) -> str | None:
     return None
 
 
-def detect_licence_plate(camera: PiCamera) -> str | None:
+def detect_licence_plate(camera: PiCamera) -> str:
     home = os.environ["HOME"]
     client = setup_google()
     take_image(camera, "image.jpg")
