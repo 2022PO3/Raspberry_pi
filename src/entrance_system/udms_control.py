@@ -88,9 +88,12 @@ def run_enter_detection(
     """
     if distance < 10 and not sensor_state:
         log(f"Car entered {system} sensor.", logger)
-        licence_plate_system = detect_licence_plate(camera)
+        licence_plate = detect_licence_plate(camera)
+        if licence_plate is None:
+            log("No licence plate detected.", logger)
+            return not sensor_state, servo_state
         log("Posting request to backend.", logger)
-        resp = send_licence_plate(licence_plate_system, GARAGE_ID)
+        resp = send_licence_plate(licence_plate, GARAGE_ID)
         if has_to_pay(resp):
             log("User has to pay.", logger)
         if can_enter(resp):
