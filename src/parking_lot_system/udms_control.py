@@ -3,7 +3,7 @@ import os
 import requests
 import led_control
 import RPi.GPIO as GPIO
-from logger import get_logger, justify_logs
+from logger import get_logger, justify_logs, log
 from typing import Any
 import reservation
 
@@ -92,7 +92,7 @@ def update_parking_lot(
         )
         return {"pl_state": [True, True], "led_state": led_state, "booked_state": True}
     elif distance >= 15 and sensor_state == [False, True]:
-        logger.info(f"Car left parking lot {parking_no}.")
+        log(f"Car left parking lot {parking_no}.", logger)
         body |= {"occupied": False}
         requests.put(url, json=body, headers=headers)
         logger.info(
