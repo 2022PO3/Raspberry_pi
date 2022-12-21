@@ -60,6 +60,7 @@ def run_parking_lot_system(
                         state[i]["pl_state"],
                         distance,
                         state[i]["led_state"],
+                        state[i]["booked_state"],
                         parking_led_pins[i],
                         i,
                         GARAGE_ID,
