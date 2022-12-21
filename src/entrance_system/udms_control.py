@@ -62,6 +62,10 @@ def send_licence_plate(licence_plate: str, garage_id: int) -> Response:
     return response
 
 
+def has_to_pay(response: Response) -> bool:
+    return response.status_code == 402
+
+
 def can_enter(response: Response) -> bool:
     return response.status_code == 200
 
@@ -87,6 +91,8 @@ def run_enter_detection(
         licence_plate_system = detect_licence_plate(camera)
         log("Posting request to backend.", logger)
         resp = send_licence_plate(licence_plate_system, GARAGE_ID)
+        if has_to_pay(resp):
+            log("User has to pay.", logger)
         if can_enter(resp):
             servo_state = open_barrier(servo, servo_state, system=system)
         return not sensor_state, servo_state
