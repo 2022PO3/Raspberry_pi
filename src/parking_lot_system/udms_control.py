@@ -57,6 +57,7 @@ def update_parking_lot(
     sensor_state: list[bool],
     distance: float,
     led_state: int,
+    booked_state: bool,
     led_pin_no: tuple[int, int],
     parking_no: int,
     garage_id: int,
@@ -72,12 +73,18 @@ def update_parking_lot(
         p_lot_r = reservation_dict[parking_no]
         if p_lot_r.is_active():
             led_state = led_control.turn_on_red(led_pin_no, parking_no, led_state)
-            logger.info(
-                justify_logs(
-                    f"Parking lot {parking_no} is booked on {p_lot_r.from_date}.", 44
+            if not booked_state:
+                logger.info(
+                    justify_logs(
+                        f"Parking lot {parking_no} is booked on {p_lot_r.from_date}.",
+                        44,
+                    )
                 )
-            )
-            return {"pl_state": [True, True], "led_state": led_state}
+            return {
+                "pl_state": [True, True],
+                "led_state": led_state,
+                "booked_state": True,
+            }
     if distance < 15:
         led_state = led_control.turn_on_red(led_pin_no, parking_no, led_state)
     elif distance >= 15:
@@ -90,7 +97,7 @@ def update_parking_lot(
         logger.info(
             justify_logs(f"Sent request that parking lot {parking_no} is occupied.", 44)
         )
-        return {"pl_state": [True, True], "led_state": led_state}
+        return {"pl_state": [True, True], "led_state": led_state, "booked_state": True}
     elif distance >= 15 and sensor_state == [False, True]:
         logger.info(f"Car left parking lot {parking_no}.")
         body |= {"occupied": False}
@@ -103,4 +110,5 @@ def update_parking_lot(
         return {
             "pl_state": [True if distance < 15 else False] + [sensor_state[0]],
             "led_state": led_state,
+            "booked_state": True,
         }

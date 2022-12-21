@@ -40,7 +40,10 @@ def run_parking_lot_system(
     # The states are an array of length 2. This prevents false positives. Only when the sensor
     # detects a car (or no car) for two consecutive times, the car will be detected. The first
     # element indicates most recent measurement.
-    state = {i: {"pl_state": [False, False], "led_state": GREEN} for i in rng}
+    state = {
+        i: {"pl_state": [False, False], "led_state": GREEN, "booked_state": False}
+        for i in rng
+    }
 
     _setup_board()
     for i in rng:
