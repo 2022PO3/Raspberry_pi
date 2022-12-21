@@ -65,7 +65,10 @@ class Reservation:
 def get_garage_reservations(garage_id: int) -> dict[int, "Reservation"]:
     url = f"{os.getenv('SERVER_URL')}api/rpi/reservations/{garage_id}"
     headers = {"PO3-ORIGIN": "rpi", "PO3-RPI-KEY": os.environ["RPI_KEY"]}
-    response = requests.get(url, headers=headers)
+    try:
+        response = requests.get(url, headers=headers)
+    except requests.exceptions.ConnectionError:
+        log("Request failed. Retrying in 1 second.", logger)
     if response.status_code == 200:
         try:
             response_json = json.loads(requests.get(url, headers=headers).text)
