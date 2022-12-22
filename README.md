@@ -1,4 +1,7 @@
-# Raspberry_pi
+# Depreciation notice
+As of the 22nd of December 2022, this project is no longer actively maintained.
+
+## Raspberry_pi
 
 This repository contains all the code which has to run on the Raspberry Pi, mainly written in Python.
 
